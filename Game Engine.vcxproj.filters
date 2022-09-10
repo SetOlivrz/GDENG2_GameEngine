@@ -24,6 +24,9 @@
     <ClCompile Include="Window.cpp">
       <Filter>Game Engine\WindowingSystem</Filter>
     </ClCompile>
+    <ClCompile Include="GraphicsEngine.cpp">
+      <Filter>Game Engine\GraphicsEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -31,6 +34,9 @@
     </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Game Engine\WindowingSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsEngine.h">
+      <Filter>Game Engine\GraphicsEngine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
