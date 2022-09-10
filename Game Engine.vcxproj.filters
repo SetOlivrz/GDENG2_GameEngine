@@ -4,19 +4,25 @@
     <Filter Include="App">
       <UniqueIdentifier>{1a408da6-0680-4526-b554-d8ef0396a453}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine">
+    <Filter Include="Game Engine">
       <UniqueIdentifier>{a2ad8679-daa2-44c9-866c-2cb45a29dea8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Engine\WindowingSystem">
+      <UniqueIdentifier>{43cc20a3-2537-4797-b70a-3255a3ba20ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game Engine\GraphicsEngine">
+      <UniqueIdentifier>{99fe66f0-ab12-4894-921e-46ab45e668bc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppWindow.cpp">
       <Filter>App</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Engine</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Game Engine\WindowingSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -24,7 +30,7 @@
       <Filter>App</Filter>
     </ClInclude>
     <ClInclude Include="Window.h">
-      <Filter>Engine</Filter>
+      <Filter>Game Engine\WindowingSystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
