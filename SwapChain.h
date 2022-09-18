@@ -4,22 +4,23 @@
 class DeviceContext;
 class SwapChain
 {
-	public:
-		SwapChain();
-		//Initialize SwapChain for a window
-		bool init(HWND hwnd, UINT width, UINT height);
-		bool present(bool vsync);
+public:
+	SwapChain();
+	//Initialize SwapChain for a window
+	bool init(HWND hwnd, UINT width, UINT height);
 
-		//Release the swap chain
-		bool release();
-		~SwapChain();
 
-	private:
+	bool present(bool vsync);
 
-		IDXGISwapChain* m_swap_chain;
-		ID3D11RenderTargetView* m_rtv;
-		ID3D11DepthStencilView* m_dsv;
+	//Release the swap chain
+	bool release();
+	~SwapChain();
+private:
+	IDXGISwapChain* m_swap_chain;
+	ID3D11RenderTargetView* m_rtv;
+	ID3D11DepthStencilView* m_dsv;
 
-	private:
-		friend class DeviceContext;
+
+private:
+	friend class DeviceContext;
 };
