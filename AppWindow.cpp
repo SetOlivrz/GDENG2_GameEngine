@@ -31,11 +31,29 @@ void AppWindow::onCreate()
 
 	vertex list[] =
 	{
-		//X - Y - Z
+		//X - Y - Z          R-G-B
+
+		//RECTANGLE          RAINBOW
 		{-0.5f,-0.5f,0.0f,   1,0,0}, // POS1
 		{-0.5f,0.5f,0.0f,    0,1,0}, // POS2
 		{ 0.5f,-0.5f,0.0f,   0,0,1},// POS2
 		{ 0.5f,0.5f,0.0f,    1,1,0}
+		
+
+		////TRIANGLE          RAINBOW
+		//{-0.5f,-0.5f,0.0f,   1,0,0}, // POS1
+		//{0.0f,0.5f,0.0f,	   0,1,0}, // POS2
+		//{ 0.5f,-0.5f,0.0f,   0,0,1}
+		
+
+		////RECTANGLE          GREEN
+		//{-0.5f,-0.5f,0.0f,   0,1,0}, // POS1
+		//{-0.5f,0.5f,0.0f,    0,1,0}, // POS2
+		//{ 0.5f,-0.5f,0.0f,   0,1,0}, // POS2
+		//{ 0.5f,0.5f,0.0f,    0,1,0}
+		
+
+
 	};
 
 	m_vb = GraphicsEngine::get()->createVertexBuffer();
