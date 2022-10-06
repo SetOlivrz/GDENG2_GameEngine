@@ -14,7 +14,7 @@ public:
 private:
 	bool init(const void* shader_byte_code, size_t byte_code_size);
 private:
-	ID3D11VertexShader* m_vs;
+	ID3D11VertexShader* vs;
 private:
 	friend class GraphicsEngine;
 	friend class DeviceContext;

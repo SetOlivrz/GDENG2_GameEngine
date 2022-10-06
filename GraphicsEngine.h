@@ -49,8 +49,8 @@ private:
 
 	ID3DBlob* m_vsblob = nullptr;
 	ID3DBlob* m_psblob = nullptr;
-	ID3D11VertexShader* m_vs = nullptr;
-	ID3D11PixelShader* m_ps = nullptr;
+	ID3D11VertexShader* vs = nullptr;
+	ID3D11PixelShader* ps = nullptr;
 private:
 	friend class SwapChain;
 	friend class VertexBuffer;

@@ -54,8 +54,8 @@ bool GraphicsEngine::init()
 
 bool GraphicsEngine::release()
 {
-	if (m_vs)m_vs->Release();
-	if (m_ps)m_ps->Release();
+	if (vs)vs->Release();
+	if (ps)ps->Release();
 
 	if (m_vsblob)m_vsblob->Release();
 	if (m_psblob)m_psblob->Release();

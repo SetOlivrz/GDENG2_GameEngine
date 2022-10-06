@@ -6,6 +6,8 @@
 #include "VertexBuffer.h"
 #include "VertexShader.h"
 #include "PixelShader.h"
+#include "Quad.h"
+#include "VertexClass.h"
 
 class AppWindow : public Window
 {
@@ -19,7 +21,15 @@ public:
 	virtual void onDestroy() override;
 private:
 	SwapChain* m_swap_chain;
-	VertexBuffer* m_vb;
-	VertexShader* m_vs;
-	PixelShader* m_ps;
+	VertexBuffer* vb;
+	VertexShader* vs;
+	PixelShader* ps;
+
+	//Quad
+	Quad quadA;
+	Quad quadB;
+	Quad quadC;
+	Quad quadD;
+
+
 };

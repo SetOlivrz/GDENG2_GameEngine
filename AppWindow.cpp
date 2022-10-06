@@ -1,15 +1,5 @@
 #include "AppWindow.h"
 
-struct vec3
-{
-	float x, y, z;
-};
-
-struct vertex
-{
-	vec3 position;
-	vec3 color;
-};
 
 AppWindow::AppWindow()
 {
@@ -29,49 +19,52 @@ void AppWindow::onCreate()
 	RECT rc = this->getClientWindowRect();
 	m_swap_chain->init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
-	vertex list[] =
+	VertexClass::vertex quadA_Vertices[] =
 	{
-		//X - Y - Z          R-G-B
-
 		//RECTANGLE          RAINBOW
-		{-0.5f,-0.5f,0.0f,   1,0,0}, // POS1
-		{-0.5f,0.5f,0.0f,    0,1,0}, // POS2
-		{ 0.5f,-0.5f,0.0f,   0,0,1},// POS2
-		{ 0.5f,0.5f,0.0f,    1,1,0}
-		
-
-		////TRIANGLE          RAINBOW
-		//{-0.5f,-0.5f,0.0f,   1,0,0}, // POS1
-		//{0.0f,0.5f,0.0f,	   0,1,0}, // POS2
-		//{ 0.5f,-0.5f,0.0f,   0,0,1}
-		
-
-		////RECTANGLE          GREEN
-		//{-0.5f,-0.5f,0.0f,   0,1,0}, // POS1
-		//{-0.5f,0.5f,0.0f,    0,1,0}, // POS2
-		//{ 0.5f,-0.5f,0.0f,   0,1,0}, // POS2
-		//{ 0.5f,0.5f,0.0f,    0,1,0}
-		
-
-
+		//X - Y - Z          R-G-B
+		{ -0.5f,0.1f, 0.0f,   1,0,0}, // LL
+		{ -0.5f, 0.5f, 0.0f,    0,1,0}, // UL
+		{ -0.1f,0.1f, 0.0f,   0,0,1},// LR
+		{ -0.1f, 0.5f, 0.0f,    1,1,0} // UR
 	};
 
-	m_vb = GraphicsEngine::get()->createVertexBuffer();
-	UINT size_list = ARRAYSIZE(list);
+	VertexClass::vertex quadB_vertices[] =
+	{
+		////RECTANGLE          GREEN
+		//X - Y - Z          R-G-B
+		{ 0.1f, 0.1f,0.0f,   1,1,0}, // LL
+		{ 0.1f, 0.5f,0.0f,   0,1,0}, // UL
+		{ 0.5f, 0.1f,0.0f,   0,1,0},  // LR
+		{ 0.5f, 0.5f,0.0f,   1,1,0}  // uR
+	};
 
-	void* shader_byte_code = nullptr;
-	size_t size_shader = 0;
-	GraphicsEngine::get()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
+	VertexClass::vertex quadC_Vertices[] =
+	{
+		//RECTANGLE             RAINBOW
+		//X - Y - Z             R-G-B
+		{ -0.5f, -0.5f, 0.0f,   1,0,0}, // LL
+		{ -0.5f, -0.1f, 0.0f,   1,0,1}, // UL
+		{ -0.1f, -0.5f, 0.0f,   1,0,0},// LR
+		{ -0.1f, -0.1f, 0.0f,   1,0,1} // UR
+	};
 
-	m_vs = GraphicsEngine::get()->createVertexShader(shader_byte_code, size_shader);
-	m_vb->load(list, sizeof(vertex), size_list, shader_byte_code, size_shader);
+	VertexClass::vertex quadD_Vertices[] =
+	{
+		//RECTANGLE            RAINBOW
+		//X - Y - Z            R-G-B
+		{ 0.1f, -0.5f, 0.0f,   1,0,1}, // LL
+		{ 0.1f, -0.1f, 0.0f,   1,1,0}, // UL
+		{ 0.5f, -0.5f, 0.0f,   0,1,0},// LR
+		{ 0.5f, -0.1f, 0.0f,   1,0,1} // UR
+	};
 
-	GraphicsEngine::get()->releaseCompiledShader();
+	quadA.initialize(quadA_Vertices, nullptr, 0);
+	quadB.initialize(quadB_vertices, nullptr, 0);
+	quadC.initialize(quadC_Vertices, nullptr, 0);
+	quadD.initialize(quadD_Vertices, nullptr, 0);
 
 
-	GraphicsEngine::get()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shader_byte_code, &size_shader);
-	m_ps = GraphicsEngine::get()->createPixelShader(shader_byte_code, size_shader);
-	GraphicsEngine::get()->releaseCompiledShader();
 
 }
 
@@ -84,25 +77,24 @@ void AppWindow::onUpdate()
 	//SET VIEWPORT OF RENDER TARGET IN WHICH WE HAVE TO DRAW
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
-	//SET DEFAULT SHADER IN THE GRAPHICS PIPELINE TO BE ABLE TO DRAW
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexShader(m_vs);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setPixelShader(m_ps);
 
+	// draw quads
+	quadA.drawQuad();
+	quadB.drawQuad();
+	quadC.drawQuad();
+	quadD.drawQuad();
 
-	//SET THE VERTICES OF THE TRIANGLE TO DRAW
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(m_vb);
-
-	// FINALLY DRAW THE TRIANGLE
-	GraphicsEngine::get()->getImmediateDeviceContext()->drawTriangleStrip(m_vb->getSizeVertexList(), 0);
 	m_swap_chain->present(true);
 }
 
 void AppWindow::onDestroy()
 {
 	Window::onDestroy();
-	m_vb->release();
+	// release quads
+	quadA.release();
+	quadB.release();
+	quadC.release();
+	quadD.release();
 	m_swap_chain->release();
-	m_vs->release();
-	m_ps->release();
 	GraphicsEngine::get()->release();
 }
