@@ -26,13 +26,13 @@ double EngineTime::getTimerValue()
 	if (sharedInstance->isSpeeding)
 	{
 		sharedInstance->newVal +=  sharedInstance->deltaTime;
-		std::cout << "speeding: " << sharedInstance->newVal << "\n";
+		//std::cout << "speeding: " << sharedInstance->newVal << "\n";
 
 	}
 	else
 	{
 		sharedInstance->newVal -=  sharedInstance->deltaTime;
-		std::cout << "decreasing: " << sharedInstance->newVal << "\n";
+		//std::cout << "decreasing: " << sharedInstance->newVal << "\n";
 
 	}
 
