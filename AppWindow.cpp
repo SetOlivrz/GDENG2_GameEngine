@@ -41,6 +41,7 @@ void AppWindow::onCreate()
 	RECT rc = this->getClientWindowRect();
 	m_swap_chain->init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
 
+	// Demo 1
 	vertex list[] =
 	{
 		//X - Y - Z
@@ -49,6 +50,19 @@ void AppWindow::onCreate()
 		{ 0.2f,-0.25f,0.0f,      0.75f,-0.80f,0.0f,   0,0,1,  1,0,0 },// POS2 LR
 		{ 0.10f,0.25f,0.0f,      0.80f,0.80f,0.0f,    1,1,1,  0,0,1 } //UR
 	};
+
+
+	// Demo 2
+	//vertex list[] =
+	//{
+	//	//X - Y - Z
+	//	{-0.80f,-0.85f,0.0f,    -0.35f,-0.15f,0.0f,   0,0,0,  0,1,0 }, // POS1 LL
+	//	{-0.90f,0.2f,0.0f,      -0.1f ,0.75f,0.0f,     1,1,0,  0,1,1 }, // POS2 UL
+	//	{ 1.0f,-0.4f,0.0f,      0.0f,-0.70f,0.0f,   0,0,1,  1,0,0 },// POS2 LR
+	//	{ -0.75f,-0.85f,0.0f,      0.80f,0.75f,0.0f,    1,1,1,  0,0,1 } //UR
+	//};
+
+
 
 
 
