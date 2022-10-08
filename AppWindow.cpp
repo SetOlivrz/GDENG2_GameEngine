@@ -31,7 +31,6 @@ void AppWindow::onCreate()
 
 	VertexClass::vertex quadB_vertices[] =
 	{
-		////RECTANGLE          GREEN
 		//X - Y - Z          R-G-B
 		{ 0.1f, 0.1f,0.0f,   1,1,0}, // LL
 		{ 0.1f, 0.5f,0.0f,   0,1,0}, // UL
@@ -41,31 +40,18 @@ void AppWindow::onCreate()
 
 	VertexClass::vertex quadC_Vertices[] =
 	{
-		//RECTANGLE             RAINBOW
 		//X - Y - Z             R-G-B
 		{ -0.5f, -0.5f, 0.0f,   1,0,0}, // LL
 		{ -0.5f, -0.1f, 0.0f,   1,0,1}, // UL
-		{ -0.1f, -0.5f, 0.0f,   1,0,0},// LR
-		{ -0.1f, -0.1f, 0.0f,   1,0,1} // UR
-	};
-
-	VertexClass::vertex quadD_Vertices[] =
-	{
-		//RECTANGLE            RAINBOW
-		//X - Y - Z            R-G-B
-		{ 0.1f, -0.5f, 0.0f,   1,0,1}, // LL
-		{ 0.1f, -0.1f, 0.0f,   1,1,0}, // UL
-		{ 0.5f, -0.5f, 0.0f,   0,1,0},// LR
+		{ 0.5f, -0.5f, 0.0f,   1,0,0},// LR
 		{ 0.5f, -0.1f, 0.0f,   1,0,1} // UR
 	};
+
 
 	quadA.initialize(quadA_Vertices, nullptr, 0);
 	quadB.initialize(quadB_vertices, nullptr, 0);
 	quadC.initialize(quadC_Vertices, nullptr, 0);
-	quadD.initialize(quadD_Vertices, nullptr, 0);
-
-
-
+	
 }
 
 void AppWindow::onUpdate()
@@ -82,7 +68,6 @@ void AppWindow::onUpdate()
 	quadA.drawQuad();
 	quadB.drawQuad();
 	quadC.drawQuad();
-	quadD.drawQuad();
 
 	m_swap_chain->present(true);
 }
@@ -94,7 +79,6 @@ void AppWindow::onDestroy()
 	quadA.release();
 	quadB.release();
 	quadC.release();
-	quadD.release();
 	m_swap_chain->release();
 	GraphicsEngine::get()->release();
 }

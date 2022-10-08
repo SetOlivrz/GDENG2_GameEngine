@@ -22,7 +22,6 @@ private:
 	VertexShader* vs;
 	PixelShader* ps;
 public:
-	void update();
 	void drawQuad();
 	void release();
 };

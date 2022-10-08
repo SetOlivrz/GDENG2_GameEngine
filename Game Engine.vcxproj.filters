@@ -31,6 +31,9 @@
     <Filter Include="GameEngine\Quad">
       <UniqueIdentifier>{b900a471-f864-43ce-b36c-e4e77de20072}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\Vertex">
+      <UniqueIdentifier>{2c5c5c70-4203-46d4-8606-868f51bdb36b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppWindow.cpp">
@@ -61,9 +64,11 @@
       <Filter>GameEngine\GraphicsEngine\PixelShader</Filter>
     </ClCompile>
     <ClCompile Include="Quad.cpp">
-      <Filter>GameEngine</Filter>
+      <Filter>GameEngine\Quad</Filter>
     </ClCompile>
-    <ClCompile Include="VertexClass.cpp" />
+    <ClCompile Include="VertexClass.cpp">
+      <Filter>GameEngine\Vertex</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -91,9 +96,11 @@
       <Filter>GameEngine\GraphicsEngine\PixelShader</Filter>
     </ClInclude>
     <ClInclude Include="Quad.h">
-      <Filter>GameEngine</Filter>
+      <Filter>GameEngine\Quad</Filter>
     </ClInclude>
-    <ClInclude Include="VertexClass.h" />
+    <ClInclude Include="VertexClass.h">
+      <Filter>GameEngine\Vertex</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">

@@ -29,7 +29,6 @@ private:
 	Quad quadA;
 	Quad quadB;
 	Quad quadC;
-	Quad quadD;
 
 
 };
