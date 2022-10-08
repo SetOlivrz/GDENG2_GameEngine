@@ -31,6 +31,12 @@
     <Filter Include="GameEngine\GraphicsEngine\Constant Buffer">
       <UniqueIdentifier>{e19a6fb5-670f-4d2e-a467-ff803b9402b8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\EngineTime">
+      <UniqueIdentifier>{5e60ba94-af2e-437a-923e-a2e31d2cff0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Shaders">
+      <UniqueIdentifier>{7264da95-9dcb-4700-9e5b-cb38e3b86258}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppWindow.cpp">
@@ -60,7 +66,12 @@
     <ClCompile Include="PixelShader.cpp">
       <Filter>GameEngine\GraphicsEngine\PixelShader</Filter>
     </ClCompile>
-    <ClCompile Include="ConstantBuffer.cpp" />
+    <ClCompile Include="EngineTime.cpp">
+      <Filter>GameEngine\EngineTime</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBuffer.cpp">
+      <Filter>GameEngine\GraphicsEngine\Constant Buffer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -87,14 +98,19 @@
     <ClInclude Include="PixelShader.h">
       <Filter>GameEngine\GraphicsEngine\PixelShader</Filter>
     </ClInclude>
-    <ClInclude Include="ConstantBuffer.h" />
+    <ClInclude Include="EngineTime.h">
+      <Filter>GameEngine\EngineTime</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>GameEngine\GraphicsEngine\Constant Buffer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
-      <Filter>App</Filter>
+      <Filter>GameEngine\Shaders</Filter>
     </FxCompile>
     <FxCompile Include="PixelShader.hlsl">
-      <Filter>App</Filter>
+      <Filter>GameEngine\Shaders</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
