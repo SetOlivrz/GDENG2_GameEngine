@@ -8,6 +8,8 @@ class ConstantBuffer;
 class VertexShader;
 class PixelShader;
 class AppWindow;
+class DebugWindow;
+
 
 
 class GraphicsEngine
@@ -62,5 +64,7 @@ private:
 	friend class VertexShader;
 	friend class PixelShader;
 	friend class AppWindow;
+	friend class DebugWindow;
+
 
 };

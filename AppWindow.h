@@ -7,9 +7,9 @@
 #include "ConstantBuffer.h"
 #include "VertexShader.h"
 #include "PixelShader.h"
-#include "imgui.h"
-#include "imgui_impl_win32.h"
-#include "imgui_impl_dx11.h"
+#include "VertexClass.h"
+#include "DebugWindow.h"
+#include "Quad.h"
 
 class GraphicsEngine;
 
@@ -26,10 +26,16 @@ public:
 private:
 	SwapChain* m_swap_chain;
 	VertexBuffer* m_vb;
-	VertexBuffer* m_vb2;
 	VertexShader* m_vs;
 	PixelShader* m_ps;
 	ConstantBuffer* m_cb;
+	
+	DebugWindow debugWindow;
+	Quad quad;
+	Quad triangle;
+
+	Quad* objectList[2];
+
 
 	unsigned long m_old_time = 0;
 	float m_delta_time = 0;

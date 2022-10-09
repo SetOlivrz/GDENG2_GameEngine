@@ -1,0 +1,52 @@
+#pragma once
+class Utils
+{
+public:
+	// addition
+	static void addArr3(float a[], float b[], float sum[])
+	{
+		for (size_t i = 0; i < 3; i++)
+		{
+			sum[i] = b[i]+ a[i];
+		}
+	}
+	// copy
+	static void copyArr3(float a[], float b[])
+	{
+		for (size_t i = 0; i < 3; i++)
+		{
+			b[i] = a[i];
+		}
+	}
+	// checker
+	static bool isEqual(float a[], float b[])
+	{
+		for (size_t i = 0; i < 3; i++)
+		{
+			if (a[i] != b[i])
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	// reset
+	static void resetArr3(float arr[])
+	{
+		for (size_t i = 0; i < 3; i++)
+		{
+			arr[i] = 0;
+		}
+	}
+
+	// subtract
+	static void subArr3(float a[], float b[], float sum[])
+	{
+		for (size_t i = 0; i < 3; i++)
+		{
+			sum[i] = b[i] - a[i];
+		}
+	}
+};
+
