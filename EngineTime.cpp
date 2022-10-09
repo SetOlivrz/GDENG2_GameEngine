@@ -14,8 +14,6 @@ double EngineTime::getDeltaTime()
 
 double EngineTime::getTimerValue()
 {
-	
-
 	if (sharedInstance->ticks >= 3)
 	{
 		sharedInstance->isSpeeding = !sharedInstance->isSpeeding;

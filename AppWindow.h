@@ -7,6 +7,11 @@
 #include "ConstantBuffer.h"
 #include "VertexShader.h"
 #include "PixelShader.h"
+#include "imgui.h"
+#include "imgui_impl_win32.h"
+#include "imgui_impl_dx11.h"
+
+class GraphicsEngine;
 
 class AppWindow : public Window
 {
@@ -29,4 +34,7 @@ private:
 	unsigned long m_old_time = 0;
 	float m_delta_time = 0;
 	float m_angle = 0;
+
+private:
+	friend class GraphicsEngine;
 };

@@ -1,5 +1,6 @@
 #include "AppWindow.h"
 #include <Windows.h>
+#include <iostream>
 
 
 struct vec3
@@ -63,8 +64,7 @@ void AppWindow::onCreate()
 	};
 
 
-
-
+	std:: cout << "Debug";
 
 	m_vb = GraphicsEngine::get()->createVertexBuffer();
 	UINT size_list = ARRAYSIZE(list);
@@ -89,6 +89,14 @@ void AppWindow::onCreate()
 	m_cb = GraphicsEngine::get()->createConstantBuffer();
 	m_cb->load(&cc, sizeof(constant));
 
+
+	// Set ImGui
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	ImGui_ImplWin32_Init(Window::m_hwnd);
+	ImGui_ImplDX11_Init(GraphicsEngine::get()->m_d3d_device, GraphicsEngine::get()->m_imm_context);
+	ImGui::StyleColorsDark();
 }
 
 void AppWindow::onUpdate()
@@ -122,6 +130,24 @@ void AppWindow::onUpdate()
 
 	// FINALLY DRAW THE TRIANGLE
 	GraphicsEngine::get()->getImmediateDeviceContext()->drawTriangleStrip(m_vb->getSizeVertexList(), 0);
+
+	//Start Imgui Frame
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+
+	ImGui::NewFrame();
+
+	//Create Imgui TEst Window
+	ImGui::Begin("Test");
+	ImGui::End();
+
+	//Assemble Together Draw Data
+	ImGui::Render();
+
+	//Render Draw Data
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+
 	m_swap_chain->present(true);
 }
 
