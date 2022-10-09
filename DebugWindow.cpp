@@ -91,7 +91,6 @@ void DebugWindow::TransformSliders(Quad* obj)
 	{
 		obj->resetScale();
 	}
-	
 }
 
 void DebugWindow::TransformSliders(Quad* quad, Quad* tri)

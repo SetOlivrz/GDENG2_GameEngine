@@ -114,8 +114,12 @@
     <ClCompile Include="imgui_widgets.cpp">
       <Filter>GameEngine\ImGui\Libraries</Filter>
     </ClCompile>
-    <ClCompile Include="DebugWindow.cpp" />
-    <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="DebugWindow.cpp">
+      <Filter>GameEngine\ImGui\Class</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>GameEngine\GraphicsEngine\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -184,8 +188,12 @@
     <ClInclude Include="imstb_truetype.h">
       <Filter>GameEngine\ImGui\Libraries</Filter>
     </ClInclude>
-    <ClInclude Include="DebugWindow.h" />
-    <ClInclude Include="Utils.h" />
+    <ClInclude Include="DebugWindow.h">
+      <Filter>GameEngine\ImGui\Class</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>GameEngine\GraphicsEngine\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
