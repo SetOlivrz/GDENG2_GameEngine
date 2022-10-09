@@ -38,8 +38,6 @@ void DebugWindow::createDisplayData(Quad* objList[] )
 
 	// check boxes
 	ImGui::Text("Objects:");
-
-	
 	ImGui::Checkbox("Quad", &obj1);
 	ImGui::Checkbox("Triangle", &obj2);
 
@@ -55,7 +53,11 @@ void DebugWindow::createDisplayData(Quad* objList[] )
 	else if (obj1 && obj2)
 	{
 		TransformSliders(objList[0], objList[1]);
-		ImGui::Text("	\n\nNOTE: PLEASE SELECT A SINGLE OBJECT");
+	}
+	else
+	{
+	    ImGui::Text("	\n\nNOTE: PLEASE SELECT A SINGLE OBJECT");
+
 	}
 
 
@@ -96,10 +98,10 @@ void DebugWindow::TransformSliders(Quad* quad, Quad* tri)
 {
 
 	ImGui::Text("");
-	ImGui::Text("	X		 Y		Z");
-	ImGui::SliderFloat3(" Position", posFactor, -1.0, 1.0);
+		ImGui::Text("	  X		    Y");
+	ImGui::SliderFloat2(" Position", posFactor, -1.0, 1.0);
 
-
+	// MULTIPLE TRANSLATION
 	// copy if not equal (has changes) 
 	if (!Utils::isEqual(sumA, quad->translation))
 	{
@@ -119,10 +121,10 @@ void DebugWindow::TransformSliders(Quad* quad, Quad* tri)
 	Utils::copyArr3(sumB, tri->translation);
 
 
-	// SCALING
+	// MULTIPLE SCALING
 	ImGui::Text("");
-	ImGui::Text("	X		 Y		Z");
-	ImGui::SliderFloat3(" Scale", scalFactor, 0.0, 2.0);
+	ImGui::Text("	  X		    Y");
+	ImGui::SliderFloat2(" Scale", scalFactor, 0.0, 2.0);
 
 	// copy if not equal (has changes) 
 	if (!Utils::isEqual(sumC, quad->scale))
