@@ -57,7 +57,6 @@ void DebugWindow::createDisplayData(Quad* objList[] )
 	else
 	{
 	    ImGui::Text("	\n\nNOTE: PLEASE SELECT A SINGLE OBJECT");
-
 	}
 
 
@@ -76,7 +75,6 @@ void DebugWindow::TransformSliders(Quad* obj)
 	Utils::resetArr3(sumC);
 	Utils::resetArr3(sumD);
 
-	//posFactor = 0;
 	ImGui::Text("");
 	ImGui::Text("	  X		    Y");
 	ImGui::SliderFloat2(" Position", obj->translation, -1.0, 1.0);

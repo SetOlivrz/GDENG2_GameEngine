@@ -90,7 +90,9 @@ void Quad::update(RECT window)
 
 	cc.m_world *= holder;
 	cc.m_view.setIdentity();
-	cc.m_proj.setOrthoLH( (window.right - window.left) / 400.0f, (window.bottom - window.top) / 400.0f, -4.0f, 4.0f );
+	cc.m_proj.setOrthoLH( (window.right - window.left) / 400.0f, 
+						  (window.bottom - window.top) / 400.0f, 
+						  -4.0f, 4.0f );
 
 	m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
 
