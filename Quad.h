@@ -4,6 +4,8 @@
 #include "GraphicsEngine.h"
 #include "DeviceContext.h"
 #include "VertexBuffer.h"
+#include "indexBuffer.h"
+
 #include "ConstantBuffer.h"
 
 #include "VertexShader.h"
@@ -21,8 +23,9 @@ public:
 	~Quad();
 
 private:
-	VertexClass::vertex list[4];
+	VertexClass::vertex list[8];
 	VertexBuffer* m_vb;
+	IndexBuffer* m_ib;
 	VertexShader* m_vs;
 	PixelShader* m_ps;
 	ConstantBuffer* m_cb;

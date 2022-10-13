@@ -9,6 +9,7 @@ class VertexShader;
 class PixelShader;
 class AppWindow;
 class DebugWindow;
+class IndexBuffer;
 
 
 
@@ -24,8 +25,13 @@ public:
 public:
 	SwapChain* createSwapChain();
 	DeviceContext* getImmediateDeviceContext();
+
+	//Buffers
 	VertexBuffer* createVertexBuffer();
+	IndexBuffer* createIndexBuffer();
 	ConstantBuffer* createConstantBuffer();
+
+	//Shaders
 	VertexShader* createVertexShader(const void* shader_byte_code, size_t byte_code_size);
 	PixelShader* createPixelShader(const void* shader_byte_code, size_t byte_code_size);
 public:
@@ -65,6 +71,8 @@ private:
 	friend class PixelShader;
 	friend class AppWindow;
 	friend class DebugWindow;
+	friend class IndexBuffer;
+
 
 
 };

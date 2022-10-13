@@ -25,33 +25,25 @@ void AppWindow::onCreate()
 	VertexClass::vertex quad_list[] =
 	{
 		//X - Y - Z
-		//X - Y - Z
-		{Vector3D(-0.2f,-0.2f,0.0f),    Vector3D(-0.32f,-0.11f,0.0f),   Vector3D(0,0,0), Vector3D(0,1,0) }, // POS1
-		{Vector3D(-0.2f,0.2f,0.0f),     Vector3D(-0.11f,0.78f,0.0f),   Vector3D(1,1,0), Vector3D(0,1,1) }, // POS2
-		{ Vector3D(0.2f,-0.2f,0.0f),     Vector3D(0.75f,-0.73f,0.0f), Vector3D(0,0,1),  Vector3D(1,0,0) },// POS2
-		{ Vector3D(0.2f,0.2f,0.0f),     Vector3D(0.88f,0.77f,0.0f),    Vector3D(1,1,1), Vector3D(0,0,1) }
+		//FRONT FACE
+		{Vector3D(-0.5f,-0.5f,-0.5f),    Vector3D(1,0,0),  Vector3D(0.2f,0,0) },
+		{Vector3D(-0.5f,0.5f,-0.5f),    Vector3D(1,1,0), Vector3D(0.2f,0.2f,0) },
+		{ Vector3D(0.5f,0.5f,-0.5f),   Vector3D(1,1,0),  Vector3D(0.2f,0.2f,0) },
+		{ Vector3D(0.5f,-0.5f,-0.5f),     Vector3D(1,0,0), Vector3D(0.2f,0,0) },
+
+		//BACK FACE
+		{ Vector3D(0.5f,-0.5f,0.5f),    Vector3D(0,1,0), Vector3D(0,0.2f,0) },
+		{ Vector3D(0.5f,0.5f,0.5f),    Vector3D(0,1,1), Vector3D(0,0.2f,0.2f) },
+		{ Vector3D(-0.5f,0.5f,0.5f),   Vector3D(0,1,1),  Vector3D(0,0.2f,0.2f) },
+		{ Vector3D(-0.5f,-0.5f,0.5f),     Vector3D(0,1,0), Vector3D(0,0.2f,0) }
 	};
 
-	VertexClass::vertex triangle_list[] =
-	{
-		//X - Y - Z
-		//X - Y - Z
-		{Vector3D(-0.7f,-0.2f,0.0f),    Vector3D(-0.32f,-0.11f,0.0f),   Vector3D(0,0,0), Vector3D(0,1,0) }, // POS1
-		{Vector3D(-0.7f,0.2f,0.0f),     Vector3D(-0.11f,0.78f,0.0f),   Vector3D(1,1,0), Vector3D(0,1,1) }, // POS2
-		{ Vector3D(0.7f,-0.2f,0.0f),     Vector3D(0.75f,-0.73f,0.0f), Vector3D(0,0,1),  Vector3D(1,0,0) },// POS2
-	};
 
 
 	std:: cout << "Debug";
 	debugWindow.intitialize(Window::m_hwnd);
+
 	quad.initialize(quad_list, nullptr, 0);
-	triangle.initialize(triangle_list, nullptr, 0);
-
-	objectList[0] = &quad;
-	objectList[1] = &triangle;
-
-	
-
 }
 
 void AppWindow::onUpdate()
@@ -66,14 +58,7 @@ void AppWindow::onUpdate()
 
 
 	quad.update(this->getClientWindowRect());
-	triangle.update(this->getClientWindowRect());
-
 	quad.drawQuad();
-	triangle.drawQuad();
-
-
-	debugWindow.createDisplayData(objectList);
-	debugWindow.renderWindow();
 
 	m_swap_chain->present(true);
 }

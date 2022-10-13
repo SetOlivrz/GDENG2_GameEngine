@@ -155,13 +155,12 @@
     <ClCompile Include="imgui_impl_win32.cpp" />
     <ClCompile Include="imgui_tables.cpp" />
     <ClCompile Include="imgui_widgets.cpp" />
+    <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix4x4.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="SwapChain.cpp" />
-    <ClCompile Include="Utils.cpp" />
-    <ClCompile Include="Vector3D.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -181,6 +180,7 @@
     <ClInclude Include="imstb_rectpack.h" />
     <ClInclude Include="imstb_textedit.h" />
     <ClInclude Include="imstb_truetype.h" />
+    <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="PixelShader.h" />
     <ClInclude Include="Quad.h" />

@@ -14,9 +14,9 @@ struct constant
 };
 
 
-void Quad::initialize(VertexClass::vertex v[4], void* shaderByteCode, size_t sizeShader)
+void Quad::initialize(VertexClass::vertex v[8], void* shaderByteCode, size_t sizeShader)
 {
-	for (size_t i = 0; i < 4; i++)
+	for (size_t i = 0; i < 8; i++)
 	{
 		list[i] = v[i];
 	}
@@ -25,6 +25,37 @@ void Quad::initialize(VertexClass::vertex v[4], void* shaderByteCode, size_t siz
 
 
 	m_vb = GraphicsEngine::get()->createVertexBuffer();
+	
+	unsigned int index_list[] =
+	{
+		//FRONT SIDE
+		0,1,2,  //FIRST TRIANGLE
+		2,3,0,  //SECOND TRIANGLE
+		//BACK SIDE
+		4,5,6,
+		6,7,4,
+		//TOP SIDE
+		1,6,5,
+		5,2,1,
+		//BOTTOM SIDE
+		7,0,3,
+		3,4,7,
+		//RIGHT SIDE
+		3,2,5,
+		5,4,3,
+		//LEFT SIDE
+		7,6,1,
+		1,0,7
+	};
+
+
+	m_ib = GraphicsEngine::get()->createIndexBuffer();
+	UINT size_index_list = ARRAYSIZE(index_list);
+
+	m_ib->load(index_list, size_index_list);
+
+
+
 
 	void* shader_byte_code = nullptr;
 	size_t size_shader = 0;
@@ -65,13 +96,17 @@ void Quad::drawQuad()
 
 	//SET THE VERTICES OF THE TRIANGLE TO DRAW
 	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(m_vb);
+	GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(m_ib);
+
 
 	// FINALLY DRAW THE TRIANGLE
-	GraphicsEngine::get()->getImmediateDeviceContext()->drawTriangleStrip(m_vb->getSizeVertexList(), 0);
+	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(m_ib->getSizeIndexList(),0, 0);
 }
 
 void Quad::release()
 {
+	m_ib->release();
+	m_cb->release();
 	m_vb->release();
 	m_vs->release();
 	m_ps->release();
@@ -81,14 +116,27 @@ void Quad::update(RECT window)
 {
 	//m_angle += 0.1 * EngineTime::getTimerValue();
 	constant cc;
-	cc.m_time =GetTickCount();
+	cc.m_time = GetTickCount();
 
-	Matrix4x4 holder;
+	Matrix4x4 temp;
 	cc.m_world.setScale(Vector3D(scale[0], scale[1], scale[2]));
-	holder.setTranslation(Vector3D(translation[0], translation[1], translation[2]));
-	//holder.setScale(Vector3D(scale[0], scale[1], scale[2]));
+	temp.setTranslation(Vector3D(translation[0], translation[1], translation[2]));
+	////holder.setScale(Vector3D(scale[0], scale[1], scale[2]));
 
-	cc.m_world *= holder;
+
+	temp.setIdentity();
+	temp.setRotationZ(EngineTime::getTimerValue());
+	cc.m_world *= temp;
+
+	temp.setIdentity();
+	temp.setRotationY(EngineTime::getTimerValue());
+	cc.m_world *= temp;
+
+	temp.setIdentity();
+	temp.setRotationX(EngineTime::getTimerValue());
+	cc.m_world *= temp;
+
+
 	cc.m_view.setIdentity();
 	cc.m_proj.setOrthoLH( (window.right - window.left) / 400.0f, 
 						  (window.bottom - window.top) / 400.0f, 
