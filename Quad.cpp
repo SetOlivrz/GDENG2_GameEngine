@@ -5,7 +5,7 @@ Quad::Quad()
 }
 
 __declspec(align(16))
-struct constant
+struct Constant
 {
 	Matrix4x4 m_world;
 	Matrix4x4 m_view;
@@ -14,7 +14,7 @@ struct constant
 };
 
 
-void Quad::initialize(VertexClass::vertex v[8], void* shaderByteCode, size_t sizeShader)
+void Quad::initialize(VertexClass::Vertex v[8], void* shaderByteCode, size_t sizeShader)
 {
 	for (size_t i = 0; i < 8; i++)
 	{
@@ -55,14 +55,12 @@ void Quad::initialize(VertexClass::vertex v[8], void* shaderByteCode, size_t siz
 	m_ib->load(index_list, size_index_list);
 
 
-
-
 	void* shader_byte_code = nullptr;
 	size_t size_shader = 0;
 	GraphicsEngine::get()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
 
 	m_vs = GraphicsEngine::get()->createVertexShader(shader_byte_code, size_shader);
-	m_vb->load(list, sizeof(VertexClass::vertex), size_list, shader_byte_code, size_shader);
+	m_vb->load(list, sizeof(VertexClass::Vertex), size_list, shader_byte_code, size_shader);
 
 	GraphicsEngine::get()->releaseCompiledShader();
 
@@ -71,11 +69,11 @@ void Quad::initialize(VertexClass::vertex v[8], void* shaderByteCode, size_t siz
 	m_ps = GraphicsEngine::get()->createPixelShader(shader_byte_code, size_shader);
 	GraphicsEngine::get()->releaseCompiledShader();
 
-	constant cc;
+	Constant cc;
 	cc.m_time = 0;
 
 	m_cb = GraphicsEngine::get()->createConstantBuffer();
-	m_cb->load(&cc, sizeof(constant));
+	m_cb->load(&cc, sizeof(Constant));
 }
 
 Quad::~Quad()
@@ -115,7 +113,7 @@ void Quad::release()
 void Quad::update(RECT window)
 {
 	//m_angle += 0.1 * EngineTime::getTimerValue();
-	constant cc;
+	Constant cc;
 	cc.m_time = GetTickCount();
 
 	Matrix4x4 temp;

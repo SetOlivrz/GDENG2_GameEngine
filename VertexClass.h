@@ -9,7 +9,7 @@ public:
 		float x, y, z;
 	};
 	
-	struct vertex
+	struct Vertex
 	{
 		Vector3D position;
 		Vector3D color;

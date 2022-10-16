@@ -1178,7 +1178,7 @@ static void stb_textedit_discard_redo(StbUndoState *state)
 
 static StbUndoRecord *stb_text_create_undo_record(StbUndoState *state, int numchars)
 {
-   // any time we create a new undo record, we discard redo
+   // any m_time we create a new undo record, we discard redo
    stb_textedit_flush_redo(state);
 
    // if we have no free records, we have to make room, by sliding the

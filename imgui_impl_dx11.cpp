@@ -90,7 +90,7 @@ static void ImGui_ImplDX11_SetupRenderState(ImDrawData* draw_data, ID3D11DeviceC
     vp.TopLeftX = vp.TopLeftY = 0;
     ctx->RSSetViewports(1, &vp);
 
-    // Setup shader and vertex buffers
+    // Setup shader and Vertex buffers
     unsigned int stride = sizeof(ImDrawVert);
     unsigned int offset = 0;
     ctx->IASetInputLayout(bd->pInputLayout);
@@ -123,7 +123,7 @@ void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data)
     ImGui_ImplDX11_Data* bd = ImGui_ImplDX11_GetBackendData();
     ID3D11DeviceContext* ctx = bd->pd3dDeviceContext;
 
-    // Create and grow vertex/index buffers if needed
+    // Create and grow Vertex/index buffers if needed
     if (!bd->pVB || bd->VertexBufferSize < draw_data->TotalVtxCount)
     {
         if (bd->pVB) { bd->pVB->Release(); bd->pVB = NULL; }
@@ -152,7 +152,7 @@ void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data)
             return;
     }
 
-    // Upload vertex/index data into a single contiguous GPU buffer
+    // Upload Vertex/index data into a single contiguous GPU buffer
     D3D11_MAPPED_SUBRESOURCE vtx_resource, idx_resource;
     if (ctx->Map(bd->pVB, 0, D3D11_MAP_WRITE_DISCARD, 0, &vtx_resource) != S_OK)
         return;
@@ -171,7 +171,7 @@ void ImGui_ImplDX11_RenderDrawData(ImDrawData* draw_data)
     ctx->Unmap(bd->pVB, 0);
     ctx->Unmap(bd->pIB, 0);
 
-    // Setup orthographic projection matrix into our constant buffer
+    // Setup orthographic projection matrix into our Constant buffer
     // Our visible imgui space lies from draw_data->DisplayPos (top left) to draw_data->DisplayPos+data_data->DisplaySize (bottom right). DisplayPos is (0,0) for single viewport apps.
     {
         D3D11_MAPPED_SUBRESOURCE mapped_resource;
@@ -379,7 +379,7 @@ bool    ImGui_ImplDX11_CreateDeviceObjects()
     //  2) use code to detect any version of the DLL and grab a pointer to D3DCompile from the DLL.
     // See https://github.com/ocornut/imgui/pull/638 for sources and details.
 
-    // Create the vertex shader
+    // Create the Vertex shader
     {
         static const char* vertexShader =
             "cbuffer vertexBuffer : register(b0) \
@@ -432,7 +432,7 @@ bool    ImGui_ImplDX11_CreateDeviceObjects()
         }
         vertexShaderBlob->Release();
 
-        // Create the constant buffer
+        // Create the Constant buffer
         {
             D3D11_BUFFER_DESC desc;
             desc.ByteWidth = sizeof(VERTEX_CONSTANT_BUFFER_DX11);

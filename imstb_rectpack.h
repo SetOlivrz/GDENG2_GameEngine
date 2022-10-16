@@ -110,7 +110,7 @@ STBRP_DEF int stbrp_pack_rects (stbrp_context *context, stbrp_rect *rects, int n
 // again. To continue packing into the same rectangle, you can call
 // this function again. Calling this multiple times with multiple rect
 // arrays will probably produce worse packing results than calling it
-// a single time with the full rectangle array, but the option is
+// a single m_time with the full rectangle array, but the option is
 // available.
 //
 // The function returns 1 if all of the rectangles were successfully
@@ -136,7 +136,7 @@ STBRP_DEF void stbrp_init_target (stbrp_context *context, int width, int height,
 //    pack a rectangle that is 'width' by 'height' in dimensions
 //    using temporary storage provided by the array 'nodes', which is 'num_nodes' long
 //
-// You must call this function every time you start packing into a new target.
+// You must call this function every m_time you start packing into a new target.
 //
 // There is no "shutdown" function. The 'nodes' memory must stay valid for
 // the following stbrp_pack_rects() call (or calls), but can be freed after
@@ -318,7 +318,7 @@ static int stbrp__skyline_find_min_y(stbrp_context *c, stbrp_node *first, int x0
          // but we'll now add more waste for everything we've visted
          waste_area += visited_width * (node->y - min_y);
          min_y = node->y;
-         // the first time through, visited_width might be reduced
+         // the first m_time through, visited_width might be reduced
          if (node->x < x0)
             visited_width += node->next->x - x0;
          else
@@ -405,7 +405,7 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context *c, int widt
    //
    // then right-aligned reduces waste, but bottom-left BL is always chooses left-aligned
    //
-   // This makes BF take about 2x the time
+   // This makes BF take about 2x the m_time
 
    if (c->heuristic == STBRP_HEURISTIC_Skyline_BF_sortHeight) {
       tail = c->active_head;

@@ -6,11 +6,12 @@ class Matrix4x4
 public:
 	Matrix4x4()
 	{
+
 	}
 
 	void setIdentity()
 	{
-		::memset(m_mat, 0, sizeof(float) * 16);
+		::memset(m_mat, 0, sizeof(float) * 16); // set matrix to zero
 		m_mat[0][0] = 1;
 		m_mat[1][1] = 1;
 		m_mat[2][2] = 1;
@@ -73,6 +74,21 @@ public:
 			}
 		}
 		setMatrix(out);
+	}
+
+	Matrix4x4 operator *(const Matrix4x4& matrix)
+	{
+		Matrix4x4 out;
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				out.m_mat[i][j] =
+					m_mat[i][0] * matrix.m_mat[0][j] + m_mat[i][1] * matrix.m_mat[1][j] +
+					m_mat[i][2] * matrix.m_mat[2][j] + m_mat[i][3] * matrix.m_mat[3][j];
+			}
+		}
+		return out;
 	}
 
 	void setMatrix(const Matrix4x4& matrix)

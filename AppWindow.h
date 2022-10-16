@@ -10,11 +10,15 @@
 #include "VertexClass.h"
 #include "DebugWindow.h"
 #include "Quad.h"
+#include "Cube.h"
+
+#include <vector>
 
 class GraphicsEngine;
 
 class AppWindow : public Window
 {
+
 public:
 	AppWindow();
 	~AppWindow();
@@ -32,7 +36,10 @@ private:
 	
 	DebugWindow debugWindow;
 	Quad quad;
-	Quad triangle;
+
+	std::vector<Cube*> CubeList;
+
+
 
 	Quad* objectList[2];
 

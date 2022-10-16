@@ -19,11 +19,11 @@ class Quad
 
 public:
 	Quad();
-	void initialize(VertexClass::vertex list[4], void* shaderByteCode, size_t sizeShader);
+	void initialize(VertexClass::Vertex list[4], void* shaderByteCode, size_t sizeShader);
 	~Quad();
 
 private:
-	VertexClass::vertex list[8];
+	VertexClass::Vertex list[8];
 	VertexBuffer* m_vb;
 	IndexBuffer* m_ib;
 	VertexShader* m_vs;

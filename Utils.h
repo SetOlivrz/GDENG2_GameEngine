@@ -1,4 +1,6 @@
 #pragma once
+#include <time.h>
+#include <stdlib.h>
 class Utils
 {
 public:
@@ -47,6 +49,16 @@ public:
 		{
 			sum[i] = b[i] - a[i];
 		}
+	}
+
+	static float randFloat()
+	{
+		return ((float)rand()) / ((float)RAND_MAX);
+	}
+
+	static float randFloatInterval(float min, float max)
+	{
+		return randFloat() * (max - min) + min;
 	}
 };
 

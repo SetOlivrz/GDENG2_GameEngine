@@ -5,7 +5,7 @@ struct PS_INPUT
 	float3 color1: COLOR1;
 };
 
-cbuffer constant: register(b0)
+cbuffer Constant: register(b0)
 {
 	//float m_angle;
 	row_major float4x4 m_world;
