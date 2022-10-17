@@ -11,6 +11,7 @@
 #include "DebugWindow.h"
 #include "Quad.h"
 #include "Cube.h"
+#include "Plane.h"
 
 #include <vector>
 
@@ -35,14 +36,10 @@ private:
 	ConstantBuffer* m_cb;
 	
 	DebugWindow debugWindow;
-	Quad quad;
+
+	Plane* planeList[1];
 
 	std::vector<Cube*> CubeList;
-
-
-
-	Quad* objectList[2];
-
 
 	unsigned long m_old_time = 0;
 	float m_delta_time = 0;

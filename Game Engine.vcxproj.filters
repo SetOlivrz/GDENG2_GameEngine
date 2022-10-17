@@ -124,6 +124,7 @@
       <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClCompile>
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Plane.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -205,6 +206,7 @@
       <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Plane.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">

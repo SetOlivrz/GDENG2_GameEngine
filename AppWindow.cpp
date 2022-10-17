@@ -38,6 +38,12 @@ void AppWindow::onCreate()
 		this->CubeList.push_back(cubeObj);
 	}
 
+	Plane* plane = new Plane ("Plane", shaderByteCode, sizeShader);
+	plane->setPosition(0.0, 0.0, 0.0f);
+	plane->setAnimation(Utils::randFloatInterval(1.0, 3.0), Utils::randFloatInterval(2.0, 5.0), true);
+	planeList[0] = plane;
+
+
 
 
 }
@@ -52,7 +58,7 @@ void AppWindow::onUpdate()
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
-	for (int i = 0; i < CubeList.size(); i++)
+	/*for (int i = 0; i < CubeList.size(); i++)
 	{
 		CubeList[i]->update(EngineTime::getDeltaTime());
 	}
@@ -60,7 +66,10 @@ void AppWindow::onUpdate()
 	for (int i = 0; i < CubeList.size(); i++)
 	{
 		CubeList[i]->draw(rc.right - rc.left, rc.bottom - rc.top);
-	}
+	}*/
+
+	planeList[0]->update(EngineTime::getDeltaTime());
+	planeList[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
 
 
 
