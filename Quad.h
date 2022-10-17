@@ -30,16 +30,27 @@ private:
 	unsigned long m_old_time = 0;
 	float m_delta_time = 0;
 	float m_angle = 0;
+
+	//float translation[3] = { 0.0,0.0, 0.0 };
+	///float scale[3] = { 1.0, 1.0, 1.0 };
+
+	Vector3D translation;
+	Vector3D scale;
+
+
 public:
 	void drawQuad();
 	void release();
 	void update(RECT window);
 
+	Vector3D getTranslation();
+	Vector3D getScale();
+
+	void setScale(Vector3D scl);
+	void setTranslation(Vector3D trnslt);
+
 	void resetPosition();
 	void resetScale();
 
-
-	float translation[3]= {0.0,0.0, 0.0};
-	float scale[3] = { 1.0, 1.0, 1.0 };
 
 };

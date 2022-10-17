@@ -44,8 +44,16 @@ void AppWindow::onCreate()
 
 	std:: cout << "Debug";
 	debugWindow.intitialize(Window::m_hwnd);
+
+	//quad
 	quad.initialize(quad_list, nullptr, 0);
+	quad.setScale(Vector3D(1, 1, 1));
+	quad.setTranslation(Vector3D(0, 0, 0));
+
+	// triangle
 	triangle.initialize(triangle_list, nullptr, 0);
+	triangle.setScale(Vector3D(1, 1, 1));
+	triangle.setTranslation(Vector3D(0, 0, 0));
 
 	objectList[0] = &quad;
 	objectList[1] = &triangle;

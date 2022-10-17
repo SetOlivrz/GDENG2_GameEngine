@@ -84,8 +84,8 @@ void Quad::update(RECT window)
 	cc.m_time =GetTickCount();
 
 	Matrix4x4 holder;
-	cc.m_world.setScale(Vector3D(scale[0], scale[1], scale[2]));
-	holder.setTranslation(Vector3D(translation[0], translation[1], translation[2]));
+	cc.m_world.setScale(scale);
+	holder.setTranslation(translation);
 	//holder.setScale(Vector3D(scale[0], scale[1], scale[2]));
 
 	cc.m_world *= holder;
@@ -101,22 +101,35 @@ void Quad::update(RECT window)
 
 }
 
+Vector3D Quad::getTranslation()
+{
+	return this->translation;
+}
+
+Vector3D Quad::getScale()
+{
+	return this->scale;
+}
+
+void Quad::setScale(Vector3D scl)
+{
+	this->scale = scl;
+}
+
+void Quad::setTranslation(Vector3D trnslt)
+{
+	this->translation = trnslt;
+}
+
 void Quad::resetPosition()
 {
-	for (size_t i = 0; i < 3; i++)
-	{
-		translation[i] = 0.0f;
-	}
+	this->translation = Vector3D(0, 0, 0);
 }
 
 void Quad::resetScale()
 {
-	for (size_t i = 0; i < 3; i++)
-	{
-		scale[i] = 1.0f;
-		
-	}
-	std::cout << "Reset scale";
+	this->scale = Vector3D(1, 1, 1);
+
 }
 
 

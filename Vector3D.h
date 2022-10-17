@@ -22,6 +22,43 @@ public:
 		return v;
 	}
 
+	bool isEqual( Vector3D v)
+	{
+		if (this->m_x != v.m_x)
+		{
+			return false;
+		}
+		if (this->m_y != v.m_y)
+		{
+			return false;
+		}
+		if (this->m_z != v.m_z)
+		{
+			return false;
+		}
+
+		return true;
+	}
+
+	Vector3D operator +(const Vector3D v)
+	{
+		return Vector3D
+		(
+			this->m_x + v.m_x,
+			this->m_y + v.m_y,
+			this->m_z + v.m_z
+		);
+		
+
+	}
+
+	void zero()
+	{
+		this->m_x = 0;
+		this->m_y = 0;
+		this->m_z = 0;
+	}
+
 
 	~Vector3D()
 	{

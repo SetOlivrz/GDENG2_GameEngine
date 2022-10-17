@@ -15,6 +15,8 @@ public:
 	void createDisplayData(Quad* quad[]);
 	void TransformSliders(Quad* obj);
 	void TransformSliders(Quad* obj1,Quad* obj2);
+	void resetVariables();
+
 
 	void renderWindow();
 
@@ -24,31 +26,10 @@ private:
 	bool obj1 = false;
 	bool obj2 = false;
 
-	float posFactor[3] = {};
-	float scalFactor[3] = {};
-
-	float sumA[3] = {};
-	float sumB[3] = {};
-
-	float sumC[3] = {};
-	float sumD[3] = {};
-
-
-	float multiScale = 1.0f;
-	float scaleSum[3] = {};
-
-	float tempPosA[3] = { 0,0,0 };
-	float tempPosB[3] = { 0,0,0 };
-
-	float tempScalA[3] = { 0,0,0 };
-	float tempScalB[3] = { 0,0,0 };
-
-
-
-
-
-
-
-
+	Vector3D posFactor;
+	Vector3D scalFactor;
+	Vector3D sum[4];
+	Vector3D tempPos[2];
+	Vector3D tempScal[2];
 };
 
