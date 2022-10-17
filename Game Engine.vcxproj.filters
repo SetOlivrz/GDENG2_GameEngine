@@ -123,8 +123,12 @@
     <ClCompile Include="AGameObject.cpp">
       <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="Cube.cpp" />
-    <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="Cube.cpp">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -205,8 +209,12 @@
     <ClInclude Include="AGameObject.h">
       <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h" />
-    <ClInclude Include="Plane.h" />
+    <ClInclude Include="Cube.h">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">

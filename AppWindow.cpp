@@ -26,27 +26,27 @@ void AppWindow::onCreate()
 
 	void* shaderByteCode = nullptr;
 	size_t sizeShader = 0;
-	for (int i = 0; i <100 ; i++)
-	{
-		float x = Utils::randFloatInterval(-0.75, 0.75);
-		float y = Utils::randFloatInterval(-0.75, 0.75);;
+	//for (int i = 0; i <100 ; i++)
+	//{
+	//	float x = Utils::randFloatInterval(-0.75, 0.75);
+	//	float y = Utils::randFloatInterval(-0.75, 0.75);;
 
 
-		Cube *cubeObj =  new Cube("Cube", shaderByteCode, sizeShader);
-		cubeObj->setPosition(x,y, 0.0f);
-		cubeObj->setAnimation(Utils::randFloatInterval(1.0, 3.0), Utils::randFloatInterval(2.0, 5.0), true );
-		this->CubeList.push_back(cubeObj);
-	}
+	//	Cube *cubeObj =  new Cube("Cube", shaderByteCode, sizeShader);
+	//	cubeObj->setPosition(x,y, 0.0f);
+	//	cubeObj->setAnimation(Utils::randFloatInterval(1.0, 3.0), Utils::randFloatInterval(2.0, 5.0), true );
+	//	this->CubeList.push_back(cubeObj);
+	//}
 
-	//Plane* planeObj = new Plane ("Plane", shaderByteCode, sizeShader);
-	//planeObj->setPosition(0.0, 0.0, 0.0f);
-	//planeObj->setAnimation(1, 20, true);
-	//plane[0] = planeObj;
+	Plane* planeObj = new Plane ("Plane", shaderByteCode, sizeShader);
+	planeObj->setPosition(0.0, 0.0, 0.0f);
+	planeObj->setAnimation(1, 20, true);
+	plane[0] = planeObj;
 
-	//Cube* cubeObj = new Cube("Cube", shaderByteCode, sizeShader);
-	//cubeObj->setPosition(0.0, 0.0, 0.0f);
-	//cubeObj->setAnimation(1,20, true);
-	//cube[0] = cubeObj;
+	Cube* cubeObj = new Cube("Cube", shaderByteCode, sizeShader);
+	cubeObj->setPosition(0.0, 0.0, 0.0f);
+	cubeObj->setAnimation(1,20, true);
+	cube[0] = cubeObj;
 
 
 
@@ -62,7 +62,7 @@ void AppWindow::onUpdate()
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
-	for (int i = 0; i < CubeList.size(); i++)
+	/*for (int i = 0; i < CubeList.size(); i++)
 	{
 		CubeList[i]->update(EngineTime::getDeltaTime());
 	}
@@ -70,13 +70,13 @@ void AppWindow::onUpdate()
 	for (int i = 0; i < CubeList.size(); i++)
 	{
 		CubeList[i]->draw(rc.right - rc.left, rc.bottom - rc.top);
-	}
+	}*/
 
-	//plane[0]->update(EngineTime::getDeltaTime());
-	//cube[0]->update(EngineTime::getDeltaTime());
+	plane[0]->update(EngineTime::getDeltaTime());
+	cube[0]->update(EngineTime::getDeltaTime());
 
-	//plane[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
-	//cube[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
+	plane[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
+	cube[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
 
 
 
@@ -87,10 +87,6 @@ void AppWindow::onUpdate()
 void AppWindow::onDestroy()
 {
 	Window::onDestroy();
-	//m_vb->release();
-	//quad.release();
 	m_swap_chain->release();
-	//m_vs->release();
-	//m_ps->release();
 	GraphicsEngine::get()->release();
 }
