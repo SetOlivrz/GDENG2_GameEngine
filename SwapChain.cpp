@@ -41,13 +41,32 @@ bool SwapChain::init(HWND hwnd, UINT width, UINT height)
 		return false;
 	}
 
-	hr = device->CreateRenderTargetView(buffer, NULL, &m_rtv);
+	hr = device->CreateRenderTargetView(buffer, NULL, &renderView);
 	buffer->Release();
 
 	if (FAILED(hr))
 	{
 		return false;
 	}
+
+	D3D11_TEXTURE2D_DESC textDesc = {};
+	textDesc.Width = width;
+	textDesc.Height = height;
+	textDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	textDesc.Usage = D3D11_USAGE_DEFAULT;
+	textDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	textDesc.MipLevels = 1;
+	textDesc.SampleDesc.Count = 1;
+	textDesc.SampleDesc.Quality = 0;
+	textDesc.MiscFlags = 0;
+	textDesc.ArraySize = 1;
+	textDesc.CPUAccessFlags = 0;
+
+	HRESULT depthResult = device->CreateTexture2D(&textDesc, NULL, &buffer);
+
+	HRESULT depthStencilResult = device->CreateDepthStencilView(buffer, NULL, &this->depthStencilView);
+
+	buffer->Release();
 
 	return true;
 }

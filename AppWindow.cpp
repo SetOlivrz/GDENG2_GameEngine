@@ -38,10 +38,15 @@ void AppWindow::onCreate()
 		this->CubeList.push_back(cubeObj);
 	}
 
-	Plane* plane = new Plane ("Plane", shaderByteCode, sizeShader);
-	plane->setPosition(0.0, 0.0, 0.0f);
-	plane->setAnimation(Utils::randFloatInterval(1.0, 3.0), Utils::randFloatInterval(2.0, 5.0), true);
-	planeList[0] = plane;
+	//Plane* planeObj = new Plane ("Plane", shaderByteCode, sizeShader);
+	//planeObj->setPosition(0.0, 0.0, 0.0f);
+	//planeObj->setAnimation(1, 20, true);
+	//plane[0] = planeObj;
+
+	//Cube* cubeObj = new Cube("Cube", shaderByteCode, sizeShader);
+	//cubeObj->setPosition(0.0, 0.0, 0.0f);
+	//cubeObj->setAnimation(1,20, true);
+	//cube[0] = cubeObj;
 
 
 
@@ -52,13 +57,12 @@ void AppWindow::onUpdate()
 {
 	Window::onUpdate();
 	//CLEAR THE RENDER TARGET 
-	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain,
-		0, 0.3f, 0.4f, 1);
+	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 0, 0.1f, 0.2f, 1);
 	//SET VIEWPORT OF RENDER TARGET IN WHICH WE HAVE TO DRAW
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
-	/*for (int i = 0; i < CubeList.size(); i++)
+	for (int i = 0; i < CubeList.size(); i++)
 	{
 		CubeList[i]->update(EngineTime::getDeltaTime());
 	}
@@ -66,10 +70,14 @@ void AppWindow::onUpdate()
 	for (int i = 0; i < CubeList.size(); i++)
 	{
 		CubeList[i]->draw(rc.right - rc.left, rc.bottom - rc.top);
-	}*/
+	}
 
-	planeList[0]->update(EngineTime::getDeltaTime());
-	planeList[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
+	//plane[0]->update(EngineTime::getDeltaTime());
+	//cube[0]->update(EngineTime::getDeltaTime());
+
+	//plane[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
+	//cube[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
+
 
 
 

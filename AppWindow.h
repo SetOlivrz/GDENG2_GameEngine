@@ -37,7 +37,9 @@ private:
 	
 	DebugWindow debugWindow;
 
-	Plane* planeList[1];
+	Plane* plane[1];
+	Cube* cube[1];
+
 
 	std::vector<Cube*> CubeList;
 

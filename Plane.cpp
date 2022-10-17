@@ -11,10 +11,10 @@ Plane::Plane(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(
 	Vertex quadList[] = {
 		//X, Y, Z
 		//FRONT FACE
-		{Vector3D(-0.5f,-0.5f,-0.5f),    Vector3D(1,0,1), Vector3D(0.2f,0,0) },
-		{Vector3D(-0.5f,0.5f,-0.5f),     Vector3D(.5,.5,1), Vector3D(0.2f,0.2f,0) },
-		{Vector3D(0.5f,0.5f,-0.5f),      Vector3D(1,.5,1), Vector3D(0.2f,0.2f,0) },
-		{Vector3D(0.5f,-0.5f,-0.5f),     Vector3D(.5,0,1), Vector3D(0.2f,0,0) },
+		{Vector3D(-0.5f,-0.0f,1),    Vector3D(0,1,1), Vector3D(0.2f,0,0) },
+		{Vector3D(-0.5f,0.0f,-1),     Vector3D(0,1,1), Vector3D(0.2f,0.2f,0) },
+		{Vector3D(0.5f,-0.0f,1),      Vector3D(1,0,1), Vector3D(0.2f,0.2f,0) },
+		{Vector3D(0.5f,0.0,-1),     Vector3D(0,1,1), Vector3D(0.2f,0,0) },
 	};
 
 	// VERTEX SHADER
@@ -80,7 +80,7 @@ void Plane::draw(int width, int height)
 
 	// SCALE
 	Matrix4x4 temp;
-	cc.worldMatrix.setScale(Vector3D(.25, .25, .25));
+	cc.worldMatrix.setScale(Vector3D(1, 1, 1));
 
 	// ROTATION Z
 	temp.setIdentity();
