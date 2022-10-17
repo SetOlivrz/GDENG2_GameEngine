@@ -25,7 +25,6 @@ void AppWindow::onCreate()
 	VertexClass::vertex quad_list[] =
 	{
 		//X - Y - Z
-		//X - Y - Z
 		{Vector3D(-0.2f,-0.2f,0.0f),    Vector3D(-0.32f,-0.11f,0.0f),   Vector3D(0,0,0), Vector3D(0,1,0) }, // POS1
 		{Vector3D(-0.2f,0.2f,0.0f),     Vector3D(-0.11f,0.78f,0.0f),   Vector3D(1,1,0), Vector3D(0,1,1) }, // POS2
 		{ Vector3D(0.2f,-0.2f,0.0f),     Vector3D(0.75f,-0.73f,0.0f), Vector3D(0,0,1),  Vector3D(1,0,0) },// POS2
@@ -35,14 +34,12 @@ void AppWindow::onCreate()
 	VertexClass::vertex triangle_list[] =
 	{
 		//X - Y - Z
-		//X - Y - Z
 		{Vector3D(-0.7f,-0.2f,0.0f),    Vector3D(-0.32f,-0.11f,0.0f),   Vector3D(0,0,0), Vector3D(0,1,0) }, // POS1
 		{Vector3D(-0.7f,0.2f,0.0f),     Vector3D(-0.11f,0.78f,0.0f),   Vector3D(1,1,0), Vector3D(0,1,1) }, // POS2
 		{ Vector3D(0.7f,-0.2f,0.0f),     Vector3D(0.75f,-0.73f,0.0f), Vector3D(0,0,1),  Vector3D(1,0,0) },// POS2
 	};
 
-
-	std:: cout << "Debug";
+	//Debug Window
 	debugWindow.intitialize(Window::m_hwnd);
 
 	//quad
@@ -57,9 +54,6 @@ void AppWindow::onCreate()
 
 	objectList[0] = &quad;
 	objectList[1] = &triangle;
-
-	
-
 }
 
 void AppWindow::onUpdate()
@@ -72,14 +66,14 @@ void AppWindow::onUpdate()
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
-
+	// Primitives
 	quad.update(this->getClientWindowRect());
 	triangle.update(this->getClientWindowRect());
 
 	quad.drawQuad();
 	triangle.drawQuad();
 
-
+	// Debug Window
 	debugWindow.createDisplayData(objectList);
 	debugWindow.renderWindow();
 
@@ -89,10 +83,8 @@ void AppWindow::onUpdate()
 void AppWindow::onDestroy()
 {
 	Window::onDestroy();
-	//m_vb->release();
 	quad.release();
+	triangle.release();
 	m_swap_chain->release();
-	//m_vs->release();
-	//m_ps->release();
 	GraphicsEngine::get()->release();
 }

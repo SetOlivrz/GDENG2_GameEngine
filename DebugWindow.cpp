@@ -58,10 +58,7 @@ void DebugWindow::createDisplayData(Quad* objList[] )
 	{
 	    ImGui::Text("	\n\nNOTE: PLEASE SELECT A SINGLE OBJECT");
 	}
-
-
 	ImGui::End();
-
 	//Assemble Together Draw Data
 	ImGui::Render();
 }
@@ -176,7 +173,6 @@ void DebugWindow::resetVariables()
 
 void DebugWindow::renderWindow()
 {
-
 	//Render Draw Data
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }

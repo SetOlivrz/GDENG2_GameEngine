@@ -36,7 +36,6 @@ public:
 		{
 			return false;
 		}
-
 		return true;
 	}
 
@@ -48,8 +47,6 @@ public:
 			this->m_y + v.m_y,
 			this->m_z + v.m_z
 		);
-		
-
 	}
 
 	void zero()

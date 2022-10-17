@@ -79,14 +79,12 @@ void Quad::release()
 
 void Quad::update(RECT window)
 {
-	//m_angle += 0.1 * EngineTime::getTimerValue();
 	constant cc;
 	cc.m_time =GetTickCount();
 
 	Matrix4x4 holder;
 	cc.m_world.setScale(scale);
 	holder.setTranslation(translation);
-	//holder.setScale(Vector3D(scale[0], scale[1], scale[2]));
 
 	cc.m_world *= holder;
 	cc.m_view.setIdentity();
@@ -95,10 +93,6 @@ void Quad::update(RECT window)
 						  -4.0f, 4.0f );
 
 	m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
-
-
-
-
 }
 
 Vector3D Quad::getTranslation()

@@ -31,9 +31,6 @@ private:
 	float m_delta_time = 0;
 	float m_angle = 0;
 
-	//float translation[3] = { 0.0,0.0, 0.0 };
-	///float scale[3] = { 1.0, 1.0, 1.0 };
-
 	Vector3D translation;
 	Vector3D scale;
 
