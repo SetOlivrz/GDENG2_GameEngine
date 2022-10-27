@@ -16,6 +16,11 @@ AppWindow::~AppWindow()
 {
 }
 
+void AppWindow::update()
+{
+
+}
+
 void AppWindow::onCreate()
 {
 	Window::onCreate();
@@ -98,6 +103,16 @@ void AppWindow::onDestroy()
 	GraphicsEngine::get()->release();
 }
 
+void AppWindow::onFocus()
+{
+	InputSystem::get()->addListener(this);
+}
+
+void AppWindow::onKillFocus()
+{
+	InputSystem::get()->removeListener(this);
+}
+
 void AppWindow::onKeyDown(int key)
 {
 	Vector3D v = cube[0]->getRotation();
@@ -123,4 +138,39 @@ void AppWindow::onKeyDown(int key)
 
 void AppWindow::onKeyUp(int key)
 {
+}
+void AppWindow::onMouseMove(const Point& delta_mouse_pos)
+{
+	Vector3D v = cube[0]->getRotation();
+	v.m_x -= delta_mouse_pos.m_y * EngineTime::getDeltaTime();
+	v.m_y -= delta_mouse_pos.m_x * EngineTime::getDeltaTime();
+
+
+	cube[0]->setRotation(v);
+
+}
+
+void AppWindow::onLeftMouseDown(const Point& mouse_pos)
+{
+	cube[0]->setScale(Vector3D(0.5, 0.5, 0.5));
+}
+
+void AppWindow::onLeftMouseUp(const Point& mouse_pos)
+{
+	cube[0]->setScale(Vector3D(1.0, 1.0, 1.0));
+
+}
+
+void AppWindow::onRightMouseDown(const Point& mouse_pos)
+{
+	cube[0]->setScale(Vector3D(2.0, 2.0, 2.0));
+
+	//m_scale_cube = 2.0f;
+}
+
+void AppWindow::onRightMouseUp(const Point& mouse_pos)
+{
+	cube[0]->setScale(Vector3D(1.0, 1.0, 1.0));
+
+	//m_scale_cube = 1.0f;
 }

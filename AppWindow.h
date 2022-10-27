@@ -25,14 +25,30 @@ public:
 	AppWindow();
 	~AppWindow();
 
+	void update();
+
 	// Inherited via Window
 	virtual void onCreate() override;
 	virtual void onUpdate() override;
 	virtual void onDestroy() override;	
+	virtual void onFocus() override;
+	virtual void onKillFocus() override;
+
 	
 	// Inherited via InputListener
 	virtual void onKeyDown(int key) override;
 	virtual void onKeyUp(int key) override;
+
+		// Inherited via InputListener
+	virtual void onMouseMove(const Point& delta_mouse_pos) override;
+
+	virtual void onLeftMouseDown(const Point& mouse_pos) override;
+
+	virtual void onLeftMouseUp(const Point& mouse_pos) override;
+
+	virtual void onRightMouseDown(const Point& mouse_pos) override;
+
+	virtual void onRightMouseUp(const Point& mouse_pos) override;
 private:
 	SwapChain* m_swap_chain;
 	VertexBuffer* m_vb;
@@ -54,6 +70,5 @@ private:
 
 private:
 	friend class GraphicsEngine;
-
 
 };

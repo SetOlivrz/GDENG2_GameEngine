@@ -113,7 +113,7 @@ void Cube::draw(int width, int height)
 
 	// SCALE
 	Matrix4x4 temp;
-	cc.worldMatrix.setScale(Vector3D(.25, .25, .25));
+	cc.worldMatrix.setScale(scale);
 
 	// ROTATION Z
 	temp.setIdentity();
