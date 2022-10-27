@@ -9,7 +9,8 @@
 #include "PixelShader.h"
 #include "VertexClass.h"
 #include "DebugWindow.h"
-#include "Quad.h"
+#include "InputListener.h"
+
 #include "Cube.h"
 #include "Plane.h"
 
@@ -17,7 +18,7 @@
 
 class GraphicsEngine;
 
-class AppWindow : public Window
+class AppWindow : public Window, public InputListener
 {
 
 public:
@@ -27,7 +28,11 @@ public:
 	// Inherited via Window
 	virtual void onCreate() override;
 	virtual void onUpdate() override;
-	virtual void onDestroy() override;
+	virtual void onDestroy() override;	
+	
+	// Inherited via InputListener
+	virtual void onKeyDown(int key) override;
+	virtual void onKeyUp(int key) override;
 private:
 	SwapChain* m_swap_chain;
 	VertexBuffer* m_vb;
@@ -49,4 +54,6 @@ private:
 
 private:
 	friend class GraphicsEngine;
+
+
 };

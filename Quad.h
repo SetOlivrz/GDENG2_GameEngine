@@ -41,8 +41,16 @@ public:
 	void resetPosition();
 	void resetScale();
 
+	void setScale(Vector3D v);
+	void setTranslation(Vector3D v);
+	void setRotation(Vector3D v);
 
-	float translation[3]= {0.0,0.0, 0.0};
-	float scale[3] = { 1.0, 1.0, 1.0 };
+	Vector3D getScale(Vector3D v);
+	Vector3D getTranslation(Vector3D v);
+	Vector3D getRotation(Vector3D v);
+
+	Vector3D translation = Vector3D(0, 0, 0);
+	Vector3D scale = Vector3D(1, 1, 1);
+	Vector3D rotation = Vector3D(0, 0, 0);
 
 };

@@ -90,20 +90,20 @@ void Cube::update(float deltaTime)
 
 void Cube::draw(int width, int height)
 {
-	if (ticks >= animationInterval)
-	{
-		isIncreasing = !isIncreasing;
-		ticks = 0;
-	}
+	//if (ticks >= animationInterval)
+	//{
+	//	isIncreasing = !isIncreasing;
+	//	ticks = 0;
+	//}
 
-	if (isIncreasing)
-	{
-		rotation += deltaTime;
-	}
-	else
-	{
-		rotation -= deltaTime;
-	}
+	//if (isIncreasing)
+	//{
+	//	rotation += deltaTime;
+	//}
+	//else
+	//{
+	//	rotation -= deltaTime;
+	//}
 
 	GraphicsEngine* graphEngine = GraphicsEngine::get();
 	DeviceContext* deviceContext = GraphicsEngine::get()->getImmediateDeviceContext();
@@ -117,17 +117,17 @@ void Cube::draw(int width, int height)
 
 	// ROTATION Z
 	temp.setIdentity();
-	temp.setRotationZ(rotation* speed);
+	temp.setRotationZ(0.0);
 	cc.worldMatrix *= temp;
 
 	// ROTATION Y
 	temp.setIdentity();
-	temp.setRotationY(rotation * speed);
+	temp.setRotationY(rotation.m_y);
 	cc.worldMatrix *= temp;
 
 	// ROTATION X
 	temp.setIdentity();
-	temp.setRotationX(rotation * speed);
+	temp.setRotationX(rotation.m_x);
 	cc.worldMatrix *= temp;
 
 	// TRANSLATION
@@ -165,5 +165,49 @@ void Cube::setAnimation(float speed, float interval, bool isSpeeding)
 	this->speed = speed;
 	this->animationInterval = interval;
 	this->isIncreasing = isSpeeding;
+}
+
+
+void Cube::resetPosition()
+{
+	translation = Vector3D(0, 0, 0);
+}
+
+void Cube::resetScale()
+{
+	scale = Vector3D(1, 1, 1);
+
+}
+
+void Cube::setScale(Vector3D v)
+{
+	this->scale = v;
+}
+
+void Cube::setTranslation(Vector3D v)
+{
+	this->translation = v;
+
+}
+
+void Cube::setRotation(Vector3D v)
+{
+	this->rotation = v;
+
+}
+
+Vector3D Cube::getScale()
+{
+	return scale;
+}
+
+Vector3D Cube::getTranslation()
+{
+	return translation;
+}
+
+Vector3D Cube::getRotation()
+{
+	return rotation;
 }
 

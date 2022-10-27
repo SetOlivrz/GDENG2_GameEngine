@@ -117,21 +117,21 @@ void Quad::update(RECT window)
 	cc.m_time = GetTickCount();
 
 	Matrix4x4 temp;
-	cc.m_world.setScale(Vector3D(scale[0], scale[1], scale[2]));
-	temp.setTranslation(Vector3D(translation[0], translation[1], translation[2]));
+	cc.m_world.setScale(scale);
+	temp.setTranslation(translation);
 	////holder.setScale(Vector3D(scale[0], scale[1], scale[2]));
 
 
 	temp.setIdentity();
-	temp.setRotationZ(EngineTime::getTimerValue());
+	temp.setRotationZ(0.0);
 	cc.m_world *= temp;
 
 	temp.setIdentity();
-	temp.setRotationY(EngineTime::getTimerValue());
+	temp.setRotationY(rotation.m_y);
 	cc.m_world *= temp;
 
 	temp.setIdentity();
-	temp.setRotationX(EngineTime::getTimerValue());
+	temp.setRotationX(rotation.m_x);
 	cc.m_world *= temp;
 
 
@@ -142,27 +142,50 @@ void Quad::update(RECT window)
 
 	m_cb->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
 
-
-
-
 }
 
 void Quad::resetPosition()
 {
-	for (size_t i = 0; i < 3; i++)
-	{
-		translation[i] = 0.0f;
-	}
+	translation = Vector3D(0, 0, 0);
 }
 
 void Quad::resetScale()
 {
-	for (size_t i = 0; i < 3; i++)
-	{
-		scale[i] = 1.0f;
-		
-	}
-	std::cout << "Reset scale";
+	scale = Vector3D(1, 1, 1);
+
+}
+
+void Quad::setScale(Vector3D v)
+{
+	this->scale = v;
+}
+
+void Quad::setTranslation(Vector3D v)
+{
+	this->translation = v;
+
+}
+
+void Quad::setRotation(Vector3D v)
+{
+	this->rotation = v;
+
+}
+
+Vector3D Quad::getScale(Vector3D v)
+{
+	return scale;
+}
+
+Vector3D Quad::getTranslation(Vector3D v)
+{
+	return translation;
+}
+
+Vector3D Quad::getRotation(Vector3D v)
+{
+	return rotation;
+
 }
 
 

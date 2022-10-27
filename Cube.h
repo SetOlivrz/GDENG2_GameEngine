@@ -17,6 +17,18 @@ public:
 	void draw(int width, int height) override;
 	void setAnimation(float speed, float interval, bool isSpeeding);
 
+	void resetPosition();
+
+	void resetScale();
+
+	void setScale(Vector3D v);
+	void setTranslation(Vector3D v);
+	void setRotation(Vector3D v);
+
+	Vector3D getScale();
+	Vector3D getTranslation();
+	Vector3D getRotation();
+
 
 
 private:
@@ -27,10 +39,14 @@ private:
 	VertexShader* vertexShader;
 	PixelShader* pixelShader;
 
+	Vector3D translation = Vector3D(0, 0, 0);
+	Vector3D scale = Vector3D(1, 1, 1);
+	Vector3D rotation = Vector3D(0, 0, 0);
+
 	float ticks = 0.0f;
 	float deltaTime = 0.0f;
 	float speed = 1.0f;
 	bool isIncreasing = false;
-	float rotation = 5.0f;
+	//float rotation = 5.0f;
 	float animationInterval = 0.0f;
 };
