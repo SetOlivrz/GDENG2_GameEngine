@@ -10,6 +10,8 @@
 #include "VertexClass.h"
 #include "DebugWindow.h"
 #include "InputListener.h"
+#include "Matrix4x4.h"
+
 
 #include "Cube.h"
 #include "Plane.h"
@@ -40,7 +42,7 @@ public:
 	virtual void onKeyUp(int key) override;
 
 		// Inherited via InputListener
-	virtual void onMouseMove(const Point& delta_mouse_pos) override;
+	virtual void onMouseMove(const Point& mouse_pos) override;
 
 	virtual void onLeftMouseDown(const Point& mouse_pos) override;
 
@@ -67,6 +69,8 @@ private:
 	unsigned long m_old_time = 0;
 	float m_delta_time = 0;
 	float m_angle = 0;
+
+
 
 private:
 	friend class GraphicsEngine;

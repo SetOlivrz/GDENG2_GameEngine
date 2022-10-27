@@ -29,7 +29,10 @@ public:
 	Vector3D getTranslation();
 	Vector3D getRotation();
 
-
+	float m_scale_cube = 1;
+	float m_forward = 0.0f;
+	float m_rightward = 0.0f;
+	Matrix4x4 m_world_cam;
 
 private:
 	VertexBuffer* vertexBuffer;
@@ -49,4 +52,6 @@ private:
 	bool isIncreasing = false;
 	//float rotation = 5.0f;
 	float animationInterval = 0.0f;
+
+
 };
