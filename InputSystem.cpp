@@ -1,104 +1,187 @@
 #include "InputSystem.h"
-#include <Windows.h>
 
+InputSystem* InputSystem::sharedInstance = NULL;
+
+InputSystem* InputSystem::getInstance()
+{
+	return sharedInstance;
+}
+
+void InputSystem::initialize()
+{
+	sharedInstance = new InputSystem();
+}
+
+void InputSystem::destroy()
+{
+	if (sharedInstance != NULL) {
+		delete sharedInstance;
+	}
+}
 
 InputSystem::InputSystem()
 {
+	this->oldMousePos = Point(0, 0);
 }
-
 
 InputSystem::~InputSystem()
 {
-}
-
-void InputSystem::update()
-{
-	POINT current_mouse_pos = {};
-	::GetCursorPos(&current_mouse_pos);
-
-	if (m_first_time)
-	{
-		m_old_mouse_pos = Point(current_mouse_pos.x, current_mouse_pos.y);
-		m_first_time = false;
-	}
-
-	if (current_mouse_pos.x != m_old_mouse_pos.m_x || current_mouse_pos.y != m_old_mouse_pos.m_y)
-	{
-		//THERE IS MOUSE MOVE EVENT
-		std::unordered_set<InputListener*>::iterator it = m_set_listeners.begin();
-
-		while (it != m_set_listeners.end())
-		{
-			(*it)->onMouseMove(Point(current_mouse_pos.x, current_mouse_pos.y));
-			++it;
-		}
-	}
-	m_old_mouse_pos = Point(current_mouse_pos.x, current_mouse_pos.y);
-
-
-
-	if (::GetKeyboardState(m_keys_state))
-	{
-		for (unsigned int i = 0; i < 256; i++)
-		{
-			// KEY IS DOWN
-			if (m_keys_state[i] & 0x80)
-			{
-				std::unordered_set<InputListener*>::iterator it = m_set_listeners.begin();
-
-				while (it != m_set_listeners.end())
-				{
-					if (i == VK_LBUTTON)
-					{
-						if (m_keys_state[i] != m_old_keys_state[i])
-							(*it)->onLeftMouseDown(Point(current_mouse_pos.x, current_mouse_pos.y));
-					}
-					else if (i == VK_RBUTTON)
-					{
-						if (m_keys_state[i] != m_old_keys_state[i])
-							(*it)->onRightMouseDown(Point(current_mouse_pos.x, current_mouse_pos.y));
-					}
-					else
-						(*it)->onKeyDown(i);
-
-					++it;
-				}
-			}
-			else // KEY IS UP
-			{
-				if (m_keys_state[i] != m_old_keys_state[i])
-				{
-					std::unordered_set<InputListener*>::iterator it = m_set_listeners.begin();
-
-					while (it != m_set_listeners.end())
-					{
-						if (i == VK_LBUTTON)
-							(*it)->onLeftMouseUp(Point(current_mouse_pos.x, current_mouse_pos.y));
-						else if (i == VK_RBUTTON)
-							(*it)->onRightMouseUp(Point(current_mouse_pos.x, current_mouse_pos.y));
-						else
-							(*it)->onKeyUp(i);
-
-						++it;
-					}
-				}
-
-			}
-
-		}
-		// store current keys state to old keys state buffer
-		::memcpy(m_old_keys_state, m_keys_state, sizeof(unsigned char) * 256);
-	}
+	this->inputListenerList.clear();
 }
 
 void InputSystem::addListener(InputListener* listener)
 {
-	m_set_listeners.insert(listener);
+	this->inputListenerList.push_back(listener);
 }
 
 void InputSystem::removeListener(InputListener* listener)
 {
-	m_set_listeners.erase(listener);
+	//find object in used
+	int index = -1;
+	for (int i = 0; i < this->inputListenerList.size(); i++) {
+		if (this->inputListenerList[i] == listener) {
+			index = i;
+			break;
+		}
+	}
+	if (index > -1) {
+		this->inputListenerList.erase(this->inputListenerList.begin() + index);
+	}
+}
+
+void InputSystem::update()
+{
+
+	POINT currentPt = {};
+	GetCursorPos(&currentPt);
+
+	if (this->firstTimeCall) {
+		this->firstTimeCall = false;
+		this->oldMousePos = Point(currentPt.x, currentPt.y);
+	}
+
+	if (this->oldMousePos.m_x != currentPt.x || this->oldMousePos.m_y != currentPt.y) 
+	{
+		Point deltaPt = Point(currentPt.x - this->oldMousePos.m_x, currentPt.y - this->oldMousePos.m_y);
+		this->onMouseMove(deltaPt);
+	}
+
+	this->oldMousePos = Point(currentPt.x, currentPt.y);
+
+	if (GetKeyboardState(this->keyStates)) {
+		for (int i = 0; i < ARRAYSIZE(this->keyStates); i++) {
+			if (this->keyStates[i] & 0x80 && this->keyStates[i] != this->oldKeyStates[i]) {
+				if (i == VK_LBUTTON && this->keyStates[i] != this->oldKeyStates[i]) 
+				{
+					Point deltaPt = Point(currentPt.x - this->oldMousePos.m_x, currentPt.y - this->oldMousePos.m_y);
+					this->onLeftMouseDown(deltaPt);
+				}
+				else if (i == VK_RBUTTON && this->keyStates[i] != this->oldKeyStates[i]) 
+				{
+					Point deltaPt = Point(currentPt.x - this->oldMousePos.m_x, currentPt.y - this->oldMousePos.m_y);
+					this->onRightMouseDown(deltaPt);
+				}
+				else {
+					this->callOnKeyDown(i);
+				}
+			}
+			else if (this->keyStates[i] != this->oldKeyStates[i]) {
+				if (i == VK_LBUTTON && this->keyStates[i] != this->oldKeyStates[i]) {
+					Point deltaPt = Point(currentPt.x - this->oldMousePos.m_x, currentPt.y - this->oldMousePos.m_y);
+					this->onLeftMouseUp(deltaPt);
+				}
+				else if (i == VK_RBUTTON && this->keyStates[i] != this->oldKeyStates[i]) {
+					Point deltaPt = Point(currentPt.x - this->oldMousePos.m_x, currentPt.y - this->oldMousePos.m_y);
+					this->onRightMouseUp(deltaPt);
+				}
+				else {
+					this->callOnKeyUp(i);
+				}
+			}
+		}
+
+		//store current keys to old states
+		::memcpy(this->oldKeyStates, this->keyStates, sizeof(unsigned char) * 256);
+	}
+}
+
+bool InputSystem::isKeyDown(int key)
+{
+	for (int i = 0; i < ARRAYSIZE(this->keyStates); i++) {
+		if (this->keyStates[i] & 0x80 && i == key) {
+			return true;
+		}
+		else if (i == key) {
+			return false;
+		}
+	}
+
+
+	return false;
+}
+
+bool InputSystem::isKeyUp(int key)
+{
+	for (int i = 0; i < ARRAYSIZE(this->keyStates); i++) {
+		if (!(this->keyStates[i] & 0x80) && i == key) {
+			return true;
+		}
+		else if (i == key) {
+			return false;
+		}
+	}
+
+	return false;
+}
+
+
+void InputSystem::callOnKeyDown(int key)
+{
+	for (int i = 0; i < this->inputListenerList.size(); i++) {
+		this->inputListenerList[i]->onKeyDown(key);
+	}
+}
+
+void InputSystem::callOnKeyUp(int key)
+{
+	for (int i = 0; i < this->inputListenerList.size(); i++) {
+		this->inputListenerList[i]->onKeyUp(key);
+	}
+}
+
+void InputSystem::onMouseMove(Point deltaPt)
+{
+	for (int i = 0; i < this->inputListenerList.size(); i++) {
+		this->inputListenerList[i]->onMouseMove(deltaPt);
+	}
+}
+
+void InputSystem::onLeftMouseDown(Point deltaPt)
+{
+	for (int i = 0; i < this->inputListenerList.size(); i++) {
+		this->inputListenerList[i]->onLeftMouseDown(deltaPt);
+	}
+}
+
+void InputSystem::onLeftMouseUp(Point deltaPt)
+{
+	for (int i = 0; i < this->inputListenerList.size(); i++) {
+		this->inputListenerList[i]->onLeftMouseUp(deltaPt);
+	}
+}
+
+void InputSystem::onRightMouseDown(Point deltaPt)
+{
+	for (int i = 0; i < this->inputListenerList.size(); i++) {
+		this->inputListenerList[i]->onRightMouseDown(deltaPt);
+	}
+}
+
+void InputSystem::onRightMouseUp(Point deltaPt)
+{
+	for (int i = 0; i < this->inputListenerList.size(); i++) {
+		this->inputListenerList[i]->onRightMouseUp(deltaPt);
+	}
 }
 
 void InputSystem::setCursorPosition(const Point& pos)
@@ -109,10 +192,4 @@ void InputSystem::setCursorPosition(const Point& pos)
 void InputSystem::showCursor(bool show)
 {
 	::ShowCursor(show);
-}
-
-InputSystem* InputSystem::get()
-{
-	static InputSystem system;
-	return &system;
 }

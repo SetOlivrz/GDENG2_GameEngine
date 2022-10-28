@@ -18,7 +18,15 @@ public:
 
 	void setPosition(float x, float y, float z);
 	void setPosition(Vector3D pos);
+	void setRotation(float x, float y, float z);
+	void setRotation(Vector3D rot);
+	void setScale(float x, float y, float z);
+	void setScale(Vector3D rot);
 	Vector3D getLocalPosition();
+	Vector3D getLocalRotation();
+
+	Vector3D getLocalScale();
+
 
 	string getName();
 
@@ -41,6 +49,8 @@ public:
 protected:
 	string name;
 	Vector3D localPosition;
+	Vector3D localRotation;
+	Vector3D localScale;
 	Matrix4x4 localMatrix;
 
 };

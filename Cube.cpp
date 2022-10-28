@@ -2,12 +2,13 @@
 #include "GraphicsEngine.h"
 #include "DeviceContext.h"
 #include "EngineTime.h"
+#include "SceneCameraHandler.h"
 
 #include "SwapChain.h"
 
 Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(name)
 {
-	m_world_cam.setTranslation(Vector3D(0, 0, -2));
+	//m_world_cam.setTranslation(Vector3D(0, 0, -2));
 
 	//create buffers for drawing. Vertex data that needs to be drawn are temporarily placed here.
 	Vertex quadList[] = {
@@ -46,6 +47,9 @@ Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(na
 		7,6,1,
 		1,0,7
 	};
+
+	this->setScale(Vector3D(1, 1, 1));
+	this->setPosition(Vector3D(0, 0, 0));
 
 	// INDEX BUFFER
 	indexBuffer = GraphicsEngine::get()->createIndexBuffer();
@@ -145,48 +149,93 @@ void Cube::draw(int width, int height)
 	//constantBuffer->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
 
 
+	//Constant cc;
+	//Matrix4x4 temp;
+	//cc.worldMatrix.setIdentity();
+
+	//Matrix4x4 world_cam;
+	//world_cam.setIdentity();
+
+	//temp.setIdentity();
+	//temp.setRotationX(getRotation().m_x);
+	//world_cam *= temp;
+
+	//temp.setIdentity();
+	//temp.setRotationY(getRotation().m_y);
+	//world_cam *= temp;
+
+
+	//Vector3D new_pos = m_world_cam.getTranslation() + world_cam.getZDirection() * (m_forward * 0.1f);
+
+	//new_pos = new_pos + world_cam.getXDirection() * (m_rightward * 0.1f);
+
+	//world_cam.setTranslation(new_pos);
+
+	//m_world_cam = world_cam;
+
+
+	//world_cam.inverse();
+
+
+
+
+	//cc.viewMatrix = world_cam;
+
+	//cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
+	///*cc.m_proj.setOrthoLH
+	//(
+	//	(this->getClientWindowRect().right - this->getClientWindowRect().left)/300.0f,
+	//	(this->getClientWindowRect().bottom - this->getClientWindowRect().top)/300.0f,
+	//	-4.0f,
+	//	4.0f
+	//);*/
+	////cc.projMatrix.setOrthoLH(width / 400.0f, height/ 400.0f, -4.0f, 4.0f);
+
+	//cc.projMatrix.setPerspectiveFovLH(1.57f, ((float)width / (float)height), 0.1f, 100.0f);
+
+
 	Constant cc;
-	Matrix4x4 temp;
-	cc.worldMatrix.setIdentity();
 
-	Matrix4x4 world_cam;
-	world_cam.setIdentity();
-
+	Matrix4x4 temp; 
 	temp.setIdentity();
-	temp.setRotationX(getRotation().m_x);
-	world_cam *= temp;
 
-	temp.setIdentity();
-	temp.setRotationY(getRotation().m_y);
-	world_cam *= temp;
+	//TRANSLATION
+	Matrix4x4 translationMatrix; 
+	translationMatrix.setIdentity();  
+	translationMatrix.setTranslation(this->getLocalPosition());
+	
+	//SCALE
+	Matrix4x4 scaleMatrix; 
+	scaleMatrix.setScale(this->getLocalScale());
 
+	//ROTATION
+	Matrix4x4 xMatrix, yMatrix, zMatrix, rotMatrix; 
+	Vector3D rotation = this->getLocalRotation();
 
-	Vector3D new_pos = m_world_cam.getTranslation() + world_cam.getZDirection() * (m_forward * 0.1f);
+	xMatrix.setRotationZ(rotation.m_x);
+	yMatrix.setRotationX(rotation.m_y);
+	zMatrix.setRotationY(rotation.m_z);
 
-	new_pos = new_pos + world_cam.getXDirection() * (m_rightward * 0.1f);
+	rotMatrix.setIdentity();
 
-	world_cam.setTranslation(new_pos);
+	rotMatrix *= xMatrix;
+	rotMatrix *= yMatrix;
+	rotMatrix *= zMatrix;
 
-	m_world_cam = world_cam;
+	//Scale --> Rotate --> Transform as recommended order.
 
+	temp *= scaleMatrix;
+	temp *= rotMatrix;
+	temp *= translationMatrix;
 
-	world_cam.inverse();
+	cc.worldMatrix = temp;
 
+	Matrix4x4 cameraMatrix = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
+	cc.viewMatrix = cameraMatrix;
 
-
-
-	cc.viewMatrix = world_cam;
-	/*cc.m_proj.setOrthoLH
-	(
-		(this->getClientWindowRect().right - this->getClientWindowRect().left)/300.0f,
-		(this->getClientWindowRect().bottom - this->getClientWindowRect().top)/300.0f,
-		-4.0f,
-		4.0f
-	);*/
-	//cc.projMatrix.setOrthoLH(width / 400.0f, height/ 400.0f, -4.0f, 4.0f);
-
-	cc.projMatrix.setPerspectiveFovLH(1.57f, ((float)width / (float)height), 0.1f, 100.0f);
-
+	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
+	float aspectRatio = (float)width / (float)height;
+	cc.projMatrix.setPerspectiveFovLH(aspectRatio, aspectRatio, 0.1f, 1000.0f);
 
 	constantBuffer->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
 
@@ -211,51 +260,6 @@ void Cube::draw(int width, int height)
 void Cube::setAnimation(float speed, float interval, bool isSpeeding)
 {
 	this->speed = speed;
-	this->animationInterval = interval;
-	this->isIncreasing = isSpeeding;
+	//this->animationInterval = interval;
+	//this->isIncreasing = isSpeeding;
 }
-
-
-void Cube::resetPosition()
-{
-	translation = Vector3D(0, 0, 0);
-}
-
-void Cube::resetScale()
-{
-	scale = Vector3D(1, 1, 1);
-
-}
-
-void Cube::setScale(Vector3D v)
-{
-	this->scale = v;
-}
-
-void Cube::setTranslation(Vector3D v)
-{
-	this->translation = v;
-
-}
-
-void Cube::setRotation(Vector3D v)
-{
-	this->rotation = v;
-
-}
-
-Vector3D Cube::getScale()
-{
-	return scale;
-}
-
-Vector3D Cube::getTranslation()
-{
-	return translation;
-}
-
-Vector3D Cube::getRotation()
-{
-	return rotation;
-}
-

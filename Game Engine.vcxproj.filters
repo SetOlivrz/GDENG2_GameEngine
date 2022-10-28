@@ -58,6 +58,9 @@
     <Filter Include="GameEngine\InputSystem">
       <UniqueIdentifier>{1e819c72-91c9-45ab-bef2-cb1ac662d47f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\Camera">
+      <UniqueIdentifier>{c2654fea-7b1c-49bb-985e-bb79545f4e6d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppWindow.cpp">
@@ -135,6 +138,8 @@
     <ClCompile Include="InputSystem.cpp">
       <Filter>GameEngine\InputSystem</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="SceneCameraHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -233,6 +238,8 @@
     <ClInclude Include="Vector4D.h">
       <Filter>GameEngine\GraphicsEngine\Math</Filter>
     </ClInclude>
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="SceneCameraHandler.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
