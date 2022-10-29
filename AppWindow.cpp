@@ -72,8 +72,8 @@ void AppWindow::onCreate()
 
 	Cube* cubeObj = new Cube("Cube", shaderByteCode, sizeShader);
 	cubeObj->setPosition(0.0, 0.0, 0.0f);
-	cubeObj->setRotation(0.0f, 0.0f, 0.0f);
-	cubeObj->setScale(1.0, 1.0, 1.0f);
+	cubeObj->setRotation(2.0f, 0.0f, 4.0f);
+	cubeObj->setScale(0.5, 1.0, 1.0f);
 
 	cubeObj->setAnimation(1,20, true);
 	cube[0] = cubeObj;

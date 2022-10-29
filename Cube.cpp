@@ -53,8 +53,6 @@ Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(na
 		1,0,7
 	};
 
-	this->setScale(Vector3D(1, 1, 1));
-	this->setPosition(Vector3D(0, 0, 0));
 
 	// INDEX BUFFER
 	indexBuffer = GraphicsEngine::get()->createIndexBuffer();
@@ -105,11 +103,46 @@ void Cube::draw(int width, int height)
 	GraphicsEngine* graphEngine = GraphicsEngine::get();
 	DeviceContext* deviceContext = GraphicsEngine::get()->getImmediateDeviceContext();
 
-	
 	Constant cc;
 	Matrix4x4 temp;
-	cc.worldMatrix.setIdentity();
+	temp.setIdentity();
 
+	//TRANSLATION
+	Matrix4x4 translationMatrix;
+	translationMatrix.setIdentity();
+	translationMatrix.setTranslation(this->getLocalPosition());
+
+	//SCALE
+	Matrix4x4 scaleMatrix;
+	scaleMatrix.setIdentity();
+	scaleMatrix.setScale(this->getLocalScale());
+
+	//ROTATION
+	Matrix4x4 xMatrix, yMatrix, zMatrix, rotMatrix;
+
+	xMatrix.setIdentity();
+	yMatrix.setIdentity();
+	zMatrix.setIdentity();
+	Vector3D rotation = this->getLocalRotation();
+
+	xMatrix.setRotationZ(rotation.m_x);
+	yMatrix.setRotationX(rotation.m_y);
+	zMatrix.setRotationY(rotation.m_z);
+
+	rotMatrix.setIdentity();
+
+	rotMatrix *= xMatrix;
+	rotMatrix *= yMatrix;
+	rotMatrix *= zMatrix;
+
+	// APPLICATION
+	temp *= scaleMatrix;
+	temp *= rotMatrix;
+	temp *= translationMatrix;
+
+	cc.worldMatrix = temp;
+	
+	//CAMERA
 	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCam();
 
 
@@ -118,11 +151,6 @@ void Cube::draw(int width, int height)
 	cc.projMatrix.setPerspectiveFovLH(aspectRatio, aspectRatio, 0.1f, 1000.0f);
 
 	constantBuffer->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
-
-
-
-
-
 
 	// SET CONSTANT BUFFER
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
