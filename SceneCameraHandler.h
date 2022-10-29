@@ -11,6 +11,8 @@ public:
 	void update();
 
 	Matrix4x4 getSceneCameraViewMatrix();
+	Camera* getSceneCamera();
+
 
 private:
 	SceneCameraHandler();

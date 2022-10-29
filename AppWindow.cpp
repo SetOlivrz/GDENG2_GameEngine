@@ -115,7 +115,6 @@ void AppWindow::onUpdate()
 
 	SceneCameraHandler::getInstance()->update();
 
-
 	m_swap_chain->present(true);
 
 }

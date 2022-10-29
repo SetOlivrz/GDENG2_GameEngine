@@ -6,6 +6,7 @@
 
 #include "VertexShader.h"
 #include "PixelShader.h"
+#include "Camera.h";
 
 class Cube : public AGameObject
 {
@@ -39,6 +40,10 @@ private:
 	float deltaPos = 0.0f;
 	float deltaTime = 0.0f;
 	float speed = 10.0f;
+
+	Camera* cam;
+
+	Matrix4x4 m_world_cam;
 
 	/*Vector3D translation = Vector3D(0, 0, 0);
 	Vector3D scale = Vector3D(1, 1, 1);

@@ -9,6 +9,9 @@
 Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(name)
 {
 	//m_world_cam.setTranslation(Vector3D(0, 0, -2));
+	m_world_cam = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
+	cam = SceneCameraHandler::getInstance()->getSceneCamera();
+
 
 	//create buffers for drawing. Vertex data that needs to be drawn are temporarily placed here.
 	Vertex quadList[] = {
@@ -96,143 +99,45 @@ void Cube::update(float deltaTime)
 
 void Cube::draw(int width, int height)
 {
-	//if (ticks >= animationInterval)
-	//{
-	//	isIncreasing = !isIncreasing;
-	//	ticks = 0;
-	//}
-
-	//if (isIncreasing)
-	//{
-	//	rotation += deltaTime;
-	//}
-	//else
-	//{
-	//	rotation -= deltaTime;
-	//}
 
 	GraphicsEngine* graphEngine = GraphicsEngine::get();
 	DeviceContext* deviceContext = GraphicsEngine::get()->getImmediateDeviceContext();
 
-	//Constant cc;
-	////cc.m_time = GetTickCount();
-
-	//// SCALE
-	//Matrix4x4 temp;
-	//cc.worldMatrix.setScale(scale);
-
-	//// ROTATION Z
-	//temp.setIdentity();
-	//temp.setRotationZ(0.0);
-	//cc.worldMatrix *= temp;
-
-	//// ROTATION Y
-	//temp.setIdentity();
-	//temp.setRotationY(rotation.m_y);
-	//cc.worldMatrix *= temp;
-
-	//// ROTATION X
-	//temp.setIdentity();
-	//temp.setRotationX(rotation.m_x);
-	//cc.worldMatrix *= temp;
-
-	//// TRANSLATION
-	//temp.setIdentity();
-	//temp.setTranslation(this->localPosition);
-	//
-	//// APPLICATION
-	//cc.worldMatrix *= temp;
-
-	//cc.viewMatrix.setIdentity();
-	//cc.projMatrix.setOrthoLH(width / 400.0f, height/ 400.0f, -4.0f, 4.0f);
-
-	//constantBuffer->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
-
-
-	//Constant cc;
-	//Matrix4x4 temp;
-	//cc.worldMatrix.setIdentity();
-
-	//Matrix4x4 world_cam;
-	//world_cam.setIdentity();
-
-	//temp.setIdentity();
-	//temp.setRotationX(getRotation().m_x);
-	//world_cam *= temp;
-
-	//temp.setIdentity();
-	//temp.setRotationY(getRotation().m_y);
-	//world_cam *= temp;
-
-
-	//Vector3D new_pos = m_world_cam.getTranslation() + world_cam.getZDirection() * (m_forward * 0.1f);
-
-	//new_pos = new_pos + world_cam.getXDirection() * (m_rightward * 0.1f);
-
-	//world_cam.setTranslation(new_pos);
-
-	//m_world_cam = world_cam;
-
-
-	//world_cam.inverse();
-
-
-
-
-	//cc.viewMatrix = world_cam;
-
-	//cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
-	///*cc.m_proj.setOrthoLH
-	//(
-	//	(this->getClientWindowRect().right - this->getClientWindowRect().left)/300.0f,
-	//	(this->getClientWindowRect().bottom - this->getClientWindowRect().top)/300.0f,
-	//	-4.0f,
-	//	4.0f
-	//);*/
-	////cc.projMatrix.setOrthoLH(width / 400.0f, height/ 400.0f, -4.0f, 4.0f);
-
-	//cc.projMatrix.setPerspectiveFovLH(1.57f, ((float)width / (float)height), 0.1f, 100.0f);
-
-
-	Constant cc;
-
-	Matrix4x4 temp; 
-	temp.setIdentity();
-
-	//TRANSLATION
-	Matrix4x4 translationMatrix; 
-	translationMatrix.setIdentity();  
-	translationMatrix.setTranslation(this->getLocalPosition());
 	
-	//SCALE
-	Matrix4x4 scaleMatrix; 
-	scaleMatrix.setScale(this->getLocalScale());
+	Constant cc;
+	Matrix4x4 temp;
+	cc.worldMatrix.setIdentity();
 
-	//ROTATION
-	Matrix4x4 xMatrix, yMatrix, zMatrix, rotMatrix; 
-	Vector3D rotation = this->getLocalRotation();
+	Matrix4x4 world_cam;
+	world_cam.setIdentity();
 
-	xMatrix.setRotationZ(rotation.m_x);
-	yMatrix.setRotationX(rotation.m_y);
-	zMatrix.setRotationY(rotation.m_z);
+	temp.setIdentity();
+	temp.setRotationX(cam->getLocalRotation().m_x);
+	world_cam *= temp;
 
-	rotMatrix.setIdentity();
+	temp.setIdentity();
+	temp.setRotationY(cam->getLocalRotation().m_y);
+	world_cam *= temp;
 
-	rotMatrix *= xMatrix;
-	rotMatrix *= yMatrix;
-	rotMatrix *= zMatrix;
+	
 
-	//Scale --> Rotate --> Transform as recommended order.
+	Vector3D new_pos = m_world_cam.getTranslation() + (world_cam.getZDirection() * (cam->forward * 0.1f));
 
-	temp *= scaleMatrix;
-	temp *= rotMatrix;
-	temp *= translationMatrix;
+	new_pos = new_pos + (world_cam.getXDirection() * (cam->rightward * 0.1f));
 
-	cc.worldMatrix = temp;
+	world_cam.setTranslation(new_pos);
 
-	Matrix4x4 cameraMatrix = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
-	cc.viewMatrix = cameraMatrix;
+	std::cout << "cx: " << new_pos.m_x << " cy: " << new_pos.m_y << " cz:" << new_pos.m_z << " \n";
 
+	std::cout << "x: " << cam->getViewMatrix().getTranslation().m_x << " y: " << cam->getViewMatrix().getTranslation().m_y << " z:" << cam->getViewMatrix().getTranslation().m_z << " \n";
+	std::cout << "cx: " << cam->getLocalPosition().m_x << " cy: " << cam->getLocalPosition().m_y << " cz:" << cam->getLocalPosition().m_z << " \n";
+	m_world_cam = world_cam;
+
+	
+
+	world_cam.inverse();
+
+	cc.viewMatrix = world_cam;
 	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
 	float aspectRatio = (float)width / (float)height;
 	cc.projMatrix.setPerspectiveFovLH(aspectRatio, aspectRatio, 0.1f, 1000.0f);

@@ -21,6 +21,9 @@ public:
 	virtual void onRightMouseDown(const Point deltaPos) override;
 	virtual void onRightMouseUp(const Point deltaPos) override;
 
+	float forward = 0;
+	float rightward = 0;
+
 private:
 	void updateViewMatrix();
 
@@ -33,6 +36,6 @@ private:
 
 	Vector3D forwardDirection;
 	Vector3D backwardDirection;
-	Matrix4x4 worldCameraMatrix;
+
 };
 
