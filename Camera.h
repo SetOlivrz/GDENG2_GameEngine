@@ -12,6 +12,8 @@ public:
 
 	void update(float deltaTime) override;
 	Matrix4x4 getViewMatrix();
+	Matrix4x4 getWorldCamMatrix();
+
 
 	virtual void onKeyDown(int key) override;
 	virtual void onKeyUp(int key) override;
@@ -26,6 +28,8 @@ public:
 
 private:
 	void updateViewMatrix();
+
+	Matrix4x4 world_cam;
 
 	float ticks = 0.0f;
 	float mouseDown = false;

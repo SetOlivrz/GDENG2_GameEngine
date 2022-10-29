@@ -71,11 +71,18 @@ void Camera::update(float deltaTime)
 
 
 	}
+
+	updateViewMatrix();
 }
 
 Matrix4x4 Camera::getViewMatrix()
 {
 	return this->localMatrix;
+}
+
+Matrix4x4 Camera::getWorldCamMatrix()
+{
+	return this->world_cam;
 }
 
 void Camera::onKeyDown(int key)
@@ -185,6 +192,30 @@ void Camera::updateViewMatrix()
 
 	worldCam.inverse();
 	this->localMatrix = worldCam;*/
+
+	Constant cc;
+	Matrix4x4 temp;
+
+	//SETTING UP WORLD CAMERA
+	world_cam.setIdentity();
+	temp.setIdentity();
+	temp.setRotationX(this->getLocalRotation().m_x);
+	world_cam *= temp;
+
+	temp.setIdentity();
+	temp.setRotationY(this->getLocalRotation().m_y);
+	world_cam *= temp;
+
+
+	// COMPUTATION FOR CAM TRANSLATION
+	Vector3D new_pos = this->localMatrix.getTranslation() + (world_cam.getZDirection() * (this->forward * 0.1f));
+	new_pos = new_pos + (world_cam.getXDirection() * (this->rightward * 0.1f));
+	world_cam.setTranslation(new_pos);
+
+	this->localMatrix = world_cam;
+
+	world_cam.inverse();
+
 }
 
 void Camera::draw(int width, int height)

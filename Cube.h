@@ -44,6 +44,8 @@ private:
 	Camera* cam;
 
 	Matrix4x4 m_world_cam;
+	Matrix4x4 world_cam;
+
 
 	/*Vector3D translation = Vector3D(0, 0, 0);
 	Vector3D scale = Vector3D(1, 1, 1);

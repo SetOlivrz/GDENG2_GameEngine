@@ -10,6 +10,8 @@ Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(na
 {
 	//m_world_cam.setTranslation(Vector3D(0, 0, -2));
 	m_world_cam = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
+	world_cam = SceneCameraHandler::getInstance()->getSceneCameraWorldCam();
+
 	cam = SceneCameraHandler::getInstance()->getSceneCamera();
 
 
@@ -108,41 +110,19 @@ void Cube::draw(int width, int height)
 	Matrix4x4 temp;
 	cc.worldMatrix.setIdentity();
 
-	Matrix4x4 world_cam;
-	world_cam.setIdentity();
+	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCam();
 
-	temp.setIdentity();
-	temp.setRotationX(cam->getLocalRotation().m_x);
-	world_cam *= temp;
 
-	temp.setIdentity();
-	temp.setRotationY(cam->getLocalRotation().m_y);
-	world_cam *= temp;
-
-	
-
-	Vector3D new_pos = m_world_cam.getTranslation() + (world_cam.getZDirection() * (cam->forward * 0.1f));
-
-	new_pos = new_pos + (world_cam.getXDirection() * (cam->rightward * 0.1f));
-
-	world_cam.setTranslation(new_pos);
-
-	std::cout << "cx: " << new_pos.m_x << " cy: " << new_pos.m_y << " cz:" << new_pos.m_z << " \n";
-
-	std::cout << "x: " << cam->getViewMatrix().getTranslation().m_x << " y: " << cam->getViewMatrix().getTranslation().m_y << " z:" << cam->getViewMatrix().getTranslation().m_z << " \n";
-	std::cout << "cx: " << cam->getLocalPosition().m_x << " cy: " << cam->getLocalPosition().m_y << " cz:" << cam->getLocalPosition().m_z << " \n";
-	m_world_cam = world_cam;
-
-	
-
-	world_cam.inverse();
-
-	cc.viewMatrix = world_cam;
 	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
 	float aspectRatio = (float)width / (float)height;
 	cc.projMatrix.setPerspectiveFovLH(aspectRatio, aspectRatio, 0.1f, 1000.0f);
 
 	constantBuffer->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
+
+
+
+
+
 
 	// SET CONSTANT BUFFER
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
