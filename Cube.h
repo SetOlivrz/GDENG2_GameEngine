@@ -16,7 +16,7 @@ public:
 
 	void update(float deltaTime) override;
 	void draw(int width, int height) override;
-	void setAnimation(float speed, float interval, bool isSpeeding);
+	void setAnimation(float speed, float interval, bool isSpeeding, float rotFactor);
 
 	//void resetPosition();
 
@@ -39,7 +39,7 @@ private:
 	float ticks = 0.0f;
 	float deltaPos = 0.0f;
 	float deltaTime = 0.0f;
-	float speed = 10.0f;
+	float speed = 1.0f;
 
 	Camera* cam;
 
@@ -51,12 +51,9 @@ private:
 	Vector3D scale = Vector3D(1, 1, 1);
 	Vector3D rotation = Vector3D(0, 0, 0);*/
 
-	//float ticks = 0.0f;
-	//float deltaTime = 0.0f;
-	//float speed = 1.0f;
-	//bool isIncreasing = false;
-	////float rotation = 5.0f;
-	//float animationInterval = 0.0f;
+	bool isIncreasing = false;
+	float rotFactor = 0.0f;
+	float animationInterval = 0.0f;
 
 
 };

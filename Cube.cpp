@@ -10,7 +10,7 @@ Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(na
 {
 	//m_world_cam.setTranslation(Vector3D(0, 0, -2));
 	m_world_cam = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
-	world_cam = SceneCameraHandler::getInstance()->getSceneCameraWorldCam();
+	world_cam = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
 
 	cam = SceneCameraHandler::getInstance()->getSceneCamera();
 
@@ -99,6 +99,20 @@ void Cube::update(float deltaTime)
 
 void Cube::draw(int width, int height)
 {
+	if (ticks >= animationInterval)
+	{
+		isIncreasing = !isIncreasing;
+		ticks = 0;
+	}
+
+	if (isIncreasing)
+	{
+		rotFactor += deltaTime ;
+	}
+	else
+	{
+		rotFactor -= deltaTime ;
+	}
 
 	GraphicsEngine* graphEngine = GraphicsEngine::get();
 	DeviceContext* deviceContext = GraphicsEngine::get()->getImmediateDeviceContext();
@@ -125,9 +139,10 @@ void Cube::draw(int width, int height)
 	zMatrix.setIdentity();
 	Vector3D rotation = this->getLocalRotation();
 
-	xMatrix.setRotationZ(rotation.m_x);
-	yMatrix.setRotationX(rotation.m_y);
-	zMatrix.setRotationY(rotation.m_z);
+
+	xMatrix.setRotationZ(rotation.m_x + rotFactor * speed );
+	yMatrix.setRotationX(rotation.m_y+ rotFactor* speed );
+	zMatrix.setRotationY(rotation.m_z + rotFactor * speed );
 
 	rotMatrix.setIdentity();
 
@@ -143,7 +158,7 @@ void Cube::draw(int width, int height)
 	cc.worldMatrix = temp;
 	
 	//CAMERA
-	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCam();
+	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
 
 
 	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
@@ -170,9 +185,10 @@ void Cube::draw(int width, int height)
 	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(indexBuffer->getSizeIndexList(), 0, 0);
 }
 
-void Cube::setAnimation(float speed, float interval, bool isSpeeding)
+void Cube::setAnimation(float speed, float interval, bool isSpeeding, float rotFactor)
 {
+	this->rotFactor = rotFactor;
 	this->speed = speed;
-	//this->animationInterval = interval;
-	//this->isIncreasing = isSpeeding;
+	this->animationInterval = interval;
+	this->isIncreasing = isSpeeding;
 }

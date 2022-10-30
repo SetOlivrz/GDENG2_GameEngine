@@ -53,30 +53,32 @@ void AppWindow::onCreate()
 
 	void* shaderByteCode = nullptr;
 	size_t sizeShader = 0;
-	//for (int i = 0; i <100 ; i++)
-	//{
-	//	float x = Utils::randFloatInterval(-0.75, 0.75);
-	//	float y = Utils::randFloatInterval(-0.75, 0.75);;
+	for (int i = 0; i <20 ; i++)
+	{
+		float x = Utils::randFloatInterval(-5, 5);
+		float y = Utils::randFloatInterval(-5, 5);
+		float z = Utils::randFloatInterval(-5, 0);
+
+		float sx = Utils::randFloatInterval(0.25, 2);
+		float sy = Utils::randFloatInterval(0.25, 2);
+		float sz = Utils::randFloatInterval(0.25, 2);
 
 
-	//	Cube *cubeObj =  new Cube("Cube", shaderByteCode, sizeShader);
-	//	cubeObj->setPosition(x,y, 0.0f);
-	//	cubeObj->setAnimation(Utils::randFloatInterval(1.0, 3.0), Utils::randFloatInterval(2.0, 5.0), true );
-	//	this->CubeList.push_back(cubeObj);
-	//}
 
-	Plane* planeObj = new Plane ("Plane", shaderByteCode, sizeShader);
-	planeObj->setPosition(0.0, 0.0, 0.0f);
-	planeObj->setAnimation(1, 20, true);
-	plane[0] = planeObj;
+		Cube *cubeObj =  new Cube("Cube", shaderByteCode, sizeShader);
+		cubeObj->setPosition(x,y,z);
+		cubeObj->setScale(sx,sy,sz);
+		cubeObj->setAnimation(Utils::randFloatInterval(1.0, 1.0), Utils::randFloatInterval(2.0, 5.0),true, 1 );
+		this->CubeList.push_back(cubeObj);
+	}
 
-	Cube* cubeObj = new Cube("Cube", shaderByteCode, sizeShader);
+	/*Cube* cubeObj = new Cube("Cube", shaderByteCode, sizeShader);
 	cubeObj->setPosition(0.0, 0.0, 0.0f);
 	cubeObj->setRotation(2.0f, 0.0f, 4.0f);
 	cubeObj->setScale(0.5, 1.0, 1.0f);
 
 	cubeObj->setAnimation(1,20, true);
-	cube[0] = cubeObj;
+	cube[0] = cubeObj;*/
 
 
 
@@ -95,7 +97,10 @@ void AppWindow::onUpdate()
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
-	/*for (int i = 0; i < CubeList.size(); i++)
+
+
+	//UPDATE PRIMITIVES
+	for (int i = 0; i < CubeList.size(); i++)
 	{
 		CubeList[i]->update(EngineTime::getDeltaTime());
 	}
@@ -103,18 +108,14 @@ void AppWindow::onUpdate()
 	for (int i = 0; i < CubeList.size(); i++)
 	{
 		CubeList[i]->draw(rc.right - rc.left, rc.bottom - rc.top);
-	}*/
+	}
 
-	//plane[0]->update(EngineTime::getDeltaTime());
-	//update();
-	cube[0]->update(EngineTime::getDeltaTime());
-
-	//plane[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
-	cube[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
-
-
+	//UPDATE CAMERA
 	SceneCameraHandler::getInstance()->update();
 
+
+	//cube[0]->update(EngineTime::getDeltaTime());
+	//cube[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
 	m_swap_chain->present(true);
 
 }
@@ -200,7 +201,7 @@ void AppWindow::onLeftMouseDown(const Point deltaPos)
 void AppWindow::onLeftMouseUp(const Point deltaPos)
 {
 	//cube[0]->setScale(Vector3D(1.0, 1.0, 1.0));
-	std::cout << "Left mouse up! \n";
+	std::cout << "Left mouse upward! \n";
 
 
 }
@@ -216,7 +217,7 @@ void AppWindow::onRightMouseDown(const Point deltaPos)
 
 void AppWindow::onRightMouseUp(const Point deltaPos)
 {
-	std::cout << "Right mouse up! \n";
+	std::cout << "Right mouse upward! \n";
 
 	//cube[0]->setScale(Vector3D(1.0, 1.0, 1.0));
 

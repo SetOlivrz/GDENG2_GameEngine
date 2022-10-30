@@ -11,10 +11,8 @@ public:
 	void update();
 
 	Matrix4x4 getSceneCameraViewMatrix();
-	Matrix4x4 getSceneCameraWorldCam();
-
+	Matrix4x4 getSceneCameraWorldCamMatrix();
 	Camera* getSceneCamera();
-
 
 private:
 	SceneCameraHandler();
