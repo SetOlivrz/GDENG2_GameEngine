@@ -2,20 +2,62 @@
 #include "GraphicsEngine.h"
 #include "DeviceContext.h"
 #include "EngineTime.h"
+#include "SceneCameraHandler.h"
+#include "Utils.h"
 
 #include "SwapChain.h"
 
 Plane::Plane(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(name)
 {
+	this->setRotation(Utils::degToRad(90), 0, 0);
+	m_world_cam = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
+	world_cam = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
+
+	cam = SceneCameraHandler::getInstance()->getSceneCamera();
+
+
 	//create buffers for drawing. Vertex data that needs to be drawn are temporarily placed here.
 	Vertex quadList[] = {
 		//X, Y, Z
 		//FRONT FACE
-		{Vector3D(-0.5f,-0.0f,1),    Vector3D(0,1,1), Vector3D(0.2f,0,0) },
-		{Vector3D(-0.5f,0.0f,-1),     Vector3D(0,1,1), Vector3D(0.2f,0.2f,0) },
-		{Vector3D(0.5f,-0.0f,1),      Vector3D(1,0,1), Vector3D(0.2f,0.2f,0) },
-		{Vector3D(0.5f,0.0,-1),     Vector3D(0,1,1), Vector3D(0.2f,0,0) },
+		{Vector3D(-0.5f,-0.5f,-0.5f),    Vector3D(0,1,.5), Vector3D(0.1f,0,0) },
+		{Vector3D(-0.5f,0.5f,-0.5f),     Vector3D(0,1,1), Vector3D(0.1f,0.2f,0) },
+		{Vector3D(0.5f,0.5f,-0.5f),      Vector3D(0,1,.5), Vector3D(0.1f,0.2f,0) },
+		{Vector3D(0.5f,-0.5f,-0.5f),     Vector3D(0,1,.5), Vector3D(0.1f,0,0) },
+
+		//BACK FACE
+		{Vector3D(0.5f,-0.5f,0.5f),      Vector3D(0,1,1), Vector3D(0,0.2f,0) },
+		{Vector3D(0.5f,0.5f,0.5f),       Vector3D(0,1,.5), Vector3D(0,0.2f,0.2f) },
+		{Vector3D(-0.5f,0.5f,0.5f),      Vector3D(0,1,.5), Vector3D(0,0.2f,0.2f) },
+		{Vector3D(-0.5f,-0.5f,0.5f),     Vector3D(0,.1,1), Vector3D(0,0.2f,0) },
 	};
+
+	unsigned int index_list[] =
+	{
+		//FRONT SIDE
+		0,1,2,  //FIRST TRIANGLE
+		2,3,0,  //SECOND TRIANGLE
+		//BACK SIDE
+		4,5,6,
+		6,7,4,
+		//TOP SIDE
+		1,6,5,
+		5,2,1,
+		//BOTTOM SIDE
+		7,0,3,
+		3,4,7,
+		//RIGHT SIDE
+		3,2,5,
+		5,4,3,
+		//LEFT SIDE
+		7,6,1,
+		1,0,7
+	};
+
+
+	// INDEX BUFFER
+	indexBuffer = GraphicsEngine::get()->createIndexBuffer();
+	indexBuffer->load(index_list, ARRAYSIZE(index_list));
 
 	// VERTEX SHADER
 	GraphicsEngine::get()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
@@ -43,6 +85,7 @@ Plane::Plane(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(
 Plane::~Plane()
 {
 	this->vertexBuffer->release();
+	this->indexBuffer->release();
 	this->constantBuffer->release();
 	this->pixelShader->release();
 	this->vertexShader->release();
@@ -65,47 +108,68 @@ void Plane::draw(int width, int height)
 
 	if (isIncreasing)
 	{
-		rotation += deltaTime;
+		rotFactor += deltaTime ;
 	}
 	else
 	{
-		rotation -= deltaTime;
+		rotFactor -= deltaTime ;
 	}
 
 	GraphicsEngine* graphEngine = GraphicsEngine::get();
 	DeviceContext* deviceContext = GraphicsEngine::get()->getImmediateDeviceContext();
 
 	Constant cc;
-	//cc.m_time = GetTickCount();
-
-	// SCALE
 	Matrix4x4 temp;
-	cc.worldMatrix.setScale(Vector3D(1, 1, 1));
-
-	// ROTATION Z
 	temp.setIdentity();
-	temp.setRotationZ(rotation * speed);
-	cc.worldMatrix *= temp;
 
-	// ROTATION Y
-	temp.setIdentity();
-	temp.setRotationY(rotation * speed);
-	cc.worldMatrix *= temp;
+	//TRANSLATION
+	Matrix4x4 translationMatrix;
+	translationMatrix.setIdentity();
+	translationMatrix.setTranslation(this->getLocalPosition());
 
-	// ROTATION X
-	temp.setIdentity();
-	temp.setRotationX(rotation * speed);
-	cc.worldMatrix *= temp;
+	//SCALE
+	Matrix4x4 scaleMatrix;
+	scaleMatrix.setIdentity();
+	this->setScale(this->getLocalScale().m_x, this->getLocalScale().m_y, 0);
+	scaleMatrix.setScale(this->getLocalScale());
 
-	// TRANSLATION
-	temp.setIdentity();
-	temp.setTranslation(this->localPosition);
+	//ROTATION
+	Matrix4x4 xMatrix, yMatrix, zMatrix, rotMatrix;
+
+	xMatrix.setIdentity();
+	yMatrix.setIdentity();
+	zMatrix.setIdentity();
+	Vector3D rotation = this->getLocalRotation();
+
+
+	/*xMatrix.setRotationZ(rotation.m_x + rotFactor * speed );
+	yMatrix.setRotationX(rotation.m_y+ rotFactor* speed );
+	zMatrix.setRotationY(rotation.m_z + rotFactor * speed );*/
+
+	xMatrix.setRotationZ(rotation.m_z );
+	yMatrix.setRotationX(rotation.m_x );
+	zMatrix.setRotationY(rotation.m_y );
+
+	rotMatrix.setIdentity();
+
+	rotMatrix *= xMatrix;
+	rotMatrix *= yMatrix;
+	rotMatrix *= zMatrix;
 
 	// APPLICATION
-	cc.worldMatrix *= temp;
+	temp *= scaleMatrix;
+	temp *= rotMatrix;
+	temp *= translationMatrix;
 
-	cc.viewMatrix.setIdentity();
-	cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
+	cc.worldMatrix = temp;
+	
+	//CAMERA
+	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
+
+
+	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
+	float aspectRatio = (float)width / (float)height;
+	cc.projMatrix.setPerspectiveFovLH(aspectRatio, aspectRatio, 0.1f, 1000.0f);
 
 	constantBuffer->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
 
@@ -120,15 +184,17 @@ void Plane::draw(int width, int height)
 
 	//SET THE VERTICES OF THE TRIANGLE TO DRAW
 	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
+	GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(indexBuffer);
+
 
 	// FINALLY DRAW THE TRIANGLE
-	GraphicsEngine::get()->getImmediateDeviceContext()->drawTriangleStrip(vertexBuffer->getSizeVertexList(), 0);
+	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(indexBuffer->getSizeIndexList(), 0, 0);
 }
 
-void Plane::setAnimation(float speed, float interval, bool isSpeeding)
+void Plane::setAnimation(float speed, float interval, bool isSpeeding, float rotFactor)
 {
+	this->rotFactor = rotFactor;
 	this->speed = speed;
 	this->animationInterval = interval;
 	this->isIncreasing = isSpeeding;
 }
-

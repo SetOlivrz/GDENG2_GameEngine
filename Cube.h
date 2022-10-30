@@ -46,11 +46,6 @@ private:
 	Matrix4x4 m_world_cam;
 	Matrix4x4 world_cam;
 
-
-	/*Vector3D translation = Vector3D(0, 0, 0);
-	Vector3D scale = Vector3D(1, 1, 1);
-	Vector3D rotation = Vector3D(0, 0, 0);*/
-
 	bool isIncreasing = false;
 	float rotFactor = 0.0f;
 	float animationInterval = 0.0f;

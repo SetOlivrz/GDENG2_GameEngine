@@ -139,10 +139,9 @@ void Cube::draw(int width, int height)
 	zMatrix.setIdentity();
 	Vector3D rotation = this->getLocalRotation();
 
-
-	xMatrix.setRotationZ(rotation.m_x + rotFactor * speed );
-	yMatrix.setRotationX(rotation.m_y+ rotFactor* speed );
-	zMatrix.setRotationY(rotation.m_z + rotFactor * speed );
+	xMatrix.setRotationZ(rotation.m_x );
+	yMatrix.setRotationX(rotation.m_y );
+	zMatrix.setRotationY(rotation.m_z );
 
 	rotMatrix.setIdentity();
 
@@ -159,7 +158,6 @@ void Cube::draw(int width, int height)
 	
 	//CAMERA
 	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
-
 
 	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
 	float aspectRatio = (float)width / (float)height;

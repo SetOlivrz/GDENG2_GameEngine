@@ -132,14 +132,14 @@
     <ClCompile Include="Cube.cpp">
       <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="Plane.cpp">
-      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
-    </ClCompile>
     <ClCompile Include="InputSystem.cpp">
       <Filter>GameEngine\InputSystem</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="SceneCameraHandler.cpp" />
+    <ClCompile Include="Plane.cpp">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -223,9 +223,6 @@
     <ClInclude Include="Cube.h">
       <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClInclude>
-    <ClInclude Include="Plane.h">
-      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
-    </ClInclude>
     <ClInclude Include="InputListener.h">
       <Filter>GameEngine\InputSystem</Filter>
     </ClInclude>
@@ -240,6 +237,9 @@
     </ClInclude>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="SceneCameraHandler.h" />
+    <ClInclude Include="Plane.h">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">

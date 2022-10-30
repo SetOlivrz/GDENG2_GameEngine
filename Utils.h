@@ -60,5 +60,16 @@ public:
 	{
 		return randFloat() * (max - min) + min;
 	}
+
+	static float radToDeg(float radian)
+	{
+		double pi = 3.14159;
+		return(radian * (180 / pi));
+	}
+	static float degToRad(float degree)
+	{
+		double pi = 3.14159265359;
+		return (degree * (pi / 180));
+	}
 };
 

@@ -134,15 +134,11 @@ void Camera::onLeftMouseUp(const Point deltaPos)
 void Camera::onRightMouseDown(const Point deltaPos)
 {
 	this->mouseDown = true;
-	std::cout << "Right mouse downnn! \n";
-
 }
 
 void Camera::onRightMouseUp(const Point deltaPos)
 {
 	this->mouseDown = false;
-	std::cout << "Right mouse yppp! \n";
-
 }
 
 void Camera::updateViewMatrix()
