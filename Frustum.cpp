@@ -99,11 +99,11 @@ void Frustum::draw(int width, int height)
 	// setting up camera
 	static float FOV = Utils::radToDeg(camera->getFOV());
 	float fovRadians = FOV / 180 * 3.14;
-	static float nearZ = 1.0f;
-	static float farZ = 10.0f;
+	static float nearZ = camera->getNearZ();
+	static float farZ = camera->getFarZ();
 
 	float nearHeight = 2 * tan(fovRadians / 2) * nearZ;
-	float farHeight = 2 * tan(fovRadians / 2) * (farZ-nearZ)/2;
+	float farHeight = 2 * tan(fovRadians / 2) * (farZ-nearZ);
 	float nearWidth = nearHeight * camera->getAspectRatio();
 	float farWidth = farHeight * camera->getAspectRatio();
 
@@ -115,10 +115,10 @@ void Frustum::draw(int width, int height)
 	Vector3D nearTL = Vector3D((-nearWidth * 0.5), (nearHeight * 0.5), nearZ/2);
 	Vector3D nearTR = Vector3D((nearWidth * 0.5), (nearHeight * 0.5), nearZ/2);
 
-	Vector3D farBL = Vector3D(-(farWidth * 0.5), (-farHeight * 0.5), (farZ-nearZ)/2);
-	Vector3D farBR = Vector3D((farWidth * 0.5), (-farHeight * 0.5), (farZ-nearZ) /2);
-	Vector3D farTL = Vector3D((-farWidth * 0.5), (farHeight * 0.5), (farZ-nearZ) /2);
-	Vector3D farTR = Vector3D((farWidth * 0.5), (farHeight * 0.5), (farZ-nearZ) /2);
+	Vector3D farBL = Vector3D(-(farWidth * 0.5), (-farHeight * 0.5), (farZ-nearZ));
+	Vector3D farBR = Vector3D((farWidth * 0.5), (-farHeight * 0.5), (farZ-nearZ) );
+	Vector3D farTL = Vector3D((-farWidth * 0.5), (farHeight * 0.5), (farZ-nearZ) );
+	Vector3D farTR = Vector3D((farWidth * 0.5), (farHeight * 0.5), (farZ-nearZ) );
 
 
 	//create buffers for drawing. Vertex data that needs to be drawn are temporarily placed here.

@@ -60,7 +60,7 @@ void AppWindow::onCreate()
 	//UPDATE CAMERA PARAMETERS
 	float aspectRatio = (float)(rc.right - rc.left) / (float)(rc.bottom - rc.top);
 	static float nearZ = 1.0f;
-	static float farZ = 5;
+	static float farZ = 10;
 
 	camObj->setAspect(aspectRatio);
 	camObj->setFOV(aspectRatio);
