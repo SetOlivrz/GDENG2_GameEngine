@@ -23,8 +23,15 @@ public:
 	bool release();
 	~GraphicsEngine();
 public:
+
+	void InitRenderStates();
+
 	SwapChain* createSwapChain();
 	DeviceContext* getImmediateDeviceContext();
+	ID3D11RasterizerState* getRasterizerStateWF();
+	ID3D11RasterizerState* getRasterizerStateSLD();
+
+
 
 	//Buffers
 	VertexBuffer* createVertexBuffer();
@@ -54,11 +61,12 @@ private:
 	IDXGIFactory* m_dxgi_factory;
 	ID3D11DeviceContext* m_imm_context;
 
+	ID3D11RasterizerState* m_wireframe_rs;
+	ID3D11RasterizerState* m_solidFill_rs;
+
+
 private:
 	ID3DBlob* m_blob = nullptr;
-
-
-
 	ID3DBlob* m_vsblob = nullptr;
 	ID3DBlob* m_psblob = nullptr;
 	ID3D11VertexShader* m_vs = nullptr;

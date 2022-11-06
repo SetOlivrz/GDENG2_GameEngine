@@ -1,4 +1,4 @@
-#include "Cube.h"
+#include "Gizmo.h"
 #include "GraphicsEngine.h"
 #include "DeviceContext.h"
 #include "EngineTime.h"
@@ -6,23 +6,23 @@
 
 #include "SwapChain.h"
 
-Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(name)
+Gizmo::Gizmo(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(name)
 {
 	cam = SceneCameraHandler::getInstance()->getSceneCamera();
 	//create buffers for drawing. Vertex data that needs to be drawn are temporarily placed here.
 	Vertex quadList[] = {
 		//X, Y, Z
 		//FRONT FACE
-		{Vector3D(-0.5f,-0.5f,-0.5f),    Vector3D(1,0,.5), Vector3D(0.2f,0,0) },
-		{Vector3D(-0.5f,0.5f,-0.5f),     Vector3D(1,.5,1), Vector3D(0.2f,0.2f,0) },
-		{Vector3D(0.5f,0.5f,-0.5f),      Vector3D(1,.5,.5), Vector3D(0.2f,0.2f,0) },
-		{Vector3D(0.5f,-0.5f,-0.5f),     Vector3D(1,0,.5), Vector3D(0.2f,0,0) },
+		{Vector3D(-0.5f,-0.5f,-0.5f),    Vector3D(1,0,0), Vector3D(1,0,0) },
+		{Vector3D(-0.5f,0.5f,-0.5f),     Vector3D(1,0,0), Vector3D(1,0,0) },
+		{Vector3D(0.5f,0.5f,-0.5f),      Vector3D(1,0,0), Vector3D(1,0,0) },
+		{Vector3D(0.5f,-0.5f,-0.5f),     Vector3D(1,0,0), Vector3D(1,0,0) },
 
 		//BACK FACE
-		{Vector3D(0.5f,-0.5f,0.5f),      Vector3D(1,0,1), Vector3D(0,0.2f,0) },
-		{Vector3D(0.5f,0.5f,0.5f),       Vector3D(1,.5,.5), Vector3D(0,0.2f,0.2f) },
-		{Vector3D(-0.5f,0.5f,0.5f),      Vector3D(1,0,.5), Vector3D(0,0.2f,0.2f) },
-		{Vector3D(-0.5f,-0.5f,0.5f),     Vector3D(1,.5,1), Vector3D(0,0.2f,0) },
+		{Vector3D(0.5f,-0.5f,0.5f),      Vector3D(1,0,0), Vector3D(0,0,0) },
+		{Vector3D(0.5f,0.5f,0.5f),       Vector3D(1,0,0), Vector3D(0,0,0) },
+		{Vector3D(-0.5f,0.5f,0.5f),      Vector3D(1,0,0), Vector3D(0,0,0) },
+		{Vector3D(-0.5f,-0.5f,0.5f),     Vector3D(1,0,0), Vector3D(0,0,0) },
 	};
 
 	unsigned int index_list[] =
@@ -75,7 +75,7 @@ Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(na
 	constantBuffer->load(&cc, sizeof(Constant));
 }
 
-Cube::~Cube()
+Gizmo::~Gizmo()
 {
 	this->vertexBuffer->release();
 	this->indexBuffer->release();
@@ -85,13 +85,13 @@ Cube::~Cube()
 	AGameObject::~AGameObject();
 }
 
-void Cube::update(float deltaTime)
+void Gizmo::update(float deltaTime)
 {
 	this->ticks += deltaTime;
 	this->deltaTime = deltaTime;
 }
 
-void Cube::draw(int width, int height)
+void Gizmo::draw(int width, int height)
 {
 	if (ticks >= animationInterval)
 	{
@@ -101,11 +101,11 @@ void Cube::draw(int width, int height)
 
 	if (isIncreasing)
 	{
-		rotFactor += deltaTime ;
+		rotFactor += deltaTime;
 	}
 	else
 	{
-		rotFactor -= deltaTime ;
+		rotFactor -= deltaTime;
 	}
 
 	GraphicsEngine* graphEngine = GraphicsEngine::get();
@@ -123,7 +123,7 @@ void Cube::draw(int width, int height)
 	//SCALE
 	Matrix4x4 scaleMatrix;
 	scaleMatrix.setIdentity();
-	scaleMatrix.setScale(this->getLocalScale());
+	scaleMatrix.setScale(Vector3D(1.0,1.0,1.0));
 
 	//ROTATION
 	Matrix4x4 xMatrix, yMatrix, zMatrix, rotMatrix;
@@ -133,9 +133,9 @@ void Cube::draw(int width, int height)
 	zMatrix.setIdentity();
 	Vector3D rotation = this->getLocalRotation();
 
-	xMatrix.setRotationZ(rotation.m_z );
-	yMatrix.setRotationX(rotation.m_x );
-	zMatrix.setRotationY(rotation.m_y );
+	xMatrix.setRotationZ(rotation.m_z);
+	yMatrix.setRotationX(rotation.m_x);
+	zMatrix.setRotationY(rotation.m_y);
 
 	rotMatrix.setIdentity();
 
@@ -149,11 +149,12 @@ void Cube::draw(int width, int height)
 	temp *= translationMatrix;
 
 	cc.worldMatrix = temp;
-	
+
 	//CAMERA
 	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
 
 	float aspectRatio = (float)width / (float)height;
+	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
 	cam = SceneCameraHandler::getInstance()->getSceneCamera();
 
 	float fov = cam->getFOV();
@@ -162,7 +163,6 @@ void Cube::draw(int width, int height)
 	float fz = cam->getFarZ();
 
 	cc.projMatrix.setPerspectiveFovLH(fov, asp, nz, fz);
-	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
 
 	constantBuffer->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
 
@@ -183,7 +183,7 @@ void Cube::draw(int width, int height)
 	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(indexBuffer->getSizeIndexList(), 0, 0);
 }
 
-void Cube::setAnimation(float speed, float interval, bool isSpeeding, float rotFactor)
+void Gizmo::setAnimation(float speed, float interval, bool isSpeeding, float rotFactor)
 {
 	this->rotFactor = rotFactor;
 	this->speed = speed;

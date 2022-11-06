@@ -147,6 +147,8 @@
     <ClCompile Include="AppWindow.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ConstantBuffer.cpp" />
+    <ClCompile Include="Frustum.cpp" />
+    <ClCompile Include="Gizmo.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="DebugWindow.cpp" />
@@ -176,6 +178,8 @@
     <ClInclude Include="AppWindow.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="ConstantBuffer.h" />
+    <ClInclude Include="Frustum.h" />
+    <ClInclude Include="Gizmo.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="DebugWindow.h" />

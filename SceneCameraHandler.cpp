@@ -25,12 +25,12 @@ void SceneCameraHandler::update()
 
 Matrix4x4 SceneCameraHandler::getSceneCameraViewMatrix()
 {
-    return this->sceneCamera->getViewMatrix();
+    return this->sceneCamera->getVMatrix();
 }
 
 Matrix4x4 SceneCameraHandler::getSceneCameraWorldCamMatrix()
 {
-    return this->sceneCamera->getWorldCamMatrix();
+    return this->sceneCamera->getViewMatrix();
 }
 
 Camera* SceneCameraHandler::getSceneCamera()
@@ -38,10 +38,20 @@ Camera* SceneCameraHandler::getSceneCamera()
     return this->sceneCamera;
 }
 
+void SceneCameraHandler::SetSceneCamera(Camera* camera)
+{
+    if (sceneCamera)
+    this->sceneCamera->setCameraStatus(false);
+    this->sceneCamera = camera;
+    this->sceneCamera->setCameraStatus(true);
+}
+
 SceneCameraHandler::SceneCameraHandler()
 {
     this->sceneCamera = new Camera("SceneCamera");
+
 }
+
 SceneCameraHandler::~SceneCameraHandler()
 {
     delete this->sceneCamera;

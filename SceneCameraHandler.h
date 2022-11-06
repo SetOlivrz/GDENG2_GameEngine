@@ -14,6 +14,11 @@ public:
 	Matrix4x4 getSceneCameraWorldCamMatrix();
 	Camera* getSceneCamera();
 
+	void SetSceneCamera(Camera* camera);
+	Camera* objCamera;
+
+	
+
 private:
 	SceneCameraHandler();
 	~SceneCameraHandler();

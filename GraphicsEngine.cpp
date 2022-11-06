@@ -50,6 +50,7 @@ bool GraphicsEngine::init()
 	m_dxgi_device->GetParent(__uuidof(IDXGIAdapter), (void**)&m_dxgi_adapter);
 	m_dxgi_adapter->GetParent(__uuidof(IDXGIFactory), (void**)&m_dxgi_factory);
 
+	InitRenderStates();
 	return true;
 }
 
@@ -70,12 +71,35 @@ bool GraphicsEngine::release()
 
 
 	m_d3d_device->Release();
+	m_wireframe_rs->Release();
 	return true;
 }
 
 GraphicsEngine::~GraphicsEngine()
 {
 }
+
+void GraphicsEngine::InitRenderStates()
+{
+	D3D11_RASTERIZER_DESC wfd;
+	ZeroMemory(&wfd, sizeof(D3D11_RASTERIZER_DESC));
+	wfd.FillMode = D3D11_FILL_WIREFRAME;
+	wfd.CullMode = D3D11_CULL_NONE;
+	wfd.DepthClipEnable = true;
+	//wfd.FrontCounterClockwise = false;
+
+	m_d3d_device->CreateRasterizerState(&wfd, &m_wireframe_rs);
+
+	D3D11_RASTERIZER_DESC sld;
+	ZeroMemory(&sld, sizeof(D3D11_RASTERIZER_DESC));
+	sld.FillMode = D3D11_FILL_SOLID;
+	sld.CullMode = D3D11_CULL_NONE;
+	sld.DepthClipEnable = true;
+	//wfd.FrontCounterClockwise = false;
+
+	m_d3d_device->CreateRasterizerState(&sld, &m_solidFill_rs);
+}
+
 
 SwapChain* GraphicsEngine::createSwapChain()
 {
@@ -86,6 +110,16 @@ SwapChain* GraphicsEngine::createSwapChain()
 DeviceContext* GraphicsEngine::getImmediateDeviceContext()
 {
 	return this->m_imm_device_context;
+}
+
+ID3D11RasterizerState* GraphicsEngine::getRasterizerStateWF()
+{
+	return m_wireframe_rs;
+}
+
+ID3D11RasterizerState* GraphicsEngine::getRasterizerStateSLD()
+{
+	return m_solidFill_rs ;
 }
 
 VertexBuffer* GraphicsEngine::createVertexBuffer()

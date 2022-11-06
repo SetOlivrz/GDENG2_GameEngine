@@ -8,11 +8,11 @@
 #include "PixelShader.h"
 #include "Camera.h"
 
-class Cube : public AGameObject
+class Gizmo : public AGameObject
 {
 public:
-	Cube(string name, void* shaderByteCode, size_t sizeShader);
-	~Cube();
+	Gizmo(string name, void* shaderByteCode, size_t sizeShader);
+	~Gizmo();
 
 	void update(float deltaTime) override;
 	void draw(int width, int height) override;
@@ -23,7 +23,7 @@ public:
 	//void resetScale();
 
 
-	float m_scale_cube = 1;
+	float m_scale_Gizmo = 1;
 	float m_forward = 0.0f;
 	float m_rightward = 0.0f;
 	//Matrix4x4 m_world_cam;

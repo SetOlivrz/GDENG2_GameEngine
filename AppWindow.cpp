@@ -39,7 +39,6 @@ void AppWindow::onCreate()
 
 	InputSystem::initialize();
 	SceneCameraHandler::initialize();
-
 	InputSystem::getInstance()->addListener(this);
 	//InputSystem::getInstance()->showCursor(false);
 
@@ -53,39 +52,43 @@ void AppWindow::onCreate()
 
 	void* shaderByteCode = nullptr;
 	size_t sizeShader = 0;
-	/*for (int i = 0; i <20 ; i++)
-	{
-		float x = Utils::randFloatInterval(-5, 5);
-		float y = Utils::randFloatInterval(-5, 5);
-		float z = Utils::randFloatInterval(-5, 0);
+	
+	// CREATE CAMERAS
+	camObj = new Camera("ObjCam");
+	sceneCamera = new Camera("SceneCam");
 
-		float sx = Utils::randFloatInterval(0.25, 2);
-		float sy = Utils::randFloatInterval(0.25, 2);
-		float sz = Utils::randFloatInterval(0.25, 2);
+	//UPDATE CAMERA PARAMETERS
+	float aspectRatio = (float)(rc.right - rc.left) / (float)(rc.bottom - rc.top);
+	static float nearZ = 1.0f;
+	static float farZ = 5;
 
+	camObj->setAspect(aspectRatio);
+	camObj->setFOV(aspectRatio);
+	camObj->setNearZ(nearZ);
+	camObj->setFarZ(farZ);
 
+	sceneCamera->setAspect(aspectRatio);
+	sceneCamera->setFOV(aspectRatio);
+	sceneCamera->setNearZ(1);
+	sceneCamera->setFarZ(100);
 
-		Cube *cubeObj =  new Cube("Cube", shaderByteCode, sizeShader);
-		cubeObj->setPosition(x,y,z);
-		cubeObj->setScale(sx,sy,sz);
-		cubeObj->setAnimation(Utils::randFloatInterval(1.0, 1.0), Utils::randFloatInterval(2.0, 5.0),true, 1 );
-		this->CubeList.push_back(cubeObj);
-	}*/
+	// set one camera to camera scene
+	SceneCameraHandler::getInstance()->SetSceneCamera(sceneCamera);
 
-	Plane* planeObj = new Plane ("Plane", shaderByteCode, sizeShader);
-	planeObj->setPosition(0.0, 0.0, 0.0f);
-	planeObj->setScale(2, 2.0, 0);
+	//CREATE CAMERA GIZMO
+	cameraGizmo = new Gizmo("CameraGizmo", shaderByteCode, sizeShader);
+	cameraGizmo->setPosition(camObj->getLocalPosition().m_x, camObj->getLocalPosition().m_y, camObj->getLocalPosition().m_z);
+	cameraGizmo->setScale(.25, .25, .25);
 
+	//CREATE CUBE
+	cube = new Cube("Cube", shaderByteCode, sizeShader);
+	cube->setPosition(camObj->getLocalPosition().m_x, camObj->getLocalPosition().m_y, camObj->getLocalPosition().m_z);
+	cube->setScale(1, 1, 1);
 
-	//planeObj->setAnimation(1, 20, true);a
-	plane[0] = planeObj;
-
-	Cube* cubeObj = new Cube("Cube", shaderByteCode, sizeShader);
-	cubeObj->setPosition(0.0, 0.0, 0.0f);
-	//cubeObj->setAnimation(1,20, true);
-	cube[0] = cubeObj;
-
-
+	//CREATE FRUSTUM
+	fustrum = new Frustum("Frustum", shaderByteCode, sizeShader);
+	fustrum->setPosition(0.0, 0.0, -3.0f);
+	fustrum->camera = camObj; // set camera ref
 }
 
 void AppWindow::onUpdate()
@@ -100,27 +103,40 @@ void AppWindow::onUpdate()
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
-
-
-	//UPDATE PRIMITIVES
-	/*for (int i = 0; i < CubeList.size(); i++)
+	// SWITCH SCENE CAMERA (F KEY)
+	if (isUsingCameraObj)
 	{
-		CubeList[i]->update(EngineTime::getDeltaTime());
+		SceneCameraHandler::getInstance()->SetSceneCamera(camObj);
 	}
-
-	for (int i = 0; i < CubeList.size(); i++)
+	else
 	{
-		CubeList[i]->draw(rc.right - rc.left, rc.bottom - rc.top);
-	}*/
+		SceneCameraHandler::getInstance()->SetSceneCamera(sceneCamera);
+		//camObj->update(EngineTime::getDeltaTime());
+	}
+	//UPDATE SCENE CAMERA
+	SceneCameraHandler::getInstance()->update(); 
 
-	//UPDATE CAMERA
-	SceneCameraHandler::getInstance()->update();
+	Vector3D camPos = camObj->getLocalPosition();
+	Vector3D camRot = camObj->getLocalRotation();
 
-	cube[0]->update(EngineTime::getDeltaTime());
-	cube[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
+	// UPDATE PRIMITIVES
+	cube->update(EngineTime::getDeltaTime());
+	fustrum->update(EngineTime::getDeltaTime());
 
-	plane[0]->update(EngineTime::getDeltaTime());
-	plane[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
+	cameraGizmo->setPosition(camPos.m_x, camPos.m_y, camPos.m_z);
+	cameraGizmo->setRotation(camRot.m_x, camRot.m_y, camRot.m_z);
+	cameraGizmo->update(EngineTime::getDeltaTime());
+
+	// SET RASTERIZER
+	GraphicsEngine::get()->getImmediateDeviceContext()->setRasterizeSetState(GraphicsEngine::get()->getRasterizerStateWF());
+	if (!isUsingCameraObj)
+		fustrum->draw(rc.right - rc.left, rc.bottom - rc.top); 
+
+	// SET RASTERIZER
+	GraphicsEngine::get()->getImmediateDeviceContext()->setRasterizeSetState(GraphicsEngine::get()->getRasterizerStateSLD());
+	cube->draw(rc.right - rc.left, rc.bottom - rc.top);
+	if(!isUsingCameraObj)
+		cameraGizmo->draw(rc.right - rc.left, rc.bottom - rc.top);
 
 	m_swap_chain->present(true);
 
@@ -149,72 +165,30 @@ void AppWindow::onKeyDown(int key)
 
 	if (key == 'F')
 	{
-		float var = plane[0]->getLocalRotation().m_z + EngineTime::getDeltaTime();
-		plane[0]->setRotation( 0,0, var);
-		std::cout << "ROT: "<< plane[0]->getLocalRotation().m_z<<" \n";
-
-
+		isUsingCameraObj = !isUsingCameraObj;
+		std::cout << "camera Object: " << isUsingCameraObj<< " \n";
 	}
-	//else if (key == 'S')
-	//{
-	//	//cube[0]->setRotation(Vector3D(v.m_x - 3.14f * EngineTime::getDeltaTime(), v.m_y, v.m_z));
-	//	cube[0]->m_forward = -1.0f;
-
-	//}
-	//else if (key == 'A')
-	//{
-	//	//cube[0]->setRotation(Vector3D(v.m_x, v.m_y + 3.14 *EngineTime::getDeltaTime(), v.m_z));
-	//	cube[0]->m_rightward = -1.0f;
-
-	//}
-	//else if (key == 'D')
-	//{
-	//	//cube[0]->setRotation(Vector3D(v.m_x, v.m_y - 3.14 * EngineTime::getDeltaTime(), v.m_z));
-	//	cube[0]->m_rightward = 1.0f;
-
-	//}
 	
 }
 
 void AppWindow::onKeyUp(int key)
 {
-	/*cube[0]->m_forward = 0.0f;
-	cube[0]->m_rightward = 0.0f;*/
 
 }
 
 void AppWindow::onMouseMove(const Point deltaPos)
 {
-	/*int width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
-	int height = (this->getClientWindowRect().bottom - this->getClientWindowRect().top);
-
-	Vector3D v = cube[0]->getRotation();
-
-	v.m_x += (deltaPos.m_y - (height / 2.0f)) * EngineTime::getDeltaTime() * 0.1f;
-	v.m_y += (deltaPos.m_x - (width / 2.0f)) * EngineTime::getDeltaTime() * 0.1f;
-
-
-	cube[0]->setRotation(v);
-
-	InputSystem::getInstance()->setCursorPosition(Point((int)(width / 2.0f), (int)(height / 2.0f)));*/
 
 }
 
 void AppWindow::onLeftMouseDown(const Point deltaPos)
 {
-	//cube[0]->setScale(Vector3D(0.5, 0.5, 0.5));
-	//std::cout << "Left mosssssssssssssssssssssssssssssssssssssssuse down! \n";
-	//plane[0]->setRotation(0.0, 0.0, plane[0]->getLocalRotation().m_z + EngineTime::getDeltaTime());
-
 }
 
 void AppWindow::onLeftMouseUp(const Point deltaPos)
 {
 	//cube[0]->setScale(Vector3D(1.0, 1.0, 1.0));
 	std::cout << "Left mouse upward! \n";
-
-
-
 }
 
 void AppWindow::onRightMouseDown(const Point deltaPos)
@@ -229,8 +203,4 @@ void AppWindow::onRightMouseDown(const Point deltaPos)
 void AppWindow::onRightMouseUp(const Point deltaPos)
 {
 	std::cout << "Right mouse upward! \n";
-
-	//cube[0]->setScale(Vector3D(1.0, 1.0, 1.0));
-
-	//m_scale_cube = 1.0f;
 }

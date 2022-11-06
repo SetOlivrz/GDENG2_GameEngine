@@ -145,13 +145,28 @@ public:
 		return Vector3D(m_mat[3][0], m_mat[3][1], m_mat[3][2]);
 	}
 
-	void setPerspectiveFovLH(float fov, float aspect, float znear, float zfar)
+	void setPerspectiveFovLH(float FOV, float aspectRatio, float znear, float zfar)
 	{
-		float yscale = 1.0f / tan(fov / 2.0f);
-		float xscale = yscale / aspect;
+		// ar = h/w
+		// f = 1/tan(fov/2)
+		float yscale = 1.0f / tan(FOV / 2.0f);
+		float xscale = yscale / aspectRatio;
 		m_mat[0][0] = xscale;
-		m_mat[1][1] = yscale;
-		m_mat[2][2] = zfar / (zfar - znear);
+		m_mat[1][1] = yscale; // fov scaling
+		m_mat[2][2] = zfar / (zfar - znear); // normslizing
+		m_mat[2][3] = 1.0f;
+		m_mat[3][2] = (-znear * zfar) / (zfar - znear); 
+	}
+
+	void setProjFovLH(float FOV, float aspectRatio, float znear, float zfar)
+	{
+		// ar = h/w
+		// f = 1/tan(fov/2)
+		float yscale = 1.0f / tan(FOV / 2.0f);
+		float xscale = yscale / aspectRatio;
+		m_mat[0][0] = xscale;
+		m_mat[1][1] = yscale; // fov scaling
+		m_mat[2][2] = zfar / (zfar - znear); // normslizing
 		m_mat[2][3] = 1.0f;
 		m_mat[3][2] = (-znear * zfar) / (zfar - znear);
 	}
@@ -165,6 +180,8 @@ public:
 		m_mat[2][2] = 1.0f / (far_plane - near_plane);
 		m_mat[3][2] = -(near_plane / (far_plane - near_plane));
 	}
+
+
 
 	~Matrix4x4()
 	{

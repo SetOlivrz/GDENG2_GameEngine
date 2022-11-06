@@ -8,11 +8,11 @@
 #include "PixelShader.h"
 #include "Camera.h"
 
-class Cube : public AGameObject
+class Frustum : public AGameObject
 {
 public:
-	Cube(string name, void* shaderByteCode, size_t sizeShader);
-	~Cube();
+	Frustum(string name, void* shaderByteCode, size_t sizeShader);
+	~Frustum();
 
 	void update(float deltaTime) override;
 	void draw(int width, int height) override;
@@ -23,9 +23,11 @@ public:
 	//void resetScale();
 
 
-	float m_scale_cube = 1;
+	float m_scale_Fustrum = 1;
 	float m_forward = 0.0f;
 	float m_rightward = 0.0f;
+
+	Camera* camera;
 	//Matrix4x4 m_world_cam;
 
 private:
@@ -49,6 +51,4 @@ private:
 	bool isIncreasing = false;
 	float rotFactor = 0.0f;
 	float animationInterval = 0.0f;
-
-
 };

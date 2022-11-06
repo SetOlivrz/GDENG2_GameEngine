@@ -1,60 +1,126 @@
 #include "Camera.h"
 #include "InputSystem.h"
 #include "EngineTime.h"
+#include "GraphicsEngine.h"
+#include "DeviceContext.h"
+#include "Utils.h"
+#include "SceneCameraHandler.h"
+
 
 Camera::Camera(string name) : AGameObject(name)
 {
 	//preset camera values
 	this->setPosition(0.0f, 0.0f, -2.0f);
 	this->localMatrix.setTranslation(this->localPosition);
-
 	InputSystem::getInstance()->addListener(this);
 }
 
 Camera::~Camera()
 {
 	InputSystem::getInstance()->removeListener(this);
+	this->vertexBuffer->release();
+	this->indexBuffer->release();
+	this->constantBuffer->release();
+	this->pixelShader->release();
+	this->vertexShader->release();
+	AGameObject::~AGameObject();
 }
 
 void Camera::update(float deltaTime)
 {
-	// keu input for camerae
-	if (InputSystem::getInstance()->isKeyDown('W')) 
+	if (isActive)
 	{
-		forward = 1; //forward
-	}
-	else if (InputSystem::getInstance()->isKeyDown('S')) 
-	{
-		forward = -1; //backwards
-	}
-	else if (InputSystem::getInstance()->isKeyDown('A')) 
-	{
-		rightward = -1; //sideward (left)
-	}
-	else if (InputSystem::getInstance()->isKeyDown('D')) 
-	{
-		rightward = 1; //sidewards (right)
-	}
-	else if (InputSystem::getInstance()->isKeyDown('E')) 
-	{
-		upward = 1; //upwards
-	}
-	else if (InputSystem::getInstance()->isKeyDown('Q')) 
-	{
-		upward = -1;//downwards
-	}
+		// keu input for camerae
+		if (InputSystem::getInstance()->isKeyDown('W'))
+		{
+			forward = 1; //forward
+		}
+		else if (InputSystem::getInstance()->isKeyDown('S'))
+		{
+			forward = -1; //backwards
+		}
+		else if (InputSystem::getInstance()->isKeyDown('A'))
+		{
+			rightward = -1; //sideward (left)
+		}
+		else if (InputSystem::getInstance()->isKeyDown('D'))
+		{
+			rightward = 1; //sidewards (right)
+		}
+		else if (InputSystem::getInstance()->isKeyDown('E'))
+		{
+			upward = 1; //upwards
+		}
+		else if (InputSystem::getInstance()->isKeyDown('Q'))
+		{
+			upward = -1;//downwards
+		}
 
-	updateViewMatrix();
+		updateViewMatrix();
+	}
+	else
+	{
+		if (InputSystem::getInstance()->isKeyDown('I'))
+		{
+			forward = 1; //forward
+		}
+		else if (InputSystem::getInstance()->isKeyDown('K'))
+		{
+			forward = -1; //backwards
+		}
+		else if (InputSystem::getInstance()->isKeyDown('J'))
+		{
+			rightward = -1; //sideward (left)
+		}
+		else if (InputSystem::getInstance()->isKeyDown('L'))
+		{
+			rightward = 1; //sidewards (right)
+		}
+		else if (InputSystem::getInstance()->isKeyDown('O'))
+		{
+			upward = 1; //upwards
+		}
+		else if (InputSystem::getInstance()->isKeyDown('U'))
+		{
+			upward = -1;//downwards
+		}
+
+		updateViewMatrix();
+	}
+	
+
 }
 
-Matrix4x4 Camera::getViewMatrix()
+
+Matrix4x4 Camera::getVMatrix()
 {
 	return this->localMatrix;
 }
 
-Matrix4x4 Camera::getWorldCamMatrix()
+Matrix4x4 Camera::getViewMatrix()
 {
 	return this->world_cam;
+}
+
+
+void Camera::setCameraStatus(bool flag)
+{
+	 isActive  = flag;
+}
+
+bool Camera::getCameraStatus()
+{
+	return isActive;
+}
+
+void Camera::setFustrumVisibility(bool flag)
+{
+	isFustrumEnabled = flag;
+}
+
+bool Camera::getFustrumVisibility()
+{
+	return isFustrumEnabled;
 }
 
 float Camera::getForward()
@@ -71,6 +137,47 @@ float Camera::getUpward()
 {
 	return upward;
 }
+
+float Camera::getFOV()
+{
+	return this->FOV;
+}
+
+float Camera::getNearZ()
+{
+	return this->nearZ;
+}
+
+float Camera::getFarZ()
+{
+	return this->farZ;
+}
+
+float Camera::getAspectRatio()
+{
+	return aspectRatio;
+}
+
+void Camera::setFOV(float FOV)
+{
+	this->FOV = FOV;
+}
+
+void Camera::setNearZ(float nz)
+{
+	this->nearZ = nz;
+}
+
+void Camera::setFarZ(float fz)
+{
+	this->farZ = fz;
+}
+
+void Camera::setAspect(float aspectRatio)
+{
+	this->aspectRatio = aspectRatio;
+}
+
 
 void Camera::onKeyDown(int key)
 {
@@ -108,7 +215,7 @@ void Camera::onKeyUp(int key)
 
 void Camera::onMouseMove(const Point deltaPos)
 {
-	if (this->mouseDown) 
+	if (this->mouseDown && this->isActive) 
 	{
 		Vector3D v = this->getLocalRotation();
 		// may add speed factor
@@ -145,7 +252,7 @@ void Camera::updateViewMatrix()
 {
 	Constant cc;
 	Matrix4x4 temp;
-
+	
 	//UPDATE FOR CAM ROTATION
 	world_cam.setIdentity();
 	temp.setIdentity();
@@ -162,9 +269,9 @@ void Camera::updateViewMatrix()
 	new_pos = new_pos + (world_cam.getYDirection() * (this->upward * 0.1f));
 	new_pos = new_pos + (world_cam.getXDirection() * (this->rightward * 0.1f));
 
-	world_cam.setTranslation(new_pos);
-	world_cam.setTranslation(new_pos);
+	this->setPosition(new_pos);
 
+	world_cam.setTranslation(new_pos);
 	//update local matrix
 	this->localMatrix = world_cam;
 

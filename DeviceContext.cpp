@@ -45,10 +45,21 @@ void DeviceContext::drawIndexedTriangleList(UINT index_count, UINT start_vertex_
 	m_device_context->DrawIndexed(index_count, start_index_location, start_vertex_index);
 }
 
+void DeviceContext::drawIndexedLineList(UINT index_count, UINT start_vertex_index, UINT start_index_location)
+{
+	m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	m_device_context->DrawIndexed(index_count, start_index_location, start_vertex_index);
+}
+
 void DeviceContext::drawTriangleStrip(UINT vertex_count, UINT start_vertex_index)
 {
 	m_device_context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	m_device_context->Draw(vertex_count, start_vertex_index);
+}
+
+void DeviceContext::setRasterizeSetState(ID3D11RasterizerState * state)
+{
+	m_device_context->RSSetState(state);
 }
 
 void DeviceContext::setViewportSize(UINT width, UINT height)

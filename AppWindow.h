@@ -14,6 +14,8 @@
 
 #include "Cube.h"
 #include "Plane.h"
+#include "Frustum.h"
+#include "Gizmo.h"
 
 #include <vector>
 
@@ -55,8 +57,10 @@ private:
 	
 	DebugWindow debugWindow;
 
-	Plane* plane[1];
-	Cube* cube[1];
+	Cube* cube;
+	Gizmo* cameraGizmo;
+
+	Frustum* fustrum;
 
 
 	std::vector<Cube*> CubeList;
@@ -65,6 +69,9 @@ private:
 	float m_delta_time = 0;
 	float m_angle = 0;
 
+	Camera* camObj;
+	Camera* sceneCamera;
+	bool isUsingCameraObj = false;
 
 
 private:
