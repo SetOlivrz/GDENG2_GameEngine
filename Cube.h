@@ -50,5 +50,11 @@ private:
 	float rotFactor = 0.0f;
 	float animationInterval = 0.0f;
 
+	Vector3D start_pos;
+	Vector3D end_pos;
+	Vector3D start_scale;
+	Vector3D end_scale;
+
+
 
 };

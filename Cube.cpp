@@ -6,6 +6,7 @@
 
 #include "SwapChain.h"
 
+
 Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(name)
 {
 	//m_world_cam.setTranslation(Vector3D(0, 0, -2));
@@ -19,16 +20,16 @@ Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(na
 	Vertex quadList[] = {
 		//X, Y, Z
 		//FRONT FACE
-		{Vector3D(-0.5f,-0.5f,-0.5f),    Vector3D(1,0,.5), Vector3D(0.2f,0,0) },
-		{Vector3D(-0.5f,0.5f,-0.5f),     Vector3D(1,.5,1), Vector3D(0.2f,0.2f,0) },
-		{Vector3D(0.5f,0.5f,-0.5f),      Vector3D(1,.5,.5), Vector3D(0.2f,0.2f,0) },
-		{Vector3D(0.5f,-0.5f,-0.5f),     Vector3D(1,0,.5), Vector3D(0.2f,0,0) },
+		{Vector3D(-0.5f,-0.5f,-0.5f),    Vector3D(0.9,0.9,0.9),  Vector3D(0.2f,0,0) },
+		{Vector3D(-0.5f,0.5f,-0.5f),    Vector3D(0.9,0.9,0.9), Vector3D(0.2f,0.2f,0) },
+		{ Vector3D(0.5f,0.5f,-0.5f),   Vector3D(0.9,0.9,0.9),  Vector3D(0.2f,0.2f,0) },
+		{ Vector3D(0.5f,-0.5f,-0.5f),     Vector3D(0.9,0.9,0.9), Vector3D(0.2f,0,0) },
 
 		//BACK FACE
-		{Vector3D(0.5f,-0.5f,0.5f),      Vector3D(1,0,1), Vector3D(0,0.2f,0) },
-		{Vector3D(0.5f,0.5f,0.5f),       Vector3D(1,.5,.5), Vector3D(0,0.2f,0.2f) },
-		{Vector3D(-0.5f,0.5f,0.5f),      Vector3D(1,0,.5), Vector3D(0,0.2f,0.2f) },
-		{Vector3D(-0.5f,-0.5f,0.5f),     Vector3D(1,.5,1), Vector3D(0,0.2f,0) },
+		{ Vector3D(0.5f,-0.5f,0.5f),    Vector3D(0.9,0.9,0.9), Vector3D(0,0.2f,0) },
+		{ Vector3D(0.5f,0.5f,0.5f),    Vector3D(0.9,0.9,0.9), Vector3D(0,0.2f,0.2f) },
+		{ Vector3D(-0.5f,0.5f,0.5f),   Vector3D(0.9,0.9,0.9),  Vector3D(0,0.2f,0.2f) },
+		{ Vector3D(-0.5f,-0.5f,0.5f),     Vector3D(0.9,0.9,0.9), Vector3D(0,0.2f,0) }
 	};
 
 	unsigned int index_list[] =
@@ -95,6 +96,17 @@ void Cube::update(float deltaTime)
 {
 	this->ticks += deltaTime;
 	this->deltaTime = deltaTime;
+
+	Vector3D new_pos;
+	Vector3D new_scale;
+
+	//start_scale = Vector3D(1, 1, 1);
+	//end_scale = Vector3D(1, 0, 1); // horizontal plane
+	//this->setScale(new_scale.lerp(start_scale, end_scale, abs(sin(ticks))));
+
+	//start_pos = Vector3D(0, 0, 0);
+	//end_pos = Vector3D(1, 1, 0);
+	//this->setPosition(new_pos.lerp(start_pos, end_pos, sin(ticks)));
 }
 
 void Cube::draw(int width, int height)
@@ -139,9 +151,9 @@ void Cube::draw(int width, int height)
 	zMatrix.setIdentity();
 	Vector3D rotation = this->getLocalRotation();
 
-	xMatrix.setRotationZ(rotation.m_x );
-	yMatrix.setRotationX(rotation.m_y );
-	zMatrix.setRotationY(rotation.m_z );
+	xMatrix.setRotationZ(rotation.m_z);
+	yMatrix.setRotationX(rotation.m_x) ;
+	zMatrix.setRotationY(rotation.m_y);
 
 	rotMatrix.setIdentity();
 

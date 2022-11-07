@@ -60,6 +60,8 @@ private:
 
 
 	std::vector<Cube*> CubeList;
+	std::vector<Plane*> CardList;
+
 
 	unsigned long m_old_time = 0;
 	float m_delta_time = 0;

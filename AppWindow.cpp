@@ -53,37 +53,105 @@ void AppWindow::onCreate()
 
 	void* shaderByteCode = nullptr;
 	size_t sizeShader = 0;
-	/*for (int i = 0; i <20 ; i++)
+	/*for (int i = 0; i <15 ; i++)
 	{
-		float x = Utils::randFloatInterval(-5, 5);
-		float y = Utils::randFloatInterval(-5, 5);
-		float z = Utils::randFloatInterval(-5, 0);
+		if (i < 6)
+		{
+			float space = 0.34;
+			Plane* card = new Plane("card", shaderByteCode, sizeShader);
+			card->setPosition(i * space, 0, 0);
+			card->setScale(0.7, 1, 0);
+			if (i % 2 == 0)
+			{
+				card->setRotation(20, 90, 0);
+			}
+			else
+			{
+				card->setRotation(20, -90, 0);
+			}
+			this->CardList.push_back(card);
 
-		float sx = Utils::randFloatInterval(0.25, 2);
-		float sy = Utils::randFloatInterval(0.25, 2);
-		float sz = Utils::randFloatInterval(0.25, 2);
+		}
+		else if (i>= 6 && i <8)
+		{
+			
+			float pos_offset = .34;
+			Plane* card = new Plane("card", shaderByteCode, sizeShader);
+			card->setPosition((i - 6) + pos_offset, 0.47, 0);
+			card->setScale(0.7, 1, 0);
+			card->setRotation(90, 90, 0);
+			this->CardList.push_back(card);
 
+		}
+		else if (i >= 8 && i < 12)
+		{
+			float pos_offset = .34;
+			float space = 0.34;
+			Plane* card = new Plane("card", shaderByteCode, sizeShader);
+			card->setPosition(((i-8) * space)+pos_offset , 0.94, 0);
+			card->setScale(0.7, 1, 0);
+			if (i % 2 == 0)
+			{
+				card->setRotation(20, 90, 0);
+			}
+			else
+			{
+				card->setRotation(20, -90, 0);
+			}
+			this->CardList.push_back(card);
+		}
+		else if (i == 12)
+		{
 
-
-		Cube *cubeObj =  new Cube("Cube", shaderByteCode, sizeShader);
-		cubeObj->setPosition(x,y,z);
-		cubeObj->setScale(sx,sy,sz);
-		cubeObj->setAnimation(Utils::randFloatInterval(1.0, 1.0), Utils::randFloatInterval(2.0, 5.0),true, 1 );
-		this->CubeList.push_back(cubeObj);
+			float pos_offset = 0.85;
+			Plane* card = new Plane("card", shaderByteCode, sizeShader);
+			card->setPosition((i - 12) + pos_offset, 1.41, 0);
+			card->setScale(0.7, 1, 0);
+			card->setRotation(90, 90, 0);
+			this->CardList.push_back(card);
+		}
+		else
+		{
+			float pos_offset = 0.68;
+			float space = 0.34;
+			Plane* card = new Plane("card", shaderByteCode, sizeShader);
+			card->setPosition(((i - 13) * space) + pos_offset, .94*2, 0);
+			card->setScale(0.7, 1, 0);
+			if (i % 2 == 1)
+			{
+				card->setRotation(20, 90, 0);
+			}
+			else
+			{
+				card->setRotation(20, -90, 0);
+			}
+			this->CardList.push_back(card);
+		}
 	}*/
 
 	Plane* planeObj = new Plane ("Plane", shaderByteCode, sizeShader);
 	planeObj->setPosition(0.0, 0.0, 0.0f);
-	planeObj->setScale(2, 2.0, 0);
+	planeObj->setScale(10, 10, 0);
+	planeObj->setRotation(90, 0, 0);
 
 
-	//planeObj->setAnimation(1, 20, true);a
+	planeObj->setAnimation(1, 20, true,1);
 	plane[0] = planeObj;
 
 	Cube* cubeObj = new Cube("Cube", shaderByteCode, sizeShader);
-	cubeObj->setPosition(0.0, 0.0, 0.0f);
-	//cubeObj->setAnimation(1,20, true);
-	cube[0] = cubeObj;
+	cubeObj->setPosition(0.0, 0.9, 0.0f);
+	cubeObj->setAnimation(1,20, false,1);
+	CubeList.push_back(cubeObj);
+
+	Cube* cubeObj1 = new Cube("Cube", shaderByteCode, sizeShader);
+	cubeObj1->setPosition(-1.5, 2.0, 0.0f);
+	cubeObj1->setAnimation(1, 20, false, 1);
+	CubeList.push_back(cubeObj1);
+
+	Cube* cubeObj2 = new Cube("Cube", shaderByteCode, sizeShader);
+	cubeObj2->setPosition(-1.5, 3.0, -2.0f);
+	cubeObj2->setAnimation(1, 20, false, 1);
+	CubeList.push_back(cubeObj2);
 
 
 }
@@ -100,10 +168,23 @@ void AppWindow::onUpdate()
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
+	//UPDATE CAMERA
+	SceneCameraHandler::getInstance()->update();
+
 
 
 	//UPDATE PRIMITIVES
-	/*for (int i = 0; i < CubeList.size(); i++)
+	//for (int i = 0; i < CardList.size(); i++)
+	//{
+	//	CardList[i]->update(EngineTime::getDeltaTime());
+	//}
+
+	//for (int i = 0; i < CardList.size(); i++)
+	//{
+	//	CardList[i]->draw(rc.right - rc.left, rc.bottom - rc.top);
+	//}
+
+	for (int i = 0; i < CubeList.size(); i++)
 	{
 		CubeList[i]->update(EngineTime::getDeltaTime());
 	}
@@ -111,13 +192,11 @@ void AppWindow::onUpdate()
 	for (int i = 0; i < CubeList.size(); i++)
 	{
 		CubeList[i]->draw(rc.right - rc.left, rc.bottom - rc.top);
-	}*/
+	}
 
-	//UPDATE CAMERA
-	SceneCameraHandler::getInstance()->update();
 
-	cube[0]->update(EngineTime::getDeltaTime());
-	cube[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
+	//cube[0]->update(EngineTime::getDeltaTime());
+	//cube[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
 
 	plane[0]->update(EngineTime::getDeltaTime());
 	plane[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
@@ -147,14 +226,33 @@ void AppWindow::onKeyDown(int key)
 {
 	//Vector3D v = cube[0]->getRotation();
 
-	if (key == 'F')
-	{
-		float var = plane[0]->getLocalRotation().m_z + EngineTime::getDeltaTime();
-		plane[0]->setRotation( 0,0, var);
-		std::cout << "ROT: "<< plane[0]->getLocalRotation().m_z<<" \n";
+	//if (key == 'H')
+	//{
+	//	Vector3D rot;
+	//	float var = plane[0]->getLocalRotation().m_z + 30;
+	//	plane[0]->setRotation(plane[0]->getLocalRotation().m_z, plane[0]->getLocalRotation().m_y, var);
+	//	std::cout << "ROTz: " << plane[0]->getLocalRotation().m_z << " \n";
 
 
-	}
+	//}
+	//if (key == 'F') //x
+	//{
+	//	Vector3D rot;
+	//	float var = plane[0]->getLocalRotation().m_x + 30;
+	//	plane[0]->setRotation(var, plane[0]->getLocalRotation().m_y, plane[0]->getLocalRotation().m_z);
+	//	std::cout << "ROTx: " << plane[0]->getLocalRotation().m_x << " \n";
+
+
+	//}
+	//if (key == 'G')//y
+	//{
+	//	Vector3D rot;
+	//	float var = plane[0]->getLocalRotation().m_y + 30;
+	//	plane[0]->setRotation(plane[0]->getLocalRotation().m_x, var, plane[0]->getLocalRotation().m_z);
+	//	std::cout << "ROTy: " << plane[0]->getLocalRotation().m_y << " \n";
+
+
+	//}
 	//else if (key == 'S')
 	//{
 	//	//cube[0]->setRotation(Vector3D(v.m_x - 3.14f * EngineTime::getDeltaTime(), v.m_y, v.m_z));

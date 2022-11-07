@@ -9,7 +9,7 @@
 
 Plane::Plane(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(name)
 {
-	this->setRotation(Utils::degToRad(90), 0, 0);
+	//this->setRotation(Utils::degToRad(90), 0, 0);
 	m_world_cam = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
 	world_cam = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
 
@@ -20,16 +20,16 @@ Plane::Plane(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(
 	Vertex quadList[] = {
 		//X, Y, Z
 		//FRONT FACE
-		{Vector3D(-0.5f,-0.5f,-0.5f),    Vector3D(0,1,.5), Vector3D(0.1f,0,0) },
-		{Vector3D(-0.5f,0.5f,-0.5f),     Vector3D(0,1,1), Vector3D(0.1f,0.2f,0) },
-		{Vector3D(0.5f,0.5f,-0.5f),      Vector3D(0,1,.5), Vector3D(0.1f,0.2f,0) },
-		{Vector3D(0.5f,-0.5f,-0.5f),     Vector3D(0,1,.5), Vector3D(0.1f,0,0) },
+		{Vector3D(-0.5f,-0.5f,-0.5f),    Vector3D(1,1,1), Vector3D(0,0,0) },
+		{Vector3D(-0.5f,0.5f,-0.5f),     Vector3D(1,1,1), Vector3D(0,0,0) },
+		{Vector3D(0.5f,0.5f,-0.5f),      Vector3D(1,1,1), Vector3D(0,0,0) },
+		{Vector3D(0.5f,-0.5f,-0.5f),     Vector3D(1,1,1), Vector3D(0,0,0) },
 
 		//BACK FACE
-		{Vector3D(0.5f,-0.5f,0.5f),      Vector3D(0,1,1), Vector3D(0,0.2f,0) },
-		{Vector3D(0.5f,0.5f,0.5f),       Vector3D(0,1,.5), Vector3D(0,0.2f,0.2f) },
-		{Vector3D(-0.5f,0.5f,0.5f),      Vector3D(0,1,.5), Vector3D(0,0.2f,0.2f) },
-		{Vector3D(-0.5f,-0.5f,0.5f),     Vector3D(0,.1,1), Vector3D(0,0.2f,0) },
+		{Vector3D(0.0f,0.0f,0.0f),      Vector3D(0,0,0), Vector3D(0,0,0) },
+		{Vector3D(0.0f,0.0f,0.0f),       Vector3D(0,0,0), Vector3D(0,0,0) },
+		{Vector3D(0.0f,0.0f,0.0f),      Vector3D(0,0,0), Vector3D(0,0,0) },
+		{Vector3D(0.0f,0.0f,0.0f),     Vector3D(0,0,0), Vector3D(0,0,0) },
 	};
 
 	unsigned int index_list[] =
@@ -146,9 +146,9 @@ void Plane::draw(int width, int height)
 	yMatrix.setRotationX(rotation.m_y+ rotFactor* speed );
 	zMatrix.setRotationY(rotation.m_z + rotFactor * speed );*/
 
-	xMatrix.setRotationZ(rotation.m_z );
-	yMatrix.setRotationX(rotation.m_x );
-	zMatrix.setRotationY(rotation.m_y );
+	xMatrix.setRotationZ(Utils::degToRad(rotation.m_z) );
+	yMatrix.setRotationX(Utils::degToRad(rotation.m_x) );
+	zMatrix.setRotationY(Utils::degToRad(rotation.m_y) );
 
 	rotMatrix.setIdentity();
 
