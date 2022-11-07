@@ -58,6 +58,8 @@ private:
 	DebugWindow debugWindow;
 
 	Cube* cube;
+	Cube* cube2;
+
 	Gizmo* cameraGizmo;
 
 	Frustum* fustrum;

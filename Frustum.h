@@ -27,7 +27,7 @@ public:
 	float m_forward = 0.0f;
 	float m_rightward = 0.0f;
 
-	Camera* camera;
+	Camera* objCamera;
 	//Matrix4x4 m_world_cam;
 
 private:
@@ -43,7 +43,7 @@ private:
 	float deltaTime = 0.0f;
 	float speed = 1.0f;
 
-	Camera* cam;
+	Camera* sceneCamera;
 
 	Matrix4x4 m_world_cam;
 	Matrix4x4 world_cam;

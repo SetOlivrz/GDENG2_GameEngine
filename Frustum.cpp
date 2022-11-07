@@ -9,7 +9,7 @@
 
 Frustum::Frustum(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(name)
 {
-	cam = SceneCameraHandler::getInstance()->getSceneCamera();
+	sceneCamera = SceneCameraHandler::getInstance()->getSceneCamera();
 
 
 	//create buffers for drawing. Vertex data that needs to be drawn are temporarily placed here.
@@ -95,17 +95,17 @@ void Frustum::update(float deltaTime)
 
 void Frustum::draw(int width, int height)
 {
-	camera->getFOV();
+	objCamera->getFOV();
 	// setting up camera
-	static float FOV = Utils::radToDeg(camera->getFOV());
+	static float FOV = Utils::radToDeg(objCamera->getFOV());
 	float fovRadians = FOV / 180 * 3.14;
-	static float nearZ = camera->getNearZ();
-	static float farZ = camera->getFarZ();
+	static float nearZ = objCamera->getNearZ();
+	static float farZ = objCamera->getFarZ();
 
 	float nearHeight = 2 * tan(fovRadians / 2) * nearZ;
 	float farHeight = 2 * tan(fovRadians / 2) * (farZ-nearZ);
-	float nearWidth = nearHeight * camera->getAspectRatio();
-	float farWidth = farHeight * camera->getAspectRatio();
+	float nearWidth = nearHeight * objCamera->getAspectRatio();
+	float farWidth = farHeight * objCamera->getAspectRatio();
 
 
 #pragma region Frustum initialize
@@ -199,19 +199,19 @@ void Frustum::draw(int width, int height)
 	temp.setIdentity();
 
 
-	float fov = camera->getFOV();
-	float asp = camera->getAspectRatio();
-	float zNear = camera->getNearZ();
-	float zFar = camera->getFarZ();
+	float fov = objCamera->getFOV();
+	float asp = objCamera->getAspectRatio();
+	float zNear = objCamera->getNearZ();
+	float zFar = objCamera->getFarZ();
 	float zRange = zNear - zFar;
-	float tanHalfFOV = tanf(camera->getFOV()/2);
+	float tanHalfFOV = tanf(objCamera->getFOV()/2);
 
 	cc.worldMatrix.setIdentity();
 
 	//TRANSLATION
 	Matrix4x4 translationMatrix;
 	translationMatrix.setIdentity();
-	Vector3D pos = camera->getLocalPosition();
+	Vector3D pos = objCamera->getLocalPosition();
 	translationMatrix.setTranslation(Vector3D(pos.m_x,pos.m_y,pos.m_z+(zNear/2)));
 
 	//SCALE
@@ -225,7 +225,7 @@ void Frustum::draw(int width, int height)
 	xMatrix.setIdentity();
 	yMatrix.setIdentity();
 	zMatrix.setIdentity();
-	Vector3D rotation = camera->getLocalRotation();
+	Vector3D rotation = objCamera->getLocalRotation();
 
 	xMatrix.setRotationZ(rotation.m_z);
 	yMatrix.setRotationX(rotation.m_x);
@@ -246,9 +246,9 @@ void Frustum::draw(int width, int height)
 
 	//CAMERA
 	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
-	cam = SceneCameraHandler::getInstance()->getSceneCamera();
+	sceneCamera = SceneCameraHandler::getInstance()->getSceneCamera();
 	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
-	cc.projMatrix.setPerspectiveFovLH(cam->getFOV(), cam->getAspectRatio(), cam->getNearZ(), cam->getFarZ());
+	cc.projMatrix.setPerspectiveFovLH(sceneCamera->getFOV(), sceneCamera->getAspectRatio(), sceneCamera->getNearZ(), sceneCamera->getFarZ());
 	constantBuffer->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
 
 	// SET CONSTANT BUFFER

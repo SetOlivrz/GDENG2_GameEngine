@@ -263,7 +263,6 @@ void Camera::updateViewMatrix()
 	temp.setRotationY(this->getLocalRotation().m_y);
 	world_cam *= temp;
 
-
 	// UPDATE FOR CAM TRANSLATION
 	Vector3D new_pos = this->localMatrix.getTranslation() + (world_cam.getZDirection() * (this->forward * 0.1f));
 	new_pos = new_pos + (world_cam.getYDirection() * (this->upward * 0.1f));

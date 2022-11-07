@@ -13,7 +13,7 @@ Plane::Plane(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(
 	m_world_cam = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
 	world_cam = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
 
-	cam = SceneCameraHandler::getInstance()->getSceneCamera();
+	sceneCamera = SceneCameraHandler::getInstance()->getSceneCamera();
 
 
 	//create buffers for drawing. Vertex data that needs to be drawn are temporarily placed here.

@@ -82,13 +82,17 @@ void AppWindow::onCreate()
 
 	//CREATE CUBE
 	cube = new Cube("Cube", shaderByteCode, sizeShader);
-	cube->setPosition(camObj->getLocalPosition().m_x, camObj->getLocalPosition().m_y, camObj->getLocalPosition().m_z);
+	cube->setPosition(0,0,0);
 	cube->setScale(1, 1, 1);
+
+	cube2 = new Cube("Cube", shaderByteCode, sizeShader);
+	cube2->setPosition(-2,2,10);
+	cube2->setScale(1, 1, 1);
 
 	//CREATE FRUSTUM
 	fustrum = new Frustum("Frustum", shaderByteCode, sizeShader);
 	fustrum->setPosition(0.0, 0.0, -3.0f);
-	fustrum->camera = camObj; // set camera ref
+	fustrum->objCamera = camObj; // set camera ref
 }
 
 void AppWindow::onUpdate()
@@ -121,6 +125,8 @@ void AppWindow::onUpdate()
 
 	// UPDATE PRIMITIVES
 	cube->update(EngineTime::getDeltaTime());
+	cube2->update(EngineTime::getDeltaTime());
+
 	fustrum->update(EngineTime::getDeltaTime());
 
 	cameraGizmo->setPosition(camPos.m_x, camPos.m_y, camPos.m_z);
@@ -135,6 +141,8 @@ void AppWindow::onUpdate()
 	// SET RASTERIZER
 	GraphicsEngine::get()->getImmediateDeviceContext()->setRasterizeSetState(GraphicsEngine::get()->getRasterizerStateSLD());
 	cube->draw(rc.right - rc.left, rc.bottom - rc.top);
+	cube2->draw(rc.right - rc.left, rc.bottom - rc.top);
+
 	if(!isUsingCameraObj)
 		cameraGizmo->draw(rc.right - rc.left, rc.bottom - rc.top);
 
@@ -166,7 +174,7 @@ void AppWindow::onKeyDown(int key)
 	if (key == 'F')
 	{
 		isUsingCameraObj = !isUsingCameraObj;
-		std::cout << "camera Object: " << isUsingCameraObj<< " \n";
+		std::cout << "objCamera Object: " << isUsingCameraObj<< " \n";
 	}
 	
 }

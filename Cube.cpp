@@ -8,7 +8,7 @@
 
 Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(name)
 {
-	cam = SceneCameraHandler::getInstance()->getSceneCamera();
+	sceneCamera = SceneCameraHandler::getInstance()->getSceneCamera();
 	//create buffers for drawing. Vertex data that needs to be drawn are temporarily placed here.
 	Vertex quadList[] = {
 		//X, Y, Z
@@ -154,12 +154,12 @@ void Cube::draw(int width, int height)
 	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
 
 	float aspectRatio = (float)width / (float)height;
-	cam = SceneCameraHandler::getInstance()->getSceneCamera();
+	sceneCamera = SceneCameraHandler::getInstance()->getSceneCamera();
 
-	float fov = cam->getFOV();
-	float asp = cam->getAspectRatio();
-	float nz = cam->getNearZ();
-	float fz = cam->getFarZ();
+	float fov = sceneCamera->getFOV();
+	float asp = sceneCamera->getAspectRatio();
+	float nz = sceneCamera->getNearZ();
+	float fz = sceneCamera->getFarZ();
 
 	cc.projMatrix.setPerspectiveFovLH(fov, asp, nz, fz);
 	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);

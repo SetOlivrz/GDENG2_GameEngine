@@ -38,11 +38,11 @@ Camera* SceneCameraHandler::getSceneCamera()
     return this->sceneCamera;
 }
 
-void SceneCameraHandler::SetSceneCamera(Camera* camera)
+void SceneCameraHandler::SetSceneCamera(Camera* objCamera)
 {
     if (sceneCamera)
     this->sceneCamera->setCameraStatus(false);
-    this->sceneCamera = camera;
+    this->sceneCamera = objCamera;
     this->sceneCamera->setCameraStatus(true);
 }
 

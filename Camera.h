@@ -65,7 +65,7 @@ private:
 	float rightward = 0;
 	float upward = 0;
 
-	Camera* cam;
+	Camera* sceneCamera;
 
 	// Inherited via AGameObject
 	virtual void draw(int width, int height) override;
