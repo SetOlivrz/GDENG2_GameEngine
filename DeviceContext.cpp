@@ -82,6 +82,10 @@ void DeviceContext::setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer*
 }
 
 
+ID3D11DeviceContext* DeviceContext::getDeviceContext()
+{
+	return this->m_device_context;
+}
 bool DeviceContext::release()
 {
 	m_device_context->Release();

@@ -61,6 +61,15 @@
     <Filter Include="GameEngine\GraphicsEngine\Camera">
       <UniqueIdentifier>{c2654fea-7b1c-49bb-985e-bb79545f4e6d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GameEngine\User Interface">
+      <UniqueIdentifier>{21931827-591f-4554-ba34-c6422b95ee8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\User Interface\Screen">
+      <UniqueIdentifier>{1becb7da-ecbc-43c7-af87-893d75434e62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Helper">
+      <UniqueIdentifier>{1d5cdb71-748a-49ea-a4c7-1a2931a8d3ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppWindow.cpp">
@@ -140,6 +149,19 @@
     <ClCompile Include="Plane.cpp">
       <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClCompile>
+    <ClCompile Include="UIManager.cpp">
+      <Filter>GameEngine\User Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="AUIScreen.cpp">
+      <Filter>GameEngine\User Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorScreen.cpp">
+      <Filter>GameEngine\User Interface\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorPickerScreen.cpp">
+      <Filter>GameEngine\User Interface\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="CreditScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -240,6 +262,22 @@
     <ClInclude Include="Plane.h">
       <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClInclude>
+    <ClInclude Include="AUIScreen.h">
+      <Filter>GameEngine\User Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManager.h">
+      <Filter>GameEngine\User Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorScreen.h">
+      <Filter>GameEngine\User Interface\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorPickerScreen.h">
+      <Filter>GameEngine\User Interface\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="CreditScreen.h" />
+    <ClInclude Include="stb_image.h">
+      <Filter>GameEngine\Helper</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
@@ -248,5 +286,8 @@
     <FxCompile Include="PixelShader.hlsl">
       <Filter>GameEngine\Shaders</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="dlsu.png" />
   </ItemGroup>
 </Project>

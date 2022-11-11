@@ -75,7 +75,7 @@ Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(na
 
 	// CONSTANT BUFFER
 	Constant cc;
-	cc.m_time = 0;
+	//cc.m_time = 0;
 
 	constantBuffer = GraphicsEngine::get()->createConstantBuffer();
 	constantBuffer->load(&cc, sizeof(Constant));

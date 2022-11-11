@@ -12,7 +12,7 @@ public:
 	~DebugWindow();
 
 	void intitialize(HWND hwnd);
-	void createDisplayData(Quad* quad[]);
+	void createDisplayData();
 	void TransformSliders(Quad* obj);
 	void TransformSliders(Quad* obj1,Quad* obj2);
 

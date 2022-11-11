@@ -26,69 +26,55 @@ void DebugWindow::intitialize(HWND hwnd)
 	ImGui::StyleColorsDark();
 }
 
-void DebugWindow::createDisplayData(Quad* objList[] )
+void DebugWindow::createDisplayData( )
 {
-//	// feed inputs to dear imgui, start new frame
-//	ImGui_ImplDX11_NewFrame();
-//	ImGui_ImplWin32_NewFrame();
-//	ImGui::NewFrame();
-//
-//	//Create Imgui  Window
-//	ImGui::Begin("Debug Window");
-//
-//	// check boxes
-//	ImGui::Text("Objects:");
-//	ImGui::Checkbox("Quad", &obj1);
-//	ImGui::Checkbox("Triangle", &obj2);
-//
-//	if (obj1 && !obj2)
-//	{
-//		TransformSliders(objList[0]);
-//	}
-//	else if (obj2 && !obj1)
-//	{
-//		TransformSliders(objList[1]);
-//
-//	}
-//	else if (obj1 && obj2)
-//	{
-//		TransformSliders(objList[0], objList[1]);
-//	}
-//	else
-//	{
-//	    ImGui::Text("	\n\nNOTE: PLEASE SELECT A SINGLE OBJECT");
-//	}
-//
-//
-//	ImGui::End();
-//
-//	//Assemble Together Draw Data
-//	ImGui::Render();
-//}
-//
-//void DebugWindow::TransformSliders(Quad* obj)
-//{
-//	Utils::resetArr3(posFactor);
-//	Utils::resetArr3(scalFactor);
-//	Utils::resetArr3(sumA);
-//	Utils::resetArr3(sumB);
-//	Utils::resetArr3(sumC);
-//	Utils::resetArr3(sumD);
-//
-//	ImGui::Text("");
-//	ImGui::Text("	  X		    Y");
-//	ImGui::SliderFloat2(" Position", obj->translation, -1.0, 1.0);
-//	if (ImGui::Button("Reset###Position"))
-//	{
-//		obj->resetPosition();
-//	}
-//
-//	ImGui::SliderFloat2(" Scale", obj->scale, 0.0, 2);
-//
-//	if (ImGui::Button("Reset###Scale"))
-//	{
-//		obj->resetScale();
-//	}
+	// feed inputs to dear imgui, start new frame
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+	//Create Imgui  Window
+	ImGui::Begin("Credits");
+
+	// check boxes
+	ImGui::Text("About:");
+	ImGui::Text("Editor: v.1.");
+	ImGui::Text("Developer: Setiel Olivarez");
+	ImGui::Text("Acknowledgements:");
+	ImGui::BulletText("Sir Neil Patrick Del Gallego");
+	ImGui::BulletText("PardCode (https://www.youtube.com/c/PardCode)");
+	ImGui::BulletText("imGui (https://github.com/ocornut/imgui.git)");
+
+
+	ImGui::End();
+
+	//Assemble Together Draw Data
+	ImGui::Render();
+}
+
+void DebugWindow::TransformSliders(Quad* obj)
+{
+	Utils::resetArr3(posFactor);
+	Utils::resetArr3(scalFactor);
+	Utils::resetArr3(sumA);
+	Utils::resetArr3(sumB);
+	Utils::resetArr3(sumC);
+	Utils::resetArr3(sumD);
+
+	/*ImGui::Text("");
+	ImGui::Text("	  X		    Y");
+	ImGui::SliderFloat2(" Position", obj->translation, -1.0, 1.0);
+	if (ImGui::Button("Reset###Position"))
+	{
+		obj->resetPosition();
+	}
+
+	ImGui::SliderFloat2(" Scale", obj->scale, 0.0, 2);
+
+	if (ImGui::Button("Reset###Scale"))
+	{
+		obj->resetScale();
+	}*/
 }
 
 void DebugWindow::TransformSliders(Quad* quad, Quad* tri)
