@@ -25,6 +25,21 @@ GraphicsEngine::GraphicsEngine()
 		textureManager = new TextureManager();
 	}
 	catch (...) { throw std::exception("TextureManager not created successfully"); }
+
+	try
+	{
+		meshManager = new MeshManager();
+	}
+	catch (...) { throw std::exception("MeshManager not created successfully"); }
+
+
+
+	void* shader_byte_code = nullptr;
+	size_t size_shader = 0;
+	compileVertexShader(L"VertexMeshLayoutShader.hlsl", "vsmain", &shader_byte_code, &size_shader);
+	::memcpy(m_mesh_layout_byte_code, shader_byte_code, size_shader);
+	m_mesh_layout_size = size_shader;
+	releaseCompiledShader();
 }
 
 bool GraphicsEngine::init()
@@ -120,20 +135,54 @@ TextureManager* GraphicsEngine::getTextureManager()
 	return this->textureManager;
 }
 
-VertexBuffer* GraphicsEngine::createVertexBuffer()
+MeshManager* GraphicsEngine::getMeshManager()
 {
-	return new VertexBuffer();
+	return meshManager;
 }
+
+void GraphicsEngine::getVertexMeshLayoutShaderByteCodeAndSize(void** byte_code, size_t* size)
+{
+	*byte_code = m_mesh_layout_byte_code;
+	*size = m_mesh_layout_size;
+}
+
+VertexBuffer* GraphicsEngine::createVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader)
+{
+
+	VertexBuffer* vb = nullptr;
+	try
+	{
+		vb = new VertexBuffer(list_vertices, size_vertex, size_list, shader_byte_code, size_byte_shader);
+	}
+	catch (...) {}
+	return vb;
+}
+
+IndexBuffer* GraphicsEngine::createIndexBuffer(void* list_indices, UINT size_list)
+{
+	IndexBuffer* ib = nullptr;
+	try
+	{
+		ib = new IndexBuffer(list_indices, size_list);
+	}
+	catch (...) {}
+	return ib;
+}
+
+//VertexBuffer* GraphicsEngine::createVertexBuffer()
+//{
+//	return new VertexBuffer();
+//}
 
 TVertexBuffer* GraphicsEngine::createTVertexBuffer()
 {
 	return new TVertexBuffer();
 }
 
-IndexBuffer* GraphicsEngine::createIndexBuffer()
-{
-	return new IndexBuffer();
-}
+//IndexBuffer* GraphicsEngine::createIndexBuffer()
+//{
+//	//return new IndexBuffer();
+//}
 
 ConstantBuffer* GraphicsEngine::createConstantBuffer()
 {

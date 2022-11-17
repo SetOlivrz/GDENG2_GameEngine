@@ -70,11 +70,20 @@
     <Filter Include="GameEngine\Helper">
       <UniqueIdentifier>{1d5cdb71-748a-49ea-a4c7-1a2931a8d3ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameEngine\ResourceManager">
-      <UniqueIdentifier>{f5b0d606-5549-4256-b834-de675d7691e5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\GraphicsEngine\Primitives\Textured">
       <UniqueIdentifier>{b8718594-9f90-49e8-904c-15443e4e8932}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Manager">
+      <UniqueIdentifier>{f5b0d606-5549-4256-b834-de675d7691e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Manager\MeshManager">
+      <UniqueIdentifier>{ff66d2a0-bc5d-4e70-b78a-4c19a65fe7cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Manager\ResourceManager">
+      <UniqueIdentifier>{e0ee7d5b-f61d-47f2-b026-c82952a87859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Manager\TextureManager">
+      <UniqueIdentifier>{6fce16f0-f7d7-4080-8216-bec86cca7e3a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -141,14 +150,8 @@
     <ClCompile Include="AGameObject.cpp">
       <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="Cube.cpp">
-      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
-    </ClCompile>
     <ClCompile Include="InputSystem.cpp">
       <Filter>GameEngine\InputSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="Plane.cpp">
-      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClCompile>
     <ClCompile Include="UIManager.cpp">
       <Filter>GameEngine\User Interface</Filter>
@@ -163,23 +166,11 @@
       <Filter>GameEngine\User Interface\Screen</Filter>
     </ClCompile>
     <ClCompile Include="CreditScreen.cpp" />
-    <ClCompile Include="ResourceManager.cpp">
-      <Filter>GameEngine\ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="Resource.cpp">
-      <Filter>GameEngine\ResourceManager</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>GameEngine\ResourceManager</Filter>
-    </ClCompile>
     <ClCompile Include="SceneCameraHandler.cpp">
       <Filter>GameEngine\GraphicsEngine\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>GameEngine\GraphicsEngine\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>GameEngine\ResourceManager</Filter>
     </ClCompile>
     <ClCompile Include="TVertexBuffer.cpp">
       <Filter>GameEngine\GraphicsEngine\VertexBuffer</Filter>
@@ -187,6 +178,26 @@
     <ClCompile Include="TexturedCube.cpp">
       <Filter>GameEngine\GraphicsEngine\Primitives\Textured</Filter>
     </ClCompile>
+    <ClCompile Include="MeshManager.cpp">
+      <Filter>GameEngine\Manager\MeshManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>GameEngine\Manager\MeshManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>GameEngine\Manager\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>GameEngine\Manager\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>GameEngine\Manager\TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>GameEngine\Manager\TextureManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshObject.cpp" />
+    <ClCompile Include="VBuff.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -264,9 +275,6 @@
     <ClInclude Include="AGameObject.h">
       <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClInclude>
-    <ClInclude Include="Cube.h">
-      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
-    </ClInclude>
     <ClInclude Include="InputListener.h">
       <Filter>GameEngine\InputSystem</Filter>
     </ClInclude>
@@ -278,9 +286,6 @@
     </ClInclude>
     <ClInclude Include="Vector4D.h">
       <Filter>GameEngine\GraphicsEngine\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Plane.h">
-      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="AUIScreen.h">
       <Filter>GameEngine\User Interface</Filter>
@@ -298,23 +303,11 @@
     <ClInclude Include="stb_image.h">
       <Filter>GameEngine\Helper</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceManager.h">
-      <Filter>GameEngine\ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>GameEngine\ResourceManager</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>GameEngine\ResourceManager</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>GameEngine\GraphicsEngine\Camera</Filter>
     </ClInclude>
     <ClInclude Include="SceneCameraHandler.h">
       <Filter>GameEngine\GraphicsEngine\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>GameEngine\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="TVertexBuffer.h">
       <Filter>GameEngine\GraphicsEngine\VertexBuffer</Filter>
@@ -322,8 +315,29 @@
     <ClInclude Include="TexturedCube.h">
       <Filter>GameEngine\GraphicsEngine\Primitives\Textured</Filter>
     </ClInclude>
-    <ClInclude Include="Libs\DirectXTex\include\DirectXTex.h" />
-    <ClInclude Include="Libs\tinyobjloader\include\tiny_obj_loader.h" />
+    <ClInclude Include="MeshManager.h">
+      <Filter>GameEngine\Manager\MeshManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>GameEngine\Manager\MeshManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>GameEngine\Manager\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>GameEngine\Manager\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>GameEngine\Manager\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>GameEngine\Manager\TextureManager</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexMesh.h">
+      <Filter>GameEngine\GraphicsEngine\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshObject.h" />
+    <ClInclude Include="VBuff.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
@@ -338,11 +352,11 @@
     <FxCompile Include="TVertexShader.hlsl">
       <Filter>GameEngine\Shaders</Filter>
     </FxCompile>
+    <FxCompile Include="VertexMeshLayoutShader.hlsl">
+      <Filter>GameEngine\Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="dlsu.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Libs\DirectXTex\include\DirectXTex.inl" />
   </ItemGroup>
 </Project>

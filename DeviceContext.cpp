@@ -84,6 +84,7 @@ void DeviceContext::setPixelShader(PixelShader* pixel_shader)
 
 void DeviceContext::setTexture(PixelShader* vertex_shader, Texture* texture)
 {
+	if (texture != nullptr)
 	m_device_context->PSSetShaderResources(0,1, &texture->m_shader_res_view);
 }
 

@@ -1,4 +1,4 @@
-#include "Cube.h"
+#include "MeshObject.h"
 #include "GraphicsEngine.h"
 #include "DeviceContext.h"
 #include "EngineTime.h"
@@ -6,8 +6,9 @@
 
 #include "SwapChain.h"
 
-Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(name)
+MeshObject::MeshObject(string name, void* shaderByteCode, size_t sizeShader, Mesh* mesh) :AGameObject(name)
 {
+	this->meshData = mesh;
 	//m_world_cam.setTranslation(Vector3D(0, 0, -2));
 	m_world_cam = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
 	world_cam = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
@@ -55,21 +56,21 @@ Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(na
 
 
 	// INDEX BUFFER
-	indexBuffer = GraphicsEngine::get()->createIndexBuffer();
-	indexBuffer->load(index_list, ARRAYSIZE(index_list));
+	indexBuffer = meshData->getIndexBuffer();
+	//indexBuffer->load(index_list, ARRAYSIZE(index_list));
 
-	//Vertex Shader
+	// VERTEX SHADER
 	GraphicsEngine::get()->compileVertexShader(L"TVertexShader.hlsl", "tvsmain", &shaderByteCode, &sizeShader);
 	vertexShader = GraphicsEngine::get()->createVertexShader(shaderByteCode, sizeShader);
 
 	// VERTEX BUFFER
-	vertexBuffer = GraphicsEngine::get()->createVertexBuffer();
-	vertexBuffer->load(quadList, sizeof(Vertex), ARRAYSIZE(quadList), shaderByteCode, sizeShader);
+	vertexBuffer = meshData->getVertexBuffer();
+	//vertexBuffer->load(quadList, sizeof(Vertex), ARRAYSIZE(quadList), shaderByteCode, sizeShader);
 
 	GraphicsEngine::get()->releaseCompiledShader();
 
 	// PIXEL SHADER
-	GraphicsEngine::get()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shaderByteCode, &sizeShader);
+	GraphicsEngine::get()->compilePixelShader(L"TPixelShader.hlsl", "tpsmain", &shaderByteCode, &sizeShader);
 	pixelShader = GraphicsEngine::get()->createPixelShader(shaderByteCode, sizeShader);
 	GraphicsEngine::get()->releaseCompiledShader();
 
@@ -81,23 +82,21 @@ Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(na
 	constantBuffer->load(&cc, sizeof(Constant));
 }
 
-Cube::~Cube()
+MeshObject::~MeshObject()
 {
-	this->vertexBuffer->release();
-	this->indexBuffer->release();
 	this->constantBuffer->release();
 	this->pixelShader->release();
 	this->vertexShader->release();
 	AGameObject::~AGameObject();
 }
 
-void Cube::update(float deltaTime)
+void MeshObject::update(float deltaTime)
 {
 	this->ticks += deltaTime;
 	this->deltaTime = deltaTime;
 }
 
-void Cube::draw(int width, int height)
+void MeshObject::draw(int width, int height)
 {
 	if (ticks >= animationInterval)
 	{
@@ -107,11 +106,11 @@ void Cube::draw(int width, int height)
 
 	if (isIncreasing)
 	{
-		rotFactor += deltaTime ;
+		rotFactor += deltaTime;
 	}
 	else
 	{
-		rotFactor -= deltaTime ;
+		rotFactor -= deltaTime;
 	}
 
 	GraphicsEngine* graphEngine = GraphicsEngine::get();
@@ -139,9 +138,9 @@ void Cube::draw(int width, int height)
 	zMatrix.setIdentity();
 	Vector3D rotation = this->getLocalRotation();
 
-	xMatrix.setRotationZ(rotation.m_x );
-	yMatrix.setRotationX(rotation.m_y );
-	zMatrix.setRotationY(rotation.m_z );
+	xMatrix.setRotationZ(rotation.m_x);
+	yMatrix.setRotationX(rotation.m_y);
+	zMatrix.setRotationY(rotation.m_z);
 
 	rotMatrix.setIdentity();
 
@@ -155,7 +154,7 @@ void Cube::draw(int width, int height)
 	temp *= translationMatrix;
 
 	cc.worldMatrix = temp;
-	
+
 	//CAMERA
 	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
 
@@ -169,24 +168,26 @@ void Cube::draw(int width, int height)
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
 
+
 	//SET DEFAULT SHADER IN THE GRAPHICS PIPELINE TO BE ABLE TO DRAW
 	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexShader(vertexShader);
 	GraphicsEngine::get()->getImmediateDeviceContext()->setPixelShader(pixelShader);
 
+	GraphicsEngine::get()->getImmediateDeviceContext()->setTexture(pixelShader, this->myTexture);
+
 
 	//SET THE VERTICES OF THE TRIANGLE TO DRAW
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(indexBuffer);
+	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(meshData->getVertexBuffer());
+	GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(meshData->getIndexBuffer());
 
 
 	// FINALLY DRAW THE TRIANGLE
-	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(indexBuffer->getSizeIndexList(), 0, 0);
+	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(meshData->getIndexBuffer()->getSizeIndexList(), 0, 0);
 }
 
-void Cube::setAnimation(float speed, float interval, bool isSpeeding, float rotFactor)
+void MeshObject::setTexture(Texture* texture)
 {
-	this->rotFactor = rotFactor;
-	this->speed = speed;
-	this->animationInterval = interval;
-	this->isIncreasing = isSpeeding;
+	this->myTexture = texture;
 }
+
+

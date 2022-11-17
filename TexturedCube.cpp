@@ -111,8 +111,8 @@ TexturedCube::TexturedCube(string name, void* shaderByteCode, size_t sizeShader)
 
 
 	//Index Buffer
-	this->indexBuffer = GraphicsEngine::get()->createIndexBuffer();
-	this->indexBuffer->load(index_list, ARRAYSIZE(index_list));
+	this->indexBuffer = GraphicsEngine::get()->createIndexBuffer(index_list, ARRAYSIZE(index_list));
+	//this->indexBuffer->load(index_list, ARRAYSIZE(index_list));
 
 	//Vertex Shader
 	GraphicsEngine::get()->compileVertexShader(L"TVertexShader.hlsl", "tvsmain", &shaderByteCode, &sizeShader);
@@ -141,7 +141,7 @@ TexturedCube::TexturedCube(string name, void* shaderByteCode, size_t sizeShader)
 
 TexturedCube::~TexturedCube()
 {
-	this->indexBuffer->release();
+	//this->indexBuffer->release();
 	this->vertexShader->release();
 	this->pixelShader->release();
 	this->constantBuffer->release();

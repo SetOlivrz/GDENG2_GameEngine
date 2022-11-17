@@ -17,7 +17,6 @@ public:
 	void setAnimSpeed(float speed);
 
 	Texture* myTexture;
-	ID3D11SamplerState* samplerState;
 
 	//vector<Vertex> getVertexList();
 private:

@@ -84,10 +84,37 @@ void AppWindow::onCreate()
 	}*/
 
 	TexturedCube* cube = new TexturedCube("tcube", shaderByteCode, sizeShader);
-	cube->myTexture = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
+	cube->myTexture = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\brick.png");
 	cube->setPosition(1.0, 1.0, 1.0f);
 	cube->setScale(1, 1, 1);
-	ObjectList.push_back(cube);
+	//ObjectList.push_back(cube);
+
+	Mesh* mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\teapot2.obj");
+
+	teapot = new MeshObject("Teapot", shaderByteCode, sizeShader, mesh);
+	teapot->setTexture(GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\brick.png"));
+	teapot->setPosition(-1.0, 0.0, -1.0f);
+	teapot->setScale(1, 1, 1);
+	ObjectList.push_back(teapot);
+
+	mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\armadillo.obj");
+
+	armadillo = new MeshObject("Armadillo", shaderByteCode, sizeShader, mesh);
+
+	armadillo->setPosition(0.0, 0.0, 0.0f);
+	armadillo->setScale(0.5, 0.5, 0.5);
+	ObjectList.push_back(armadillo);
+
+	mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\bunny.obj");
+
+	bunny = new MeshObject("Bunny", shaderByteCode, sizeShader, mesh);
+
+	bunny->setPosition(1.0, 0.0, 1.0f);
+	bunny->setScale(1, 1, 1);
+	ObjectList.push_back(bunny);
+
+
+
 
 
 	/*int width = 0;
@@ -164,22 +191,37 @@ void AppWindow::onKeyUp(int key)
 
 void AppWindow::onMouseMove(const Point deltaPos)
 {
+	if (isLeftMouseDown)
+	{
+		Vector3D scale = armadillo->getLocalScale();
+		scale.m_x += deltaPos.m_x * EngineTime::getDeltaTime();
+		scale.m_y += deltaPos.m_y * EngineTime::getDeltaTime();
+		scale.m_z += deltaPos.m_x * EngineTime::getDeltaTime();
+
+		armadillo->setScale(scale);
+	}
+	
 
 }
 
 void AppWindow::onLeftMouseDown(const Point deltaPos)
 {
+	std::cout << "Left mouse down! \n";
+
+	isLeftMouseDown = true;
 
 }
 
 void AppWindow::onLeftMouseUp(const Point deltaPos)
 {
-	std::cout << "Left mouse upward! \n";
+	std::cout << "Left mouse up! \n";
+	isLeftMouseDown = false;
+
 }
 
 void AppWindow::onRightMouseDown(const Point deltaPos)
 {
-	std::cout << "Right mouse down! \n";
+	//std::cout << "Right mouse down! \n";
 
 	//cube[0]->setScale(Vector3D(2.0, 2.0, 2.0));
 
@@ -188,7 +230,7 @@ void AppWindow::onRightMouseDown(const Point deltaPos)
 
 void AppWindow::onRightMouseUp(const Point deltaPos)
 {
-	std::cout << "Right mouse upward! \n";
+	//std::cout << "Right mouse upward! \n";
 
 	//cube[0]->setScale(Vector3D(1.0, 1.0, 1.0));
 

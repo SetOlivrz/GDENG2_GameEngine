@@ -15,6 +15,9 @@
 #include "Cube.h"
 #include "Plane.h"
 #include "TexturedCube.h"
+#include "MeshObject.h"
+
+#include "Mesh.h"
 
 #include <vector>
 
@@ -58,6 +61,10 @@ private:
 
 	Plane* plane[1];
 	Cube* cube[1];
+	MeshObject* teapot;
+	MeshObject* armadillo;
+	MeshObject* bunny;
+
 
 
 	std::vector<AGameObject*> ObjectList;
@@ -70,6 +77,7 @@ private:
 
 private:
 	friend class GraphicsEngine;
+	bool isLeftMouseDown = false;
 
 
 	

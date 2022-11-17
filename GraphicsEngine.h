@@ -1,6 +1,7 @@
 #pragma once
 #include <d3d11.h>
 #include "TextureManager.h"
+#include "MeshManager.h"
 
 class SwapChain;
 class DeviceContext;
@@ -33,6 +34,14 @@ public:
 	ID3D11Device* getDevice();
 	ID3D11DeviceContext* getDeviceContext();
 	TextureManager* getTextureManager();
+	MeshManager* getMeshManager();
+
+
+	void getVertexMeshLayoutShaderByteCodeAndSize(void** byte_code, size_t* size);
+
+	VertexBuffer* createVertexBuffer(void* list_vertices, UINT size_vertex, UINT size_list, void* shader_byte_code, UINT size_byte_shader);
+
+	IndexBuffer* createIndexBuffer(void* list_indices, UINT size_list);
 
 
 	//Buffers
@@ -72,6 +81,12 @@ private:
 	ID3D11PixelShader* m_ps = nullptr;
 
 	TextureManager* textureManager = nullptr;
+	MeshManager* meshManager = nullptr;
+
+
+	unsigned char m_mesh_layout_byte_code[1024];
+	size_t m_mesh_layout_size = 0;
+
 private:
 	friend class SwapChain;
 	friend class VertexBuffer;
