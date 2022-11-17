@@ -1,12 +1,6 @@
 #pragma once
 #include "AGameObject.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "ConstantBuffer.h"
-
-#include "VertexShader.h"
-#include "PixelShader.h"
-#include "Camera.h";
+#include "Camera.h"
 
 class Cube : public AGameObject
 {
@@ -29,12 +23,12 @@ public:
 	//Matrix4x4 m_world_cam;
 
 private:
-	VertexBuffer* vertexBuffer;
-	IndexBuffer* indexBuffer;
-	ConstantBuffer* constantBuffer;
+	//VertexBuffer* vertexBuffer;
+	//IndexBuffer* indexBuffer;
+	//ConstantBuffer* constantBuffer;
 
-	VertexShader* vertexShader;
-	PixelShader* pixelShader;
+	//VertexShader* vertexShader;
+	//PixelShader* pixelShader;
 
 	float ticks = 0.0f;
 	float deltaPos = 0.0f;

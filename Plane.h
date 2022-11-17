@@ -1,12 +1,7 @@
 #pragma once
 #include "AGameObject.h"
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "ConstantBuffer.h"
+#include "Camera.h"
 
-#include "VertexShader.h"
-#include "PixelShader.h"
-#include "Camera.h";
 
 class Plane : public AGameObject
 {

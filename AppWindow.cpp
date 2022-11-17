@@ -47,8 +47,12 @@ void AppWindow::onCreate()
 	InputSystem::getInstance()->addListener(this);
 	//InputSystem::getInstance()->showCursor(false);
 
+
+	
 	// ENGINE
 	GraphicsEngine::get()->init();
+
+	Texture* woodTex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
 
 	UIManager::getInstance()->initialize(Window::m_hwnd);
 
@@ -79,21 +83,14 @@ void AppWindow::onCreate()
 		this->CubeList.push_back(cubeObj);
 	}*/
 
-	Plane* planeObj = new Plane ("Plane", shaderByteCode, sizeShader);
-	planeObj->setPosition(0.0, 0.0, 0.0f);
-	planeObj->setScale(2, 2.0, 0);
+	TexturedCube* cube = new TexturedCube("tcube", shaderByteCode, sizeShader);
+	cube->myTexture = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
+	cube->setPosition(1.0, 1.0, 1.0f);
+	cube->setScale(1, 1, 1);
+	ObjectList.push_back(cube);
 
 
-	//planeObj->setAnimation(1, 20, true);a
-	plane[0] = planeObj;
-
-	Cube* cubeObj = new Cube("Cube", shaderByteCode, sizeShader);
-	cubeObj->setPosition(0.0, 0.0, 0.0f);
-	//cubeObj->setAnimation(1,20, true);
-	cube[0] = cubeObj;
-
-
-	int width = 0;
+	/*int width = 0;
 	int height = 0;
 	ID3D11ShaderResourceView* texture = NULL;
 	bool ret = LoadTextureFromFile("C://Users//Setiel Olivarez/Desktop/School/GDENG2/Project/Game Engine/dlsu.png", &texture, &width, &height);
@@ -101,7 +98,7 @@ void AppWindow::onCreate()
 
 	UIManager::getInstance()->my_image_width = width/4;
 	UIManager::getInstance()->my_image_height = height/4;
-	UIManager::getInstance()->my_texture = texture;
+	UIManager::getInstance()->my_texture = texture;*/
 
 
 
@@ -119,27 +116,20 @@ void AppWindow::onUpdate()
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
-
-
 	//UPDATE PRIMITIVES
-	/*for (int i = 0; i < CubeList.size(); i++)
+	for (int i = 0; i < ObjectList.size(); i++)
 	{
-		CubeList[i]->update(EngineTime::getDeltaTime());
+		ObjectList[i]->update(EngineTime::getDeltaTime());
 	}
 
-	for (int i = 0; i < CubeList.size(); i++)
+	for (int i = 0; i < ObjectList.size(); i++)
 	{
-		CubeList[i]->draw(rc.right - rc.left, rc.bottom - rc.top);
-	}*/
+		ObjectList[i]->draw(rc.right - rc.left, rc.bottom - rc.top);
+	}
+
 
 	//UPDATE CAMERA
 	SceneCameraHandler::getInstance()->update();
-
-	/*cube[0]->update(EngineTime::getDeltaTime());
-	cube[0]->draw(rc.right - rc.left, rc.bottom - rc.top);*/
-
-	plane[0]->update(EngineTime::getDeltaTime());
-	plane[0]->draw(rc.right - rc.left, rc.bottom - rc.top);
 
 	UIManager::getInstance()->drawAllUI();
 
@@ -157,86 +147,34 @@ void AppWindow::onDestroy()
 
 void AppWindow::onFocus()
 {
-	//InputSystem::getInstance()->addListener(this);
 }
 
 void AppWindow::onKillFocus()
 {
-	//InputSystem::getInstance()->removeListener(this);
 }
 
 void AppWindow::onKeyDown(int key)
 {
-	//Vector3D v = cube[0]->getRotation();
-
-	if (key == 'F')
-	{
-		float var = plane[0]->getLocalRotation().m_z + EngineTime::getDeltaTime();
-		plane[0]->setRotation( 0,0, var);
-		std::cout << "ROT: "<< plane[0]->getLocalRotation().m_z<<" \n";
-
-
-	}
-	//else if (key == 'S')
-	//{
-	//	//cube[0]->setRotation(Vector3D(v.m_x - 3.14f * EngineTime::getDeltaTime(), v.m_y, v.m_z));
-	//	cube[0]->m_forward = -1.0f;
-
-	//}
-	//else if (key == 'A')
-	//{
-	//	//cube[0]->setRotation(Vector3D(v.m_x, v.m_y + 3.14 *EngineTime::getDeltaTime(), v.m_z));
-	//	cube[0]->m_rightward = -1.0f;
-
-	//}
-	//else if (key == 'D')
-	//{
-	//	//cube[0]->setRotation(Vector3D(v.m_x, v.m_y - 3.14 * EngineTime::getDeltaTime(), v.m_z));
-	//	cube[0]->m_rightward = 1.0f;
-
-	//}
 	
 }
 
 void AppWindow::onKeyUp(int key)
 {
-	/*cube[0]->m_forward = 0.0f;
-	cube[0]->m_rightward = 0.0f;*/
-
 }
 
 void AppWindow::onMouseMove(const Point deltaPos)
 {
-	/*int width = (this->getClientWindowRect().right - this->getClientWindowRect().left);
-	int height = (this->getClientWindowRect().bottom - this->getClientWindowRect().top);
-
-	Vector3D v = cube[0]->getRotation();
-
-	v.m_x += (deltaPos.m_y - (height / 2.0f)) * EngineTime::getDeltaTime() * 0.1f;
-	v.m_y += (deltaPos.m_x - (width / 2.0f)) * EngineTime::getDeltaTime() * 0.1f;
-
-
-	cube[0]->setRotation(v);
-
-	InputSystem::getInstance()->setCursorPosition(Point((int)(width / 2.0f), (int)(height / 2.0f)));*/
 
 }
 
 void AppWindow::onLeftMouseDown(const Point deltaPos)
 {
-	//cube[0]->setScale(Vector3D(0.5, 0.5, 0.5));
-	//std::cout << "Left mosssssssssssssssssssssssssssssssssssssssuse down! \n";
-	//plane[0]->setRotation(0.0, 0.0, plane[0]->getLocalRotation().m_z + EngineTime::getDeltaTime());
 
 }
 
 void AppWindow::onLeftMouseUp(const Point deltaPos)
 {
-	//cube[0]->setScale(Vector3D(1.0, 1.0, 1.0));
 	std::cout << "Left mouse upward! \n";
-
-
-
 }
 
 void AppWindow::onRightMouseDown(const Point deltaPos)

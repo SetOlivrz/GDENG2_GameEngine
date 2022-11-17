@@ -1,15 +1,20 @@
 #pragma once
 #include <d3d11.h>
+#include "TextureManager.h"
 
 class SwapChain;
 class DeviceContext;
 class VertexBuffer;
+class TVertexBuffer;
+
 class ConstantBuffer;
 class VertexShader;
 class PixelShader;
 class AppWindow;
 class DebugWindow;
 class IndexBuffer;
+class Texture;
+class Resource;
 
 
 
@@ -27,11 +32,12 @@ public:
 	DeviceContext* getImmediateDeviceContext();
 	ID3D11Device* getDevice();
 	ID3D11DeviceContext* getDeviceContext();
-
+	TextureManager* getTextureManager();
 
 
 	//Buffers
 	VertexBuffer* createVertexBuffer();
+	TVertexBuffer* createTVertexBuffer();
 	IndexBuffer* createIndexBuffer();
 	ConstantBuffer* createConstantBuffer();
 
@@ -64,11 +70,15 @@ private:
 	ID3DBlob* m_psblob = nullptr;
 	ID3D11VertexShader* m_vs = nullptr;
 	ID3D11PixelShader* m_ps = nullptr;
+
+	TextureManager* textureManager = nullptr;
 private:
 	friend class SwapChain;
 	friend class VertexBuffer;
 	friend class ConstantBuffer;
 	friend class VertexShader;
+	friend class TVertexBuffer;
+
 	friend class PixelShader;
 	friend class AppWindow;
 	friend class DebugWindow;

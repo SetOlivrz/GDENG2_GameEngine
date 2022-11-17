@@ -1,16 +1,30 @@
 #include "GraphicsEngine.h"
 #include "SwapChain.h"
 #include "DeviceContext.h"
+#include "TVertexBuffer.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "ConstantBuffer.h"
 #include "VertexShader.h"
 #include "PixelShader.h"
 
+
 #include <d3dcompiler.h>
 
 GraphicsEngine::GraphicsEngine()
 {
+
+	//try
+	//{
+	//	m_render_system = new RenderSystem();
+	//}
+	//catch (...) { throw std::exception("RenderSystem not created successfully"); }
+
+	try
+	{
+		textureManager = new TextureManager();
+	}
+	catch (...) { throw std::exception("TextureManager not created successfully"); }
 }
 
 bool GraphicsEngine::init()
@@ -75,6 +89,9 @@ bool GraphicsEngine::release()
 
 GraphicsEngine::~GraphicsEngine()
 {
+	//GraphicsEngine::m_engine = nullptr;
+	delete textureManager;
+	//delete m_render_system;
 }
 
 SwapChain* GraphicsEngine::createSwapChain()
@@ -98,9 +115,19 @@ ID3D11DeviceContext* GraphicsEngine::getDeviceContext()
 	return this->m_imm_context;
 }
 
+TextureManager* GraphicsEngine::getTextureManager()
+{
+	return this->textureManager;
+}
+
 VertexBuffer* GraphicsEngine::createVertexBuffer()
 {
 	return new VertexBuffer();
+}
+
+TVertexBuffer* GraphicsEngine::createTVertexBuffer()
+{
+	return new TVertexBuffer();
 }
 
 IndexBuffer* GraphicsEngine::createIndexBuffer()

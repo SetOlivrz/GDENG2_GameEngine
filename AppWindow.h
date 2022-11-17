@@ -14,6 +14,7 @@
 
 #include "Cube.h"
 #include "Plane.h"
+#include "TexturedCube.h"
 
 #include <vector>
 
@@ -59,7 +60,7 @@ private:
 	Cube* cube[1];
 
 
-	std::vector<Cube*> CubeList;
+	std::vector<AGameObject*> ObjectList;
 
 	unsigned long m_old_time = 0;
 	float m_delta_time = 0;

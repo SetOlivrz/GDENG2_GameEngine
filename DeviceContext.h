@@ -2,6 +2,8 @@
 #include <d3d11.h>
 
 class SwapChain;
+class TVertexBuffer;
+class Texture;
 class VertexBuffer;
 class IndexBuffer;
 class ConstantBuffer;
@@ -15,6 +17,7 @@ public:
 	void clearRenderTargetColor(SwapChain* swap_chain, float red, float green, float blue, float alpha);
 
 	void setVertexBuffer(VertexBuffer* vertex_buffer);
+	void setTVertexBuffer(TVertexBuffer* vertex_buffer);
 	void setIndexBuffer(IndexBuffer* index_buffer);
 
 	void drawTriangleList(UINT vertex_count, UINT start_vertex_index);
@@ -25,6 +28,11 @@ public:
 
 	void setVertexShader(VertexShader* vertex_shader);
 	void setPixelShader(PixelShader* pixel_shader);
+
+	void setTexture(VertexShader* vertex_shader, Texture* buffer);
+	void setTexture(PixelShader* pixel_shader, Texture* buffer);
+
+
 
 	void setConstantBuffer(VertexShader* vertex_shader, ConstantBuffer* buffer);
 	void setConstantBuffer(PixelShader* pixel_shader, ConstantBuffer* buffer);

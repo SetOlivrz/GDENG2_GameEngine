@@ -1,7 +1,17 @@
 #pragma once
 #include <string>
+#include "Vector2D.h"
 #include "Vector3D.h"
 #include "Matrix4x4.h"
+
+#include "TVertexBuffer.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
+#include "ConstantBuffer.h"
+
+#include "VertexShader.h"
+#include "PixelShader.h"
+
 
 using namespace std;
 
@@ -46,11 +56,25 @@ public:
 		Vector3D color2;
 	};
 
+	struct TVertex {
+		Vector3D position;
+		Vector2D texcoord;
+	};
+
 protected:
 	string name;
 	Vector3D localPosition;
 	Vector3D localRotation;
 	Vector3D localScale;
 	Matrix4x4 localMatrix;
+
+	VertexBuffer* vertexBuffer;
+	TVertexBuffer* tVertexBuffer;
+	IndexBuffer* indexBuffer;
+	ConstantBuffer* constantBuffer;
+
+	VertexShader* vertexShader;
+	PixelShader* pixelShader;
+
 
 };

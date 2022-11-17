@@ -1,4 +1,6 @@
 #include "Quad.h"
+#include "GraphicsEngine.h"
+#include "DeviceContext.h"
 
 Quad::Quad()
 {
