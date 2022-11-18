@@ -10,8 +10,8 @@ MeshObject::MeshObject(string name, void* shaderByteCode, size_t sizeShader, Mes
 {
 	this->meshData = mesh;
 	//m_world_cam.setTranslation(Vector3D(0, 0, -2));
-	m_world_cam = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
-	world_cam = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
+	//m_world_cam = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
+	//world_cam = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
 
 	cam = SceneCameraHandler::getInstance()->getSceneCamera();
 
@@ -156,7 +156,7 @@ void MeshObject::draw(int width, int height)
 	cc.worldMatrix = temp;
 
 	//CAMERA
-	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
+	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
 
 	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
 	float aspectRatio = (float)width / (float)height;

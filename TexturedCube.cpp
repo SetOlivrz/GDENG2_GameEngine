@@ -197,7 +197,7 @@ void TexturedCube::draw(int width, int height)
 	cc.worldMatrix = temp;
 
 	//CAMERA
-	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
+	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
 
 	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
 	float aspectRatio = (float)width / (float)height;
