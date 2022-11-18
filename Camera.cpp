@@ -49,12 +49,12 @@ void Camera::update(float deltaTime)
 
 Matrix4x4 Camera::getViewMatrix()
 {
-	return this->localMatrix;
+	return this->cam_view_matrix;
 }
 
 Matrix4x4 Camera::getWorldCamMatrix()
 {
-	return this->world_cam;
+	return this->cam_view_matrix;
 }
 
 float Camera::getForward()
@@ -147,29 +147,29 @@ void Camera::updateViewMatrix()
 	Matrix4x4 temp;
 
 	//UPDATE FOR CAM ROTATION
-	world_cam.setIdentity();
+	cam_view_matrix.setIdentity();
 	temp.setIdentity();
 	temp.setRotationX(this->getLocalRotation().m_x);
-	world_cam *= temp;
+	cam_view_matrix *= temp;
 
 	temp.setIdentity();
 	temp.setRotationY(this->getLocalRotation().m_y);
-	world_cam *= temp;
+	cam_view_matrix *= temp;
 
 
 	// UPDATE FOR CAM TRANSLATION
-	Vector3D new_pos = this->localMatrix.getTranslation() + (world_cam.getZDirection() * (this->forward * 0.1f));
-	new_pos = new_pos + (world_cam.getYDirection() * (this->upward * 0.1f));
-	new_pos = new_pos + (world_cam.getXDirection() * (this->rightward * 0.1f));
+	Vector3D new_pos = this->localMatrix.getTranslation() + (cam_view_matrix.getZDirection() * (this->forward * 0.1f));
+	new_pos = new_pos + (cam_view_matrix.getYDirection() * (this->upward * 0.1f));
+	new_pos = new_pos + (cam_view_matrix.getXDirection() * (this->rightward * 0.1f));
 
-	world_cam.setTranslation(new_pos);
-	world_cam.setTranslation(new_pos);
+	cam_view_matrix.setTranslation(new_pos);
+	cam_view_matrix.setTranslation(new_pos);
 
 	//update local matrix
-	this->localMatrix = world_cam;
+	this->localMatrix = cam_view_matrix;
 
 	// application
-	world_cam.inverse();
+	cam_view_matrix.inverse();
 
 	//std::cout << "x: "<<this->getLocalPosition().m_x <<" y: "<< this->getLocalPosition().m_y<<" z: "<<this->getLocalPosition().m_z <<"\n";
 }
