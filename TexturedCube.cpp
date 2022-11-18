@@ -111,40 +111,33 @@ TexturedCube::TexturedCube(string name, void* shaderByteCode, size_t sizeShader)
 
 
 	//Index Buffer
-	this->indexBuffer = GraphicsEngine::get()->createIndexBuffer(index_list, ARRAYSIZE(index_list));
+	this->indexBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createIndexBuffer(index_list, ARRAYSIZE(index_list));
 	//this->indexBuffer->load(index_list, ARRAYSIZE(index_list));
 
 	//Vertex Shader
-	GraphicsEngine::get()->compileVertexShader(L"TVertexShader.hlsl", "tvsmain", &shaderByteCode, &sizeShader);
-	vertexShader = GraphicsEngine::get()->createVertexShader(shaderByteCode, sizeShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->compileVertexShader(L"TVertexShader.hlsl", "tvsmain", &shaderByteCode, &sizeShader);
+	vertexShader = GraphicsEngine::getInstance()->getRenderSystem()->createVertexShader(shaderByteCode, sizeShader);
 
 	//Vertex Buffer
-	this->tVertexBuffer = GraphicsEngine::get()->createTVertexBuffer();
-	this->tVertexBuffer->load(vertex_list, sizeof(TVertex), ARRAYSIZE(vertex_list), shaderByteCode, sizeShader);
-
-	
-	GraphicsEngine::get()->releaseCompiledShader();
+	this->tVertexBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createTVertexBuffer(vertex_list, sizeof(TVertex), ARRAYSIZE(vertex_list), shaderByteCode, sizeShader);	
+	GraphicsEngine::getInstance()->getRenderSystem()->releaseCompiledShader();
 
 	//Pixel Shader
-	GraphicsEngine::get()->compilePixelShader(L"TPixelShader.hlsl", "tpsmain", &shaderByteCode, &sizeShader);
-	pixelShader = GraphicsEngine::get()->createPixelShader(shaderByteCode, sizeShader);
-	GraphicsEngine::get()->releaseCompiledShader();
+	GraphicsEngine::getInstance()->getRenderSystem()->compilePixelShader(L"TPixelShader.hlsl", "tpsmain", &shaderByteCode, &sizeShader);
+	pixelShader = GraphicsEngine::getInstance()->getRenderSystem()->createPixelShader(shaderByteCode, sizeShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->releaseCompiledShader();
 
 	//Create constant buffer
 	Constant cbData = {};
 	cbData.m_time = 0;
-	this->constantBuffer = GraphicsEngine::get()->createConstantBuffer();
-	this->constantBuffer->load(&cbData, sizeof(Constant));
+	this->constantBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createConstantBuffer(&cbData, sizeof(Constant));
 
 	setAnimSpeed(4);
 }
 
 TexturedCube::~TexturedCube()
 {
-	//this->indexBuffer->release();
-	this->vertexShader->release();
-	this->pixelShader->release();
-	this->constantBuffer->release();
+
 }
 
 void TexturedCube::update(float delta_time)
@@ -154,8 +147,8 @@ void TexturedCube::update(float delta_time)
 
 void TexturedCube::draw(int width, int height)
 {
-	GraphicsEngine* graphEngine = GraphicsEngine::get();
-	DeviceContext* deviceContext = GraphicsEngine::get()->getImmediateDeviceContext();
+	GraphicsEngine* graphEngine = GraphicsEngine::getInstance();
+	DeviceContext* deviceContext = GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext();
 
 	Constant cc;
 	Matrix4x4 temp;
@@ -206,13 +199,13 @@ void TexturedCube::draw(int width, int height)
 	this->constantBuffer->update(deviceContext, &cc);
 
 	//SET DEFAULT SHADER IN THE GRAPHICS PIPELINE TO BE ABLE TO DRAW
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexShader(vertexShader);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setPixelShader(pixelShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setVertexShader(vertexShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setPixelShader(pixelShader);
 
 	//SET TEXTURE
 	//GraphicsEngine::get()->getImmediateDeviceContext()->setPixelShaderSamplers(0, 1, samplerState);
 	//GraphicsEngine::get()->getImmediateDeviceContext()->setShaderResources(0, 1, this->myTexture);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setTexture(pixelShader, this->myTexture);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setTexture(pixelShader, this->myTexture);
 
 
 

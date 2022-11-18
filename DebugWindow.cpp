@@ -21,7 +21,7 @@ void DebugWindow::intitialize(HWND hwnd)
 	ImGuiIO& io = ImGui::GetIO();
 	// Setup Platform/Renderer bindings
 	ImGui_ImplWin32_Init(hwnd);
-	ImGui_ImplDX11_Init(GraphicsEngine::get()->m_d3d_device, GraphicsEngine::get()->m_imm_context);
+	ImGui_ImplDX11_Init(GraphicsEngine::getInstance()->getRenderSystem()->getDevice(), GraphicsEngine::getInstance()->getRenderSystem()->getDeviceContext());
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
 }

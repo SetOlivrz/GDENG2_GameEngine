@@ -51,7 +51,7 @@ public:
 	virtual void onRightMouseDown(const Point deltaPos) override;
 	virtual void onRightMouseUp(const Point deltaPos) override;
 private:
-	SwapChain* m_swap_chain;
+	SwapChain* swapChain;
 	VertexBuffer* m_vb;
 	VertexShader* m_vs;
 	PixelShader* m_ps;

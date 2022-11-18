@@ -13156,7 +13156,7 @@ void ImGui::DebugNodeFont(ImFont* font)
     SameLine(); MetricsHelpMarker(
         "Note than the default embedded font is NOT meant to be scaled.\n\n"
         "Font are currently rendered into bitmaps at a given size at the m_time of building the atlas. "
-        "You may oversample them to get some flexibility with scaling. "
+        "You may oversample them to getInstance some flexibility with scaling. "
         "You can also render at multiple sizes and select which one to use at runtime.\n\n"
         "(Glimmer of hope: the atlas system will be rewritten in the future to make scaling more flexible.)");
     Text("Ascent: %f, Descent: %f, Height: %f", font->Ascent, font->Descent, font->Ascent - font->Descent);

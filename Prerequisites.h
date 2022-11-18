@@ -4,6 +4,7 @@ class SwapChain;
 class DeviceContext;
 
 class VertexBuffer;
+class TVertexBuffer;
 class IndexBuffer;
 class ConstantBuffer;
 
@@ -13,4 +14,8 @@ class PixelShader;
 class RenderSystem;
 class GraphicsEngine;
 
-class DebugWindow;
+class Resource;
+class ResourceManager;
+
+class Texture;
+class TextureManager;

@@ -12,7 +12,7 @@ Texture::Texture(const wchar_t* full_path) : Resource(full_path)
 
 	if (SUCCEEDED(res))
 	{
-		res = DirectX::CreateTexture(GraphicsEngine::get()->getDevice(), image_data.GetImages(),
+		res = DirectX::CreateTexture(GraphicsEngine::getInstance()->getRenderSystem()->getDevice(), image_data.GetImages(),
 			image_data.GetImageCount(), image_data.GetMetadata(), &m_texture);
 
 		D3D11_SHADER_RESOURCE_VIEW_DESC desc = {};
@@ -21,7 +21,7 @@ Texture::Texture(const wchar_t* full_path) : Resource(full_path)
 		desc.Texture2D.MipLevels = (UINT)image_data.GetMetadata().mipLevels;
 		desc.Texture2D.MostDetailedMip = 0;
 
-		GraphicsEngine::get()->getDevice()->CreateShaderResourceView(m_texture, &desc,
+		GraphicsEngine::getInstance()->getRenderSystem()->getDevice()->CreateShaderResourceView(m_texture, &desc,
 			&m_shader_res_view);
 	}
 	else

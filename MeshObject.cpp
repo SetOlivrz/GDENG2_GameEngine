@@ -60,33 +60,29 @@ MeshObject::MeshObject(string name, void* shaderByteCode, size_t sizeShader, Mes
 	//indexBuffer->load(index_list, ARRAYSIZE(index_list));
 
 	// VERTEX SHADER
-	GraphicsEngine::get()->compileVertexShader(L"TVertexShader.hlsl", "tvsmain", &shaderByteCode, &sizeShader);
-	vertexShader = GraphicsEngine::get()->createVertexShader(shaderByteCode, sizeShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->compileVertexShader(L"TVertexShader.hlsl", "tvsmain", &shaderByteCode, &sizeShader);
+	vertexShader = GraphicsEngine::getInstance()->getRenderSystem()->createVertexShader(shaderByteCode, sizeShader);
 
 	// VERTEX BUFFER
 	vertexBuffer = meshData->getVertexBuffer();
 	//vertexBuffer->load(quadList, sizeof(Vertex), ARRAYSIZE(quadList), shaderByteCode, sizeShader);
 
-	GraphicsEngine::get()->releaseCompiledShader();
+	GraphicsEngine::getInstance()->getRenderSystem()->releaseCompiledShader();
 
 	// PIXEL SHADER
-	GraphicsEngine::get()->compilePixelShader(L"TPixelShader.hlsl", "tpsmain", &shaderByteCode, &sizeShader);
-	pixelShader = GraphicsEngine::get()->createPixelShader(shaderByteCode, sizeShader);
-	GraphicsEngine::get()->releaseCompiledShader();
+	GraphicsEngine::getInstance()->getRenderSystem()->compilePixelShader(L"TPixelShader.hlsl", "tpsmain", &shaderByteCode, &sizeShader);
+	pixelShader = GraphicsEngine::getInstance()->getRenderSystem()->createPixelShader(shaderByteCode, sizeShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->releaseCompiledShader();
 
 	// CONSTANT BUFFER
 	Constant cc;
 	//cc.m_time = 0;
 
-	constantBuffer = GraphicsEngine::get()->createConstantBuffer();
-	constantBuffer->load(&cc, sizeof(Constant));
+	constantBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createConstantBuffer(&cc, sizeof(Constant));
 }
 
 MeshObject::~MeshObject()
 {
-	this->constantBuffer->release();
-	this->pixelShader->release();
-	this->vertexShader->release();
 	AGameObject::~AGameObject();
 }
 
@@ -113,8 +109,8 @@ void MeshObject::draw(int width, int height)
 		rotFactor -= deltaTime;
 	}
 
-	GraphicsEngine* graphEngine = GraphicsEngine::get();
-	DeviceContext* deviceContext = GraphicsEngine::get()->getImmediateDeviceContext();
+	GraphicsEngine* graphEngine = GraphicsEngine::getInstance();
+	DeviceContext* deviceContext = GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext();
 
 	Constant cc;
 	Matrix4x4 temp;
@@ -162,27 +158,27 @@ void MeshObject::draw(int width, int height)
 	float aspectRatio = (float)width / (float)height;
 	cc.projMatrix.setPerspectiveFovLH(aspectRatio, aspectRatio, 0.1f, 1000.0f);
 
-	constantBuffer->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
+	constantBuffer->update(GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext(), &cc);
 
 	// SET CONSTANT BUFFER
-	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
 
 
 	//SET DEFAULT SHADER IN THE GRAPHICS PIPELINE TO BE ABLE TO DRAW
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexShader(vertexShader);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setPixelShader(pixelShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setVertexShader(vertexShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setPixelShader(pixelShader);
 
-	GraphicsEngine::get()->getImmediateDeviceContext()->setTexture(pixelShader, this->myTexture);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setTexture(pixelShader, this->myTexture);
 
 
 	//SET THE VERTICES OF THE TRIANGLE TO DRAW
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(meshData->getVertexBuffer());
-	GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(meshData->getIndexBuffer());
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setVertexBuffer(meshData->getVertexBuffer());
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setIndexBuffer(meshData->getIndexBuffer());
 
 
 	// FINALLY DRAW THE TRIANGLE
-	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(meshData->getIndexBuffer()->getSizeIndexList(), 0, 0);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->drawIndexedTriangleList(meshData->getIndexBuffer()->getSizeIndexList(), 0, 0);
 }
 
 void MeshObject::setTexture(Texture* texture)

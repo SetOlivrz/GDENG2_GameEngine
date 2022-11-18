@@ -49,7 +49,7 @@ UIManager::UIManager(HWND windowHandle)
 
 	//Setup Platform/Renderer bindings
 	ImGui_ImplWin32_Init(windowHandle);
-	ImGui_ImplDX11_Init(GraphicsEngine::get()->getDevice(), GraphicsEngine::get()->getImmediateDeviceContext()->getDeviceContext());
+	ImGui_ImplDX11_Init(GraphicsEngine::getInstance()->getRenderSystem()->getDevice(), GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->getDeviceContext());
 
 	//Populate UI Table (Note: ordering matters)
 	UINames uiNames;

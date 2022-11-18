@@ -39,27 +39,33 @@ void AppWindow::update()
 
 void AppWindow::onCreate()
 {
+
+	// Create Window
 	Window::onCreate();
 
+	//Initialize InputListener
 	InputSystem::initialize();
+
+	GraphicsEngine::create();
+
+	//Initialize SceneCameraHAndler
+
 	SceneCameraHandler::initialize();
 
 	InputSystem::getInstance()->addListener(this);
 	//InputSystem::getInstance()->showCursor(false);
 
-
-	
-	// ENGINE
-	GraphicsEngine::get()->init();
-
-	Texture* woodTex = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
-
+	//Initialize UIManager
 	UIManager::getInstance()->initialize(Window::m_hwnd);
 
-	m_swap_chain = GraphicsEngine::get()->createSwapChain();
 
 	RECT rc = this->getClientWindowRect();
-	m_swap_chain->init(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
+	//Set swap chain
+	swapChain = GraphicsEngine::getInstance()->getRenderSystem()->createSwapChain(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
+
+
+	
+	Texture* woodTex = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
 
 
 	void* shaderByteCode = nullptr;
@@ -80,24 +86,24 @@ void AppWindow::onCreate()
 		cubeObj->setPosition(x,y,z);
 		cubeObj->setScale(sx,sy,sz);
 		cubeObj->setAnimation(Utils::randFloatInterval(1.0, 1.0), Utils::randFloatInterval(2.0, 5.0),true, 1 );
-		this->CubeList.push_back(cubeObj);
+		this->CubeList.push_back(cubeObj);S
 	}*/
 
 	TexturedCube* cube = new TexturedCube("tcube", shaderByteCode, sizeShader);
-	cube->myTexture = GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\brick.png");
+	cube->myTexture = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\dlsu.png");
 	cube->setPosition(1.0, 1.0, 1.0f);
 	cube->setScale(1, 1, 1);
-	//ObjectList.push_back(cube);
+	ObjectList.push_back(cube);
 
-	Mesh* mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\teapot2.obj");
+	Mesh* mesh = GraphicsEngine::getInstance()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\teapot2.obj");
 
 	teapot = new MeshObject("Teapot", shaderByteCode, sizeShader, mesh);
-	teapot->setTexture(GraphicsEngine::get()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\brick.png"));
+	teapot->setTexture(GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\brick.png"));
 	teapot->setPosition(-1.0, 0.0, -1.0f);
 	teapot->setScale(1, 1, 1);
 	ObjectList.push_back(teapot);
 
-	mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\armadillo.obj");
+	mesh = GraphicsEngine::getInstance()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\armadillo.obj");
 
 	armadillo = new MeshObject("Armadillo", shaderByteCode, sizeShader, mesh);
 
@@ -105,7 +111,7 @@ void AppWindow::onCreate()
 	armadillo->setScale(0.5, 0.5, 0.5);
 	ObjectList.push_back(armadillo);
 
-	mesh = GraphicsEngine::get()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\bunny.obj");
+	mesh = GraphicsEngine::getInstance()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\bunny.obj");
 
 	bunny = new MeshObject("Bunny", shaderByteCode, sizeShader, mesh);
 
@@ -138,10 +144,10 @@ void AppWindow::onUpdate()
 	InputSystem::getInstance()->update();
 
 	//CLEAR THE RENDER TARGET 
-	GraphicsEngine::get()->getImmediateDeviceContext()->clearRenderTargetColor(this->m_swap_chain, 0, 0.1f, 0.2f, 1);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->clearRenderTargetColor(this->swapChain, 0, 0.3f, 0.4f, 1);
 	//SET VIEWPORT OF RENDER TARGET IN WHICH WE HAVE TO DRAW
 	RECT rc = this->getClientWindowRect();
-	GraphicsEngine::get()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
 
 	//UPDATE PRIMITIVES
 	for (int i = 0; i < ObjectList.size(); i++)
@@ -161,15 +167,13 @@ void AppWindow::onUpdate()
 	UIManager::getInstance()->drawAllUI();
 
 
-	m_swap_chain->present(true);
+	swapChain->present(true);
 
 }
 
 void AppWindow::onDestroy()
 {
 	Window::onDestroy();
-	m_swap_chain->release();
-	GraphicsEngine::get()->release();
 }
 
 void AppWindow::onFocus()
@@ -241,7 +245,7 @@ void AppWindow::onRightMouseUp(const Point deltaPos)
 // Simple helper function to load an image into a DX11 texture with common settings
 bool LoadTextureFromFile(const char* filename, ID3D11ShaderResourceView** out_srv, int* out_width, int* out_height)
 {
-	ID3D11Device* g_pd3dDevice = GraphicsEngine::get()->getDevice();
+	ID3D11Device* g_pd3dDevice = GraphicsEngine::getInstance()->getRenderSystem()->getDevice();
 	// Load from disk into a raw RGBA buffer
 	int image_width = 0;
 	int image_height = 0;
