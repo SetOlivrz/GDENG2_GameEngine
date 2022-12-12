@@ -58,15 +58,6 @@
     <Filter Include="GameEngine\GraphicsEngine\RenderSystem\DeviceContext">
       <UniqueIdentifier>{728bd3d0-a20d-48de-bcfc-c30fdf507a13}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameEngine\GraphicsEngine\RenderSystem\Math">
-      <UniqueIdentifier>{06836cd2-3e2b-48c8-a83a-d5fe7ee5a36f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameEngine\GraphicsEngine\RenderSystem\Primitives">
-      <UniqueIdentifier>{cf4532ec-310a-4c13-aad9-6aced040e34e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameEngine\GraphicsEngine\RenderSystem\Primitives\Textured">
-      <UniqueIdentifier>{b8718594-9f90-49e8-904c-15443e4e8932}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\GraphicsEngine\RenderSystem\SwapChain">
       <UniqueIdentifier>{f6db385c-9076-4ba5-a7c6-678ac526f162}</UniqueIdentifier>
     </Filter>
@@ -90,6 +81,27 @@
     </Filter>
     <Filter Include="GameEngine\GraphicsEngine\RenderSystem\Buffers\Constant Buffer">
       <UniqueIdentifier>{e19a6fb5-670f-4d2e-a467-ff803b9402b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\User Interface\NewFilter1">
+      <UniqueIdentifier>{6cbabd5d-3c0d-49c9-8f31-010b20e5ed37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\Primitives">
+      <UniqueIdentifier>{cf4532ec-310a-4c13-aad9-6aced040e34e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\Primitives\Textured">
+      <UniqueIdentifier>{b8718594-9f90-49e8-904c-15443e4e8932}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\Math">
+      <UniqueIdentifier>{06836cd2-3e2b-48c8-a83a-d5fe7ee5a36f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\ComponentSystem">
+      <UniqueIdentifier>{bd0b9946-425b-4ea0-b267-c890f9fa692f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GraphicsEngine\ComponentSystem\PhysicsSystem">
+      <UniqueIdentifier>{0c73c535-bdf9-41c4-bcc7-defcf687544d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Manager\GameObjectManager">
+      <UniqueIdentifier>{3931fac1-8c86-4d86-b3be-baf418af74b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -127,7 +139,7 @@
       <Filter>GameEngine\GraphicsEngine\RenderSystem\Buffers\Constant Buffer</Filter>
     </ClCompile>
     <ClCompile Include="Matrix4x4.cpp">
-      <Filter>GameEngine\GraphicsEngine\RenderSystem\Math</Filter>
+      <Filter>GameEngine\GraphicsEngine\Math</Filter>
     </ClCompile>
     <ClCompile Include="imgui.cpp">
       <Filter>GameEngine\ImGui\Libraries</Filter>
@@ -154,7 +166,7 @@
       <Filter>GameEngine\GraphicsEngine\RenderSystem\Buffers\IndexBuffer</Filter>
     </ClCompile>
     <ClCompile Include="AGameObject.cpp">
-      <Filter>GameEngine\GraphicsEngine\RenderSystem\Primitives</Filter>
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClCompile>
     <ClCompile Include="InputSystem.cpp">
       <Filter>GameEngine\InputSystem</Filter>
@@ -171,7 +183,6 @@
     <ClCompile Include="ColorPickerScreen.cpp">
       <Filter>GameEngine\User Interface\Screen</Filter>
     </ClCompile>
-    <ClCompile Include="CreditScreen.cpp" />
     <ClCompile Include="SceneCameraHandler.cpp">
       <Filter>GameEngine\GraphicsEngine\RenderSystem\Camera</Filter>
     </ClCompile>
@@ -199,10 +210,39 @@
     <ClCompile Include="TextureManager.cpp">
       <Filter>GameEngine\Manager\TextureManager</Filter>
     </ClCompile>
-    <ClCompile Include="VBuff.cpp" />
-    <ClCompile Include="RenderSystem.cpp" />
-    <ClCompile Include="MeshObject.cpp" />
-    <ClCompile Include="TexturedCube.cpp" />
+    <ClCompile Include="MeshObject.cpp">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="TexturedCube.cpp">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderSystem.cpp">
+      <Filter>GameEngine\GraphicsEngine\RenderSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="CreditScreen.cpp">
+      <Filter>GameEngine\User Interface\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="AComponent.cpp">
+      <Filter>GameEngine\GraphicsEngine\ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseComponentSystem.cpp">
+      <Filter>GameEngine\GraphicsEngine\ComponentSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Plane.cpp">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsSystem.cpp">
+      <Filter>GameEngine\GraphicsEngine\ComponentSystem\PhysicsSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsComponent.cpp">
+      <Filter>GameEngine\GraphicsEngine\ComponentSystem\PhysicsSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObjectManager.cpp">
+      <Filter>GameEngine\Manager\GameObjectManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -236,13 +276,13 @@
       <Filter>GameEngine\GraphicsEngine\RenderSystem\Buffers\Constant Buffer</Filter>
     </ClInclude>
     <ClInclude Include="Matrix4x4.h">
-      <Filter>GameEngine\GraphicsEngine\RenderSystem\Math</Filter>
+      <Filter>GameEngine\GraphicsEngine\Math</Filter>
     </ClInclude>
     <ClInclude Include="Vector3D.h">
-      <Filter>GameEngine\GraphicsEngine\RenderSystem\Math</Filter>
+      <Filter>GameEngine\GraphicsEngine\Math</Filter>
     </ClInclude>
     <ClInclude Include="VertexClass.h">
-      <Filter>GameEngine\GraphicsEngine\RenderSystem\Math</Filter>
+      <Filter>GameEngine\GraphicsEngine\Math</Filter>
     </ClInclude>
     <ClInclude Include="imconfig.h">
       <Filter>GameEngine\ImGui\Libraries</Filter>
@@ -272,13 +312,13 @@
       <Filter>GameEngine\ImGui\Class</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
-      <Filter>GameEngine\GraphicsEngine\RenderSystem\Math</Filter>
+      <Filter>GameEngine\GraphicsEngine\Math</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
       <Filter>GameEngine\GraphicsEngine\RenderSystem\Buffers\IndexBuffer</Filter>
     </ClInclude>
     <ClInclude Include="AGameObject.h">
-      <Filter>GameEngine\GraphicsEngine\RenderSystem\Primitives</Filter>
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="InputListener.h">
       <Filter>GameEngine\InputSystem</Filter>
@@ -287,13 +327,10 @@
       <Filter>GameEngine\InputSystem</Filter>
     </ClInclude>
     <ClInclude Include="Point.h">
-      <Filter>GameEngine\GraphicsEngine\RenderSystem\Math</Filter>
+      <Filter>GameEngine\GraphicsEngine\Math</Filter>
     </ClInclude>
     <ClInclude Include="Vector4D.h">
-      <Filter>GameEngine\GraphicsEngine\RenderSystem\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="AUIScreen.h">
-      <Filter>GameEngine\User Interface</Filter>
+      <Filter>GameEngine\GraphicsEngine\Math</Filter>
     </ClInclude>
     <ClInclude Include="UIManager.h">
       <Filter>GameEngine\User Interface</Filter>
@@ -304,7 +341,6 @@
     <ClInclude Include="ColorPickerScreen.h">
       <Filter>GameEngine\User Interface\Screen</Filter>
     </ClInclude>
-    <ClInclude Include="CreditScreen.h" />
     <ClInclude Include="stb_image.h">
       <Filter>GameEngine\Helper</Filter>
     </ClInclude>
@@ -336,13 +372,47 @@
       <Filter>GameEngine\Manager\TextureManager</Filter>
     </ClInclude>
     <ClInclude Include="VertexMesh.h">
-      <Filter>GameEngine\GraphicsEngine\RenderSystem\Math</Filter>
+      <Filter>GameEngine\GraphicsEngine\Math</Filter>
     </ClInclude>
-    <ClInclude Include="VBuff.h" />
-    <ClInclude Include="RenderSystem.h" />
-    <ClInclude Include="Prerequisites.h" />
-    <ClInclude Include="MeshObject.h" />
-    <ClInclude Include="TexturedCube.h" />
+    <ClInclude Include="MeshObject.h">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="TexturedCube.h">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderSystem.h">
+      <Filter>GameEngine\GraphicsEngine\RenderSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Prerequisites.h">
+      <Filter>GameEngine\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="CreditScreen.h">
+      <Filter>GameEngine\User Interface\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="AUIScreen.h">
+      <Filter>GameEngine\User Interface\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="AComponent.h">
+      <Filter>GameEngine\GraphicsEngine\ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseComponentSystem.h">
+      <Filter>GameEngine\GraphicsEngine\ComponentSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>GameEngine\GraphicsEngine\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsSystem.h">
+      <Filter>GameEngine\GraphicsEngine\ComponentSystem\PhysicsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsComponent.h">
+      <Filter>GameEngine\GraphicsEngine\ComponentSystem\PhysicsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObjectManager.h">
+      <Filter>GameEngine\Manager\GameObjectManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
@@ -360,8 +430,5 @@
     <FxCompile Include="VertexMeshLayoutShader.hlsl">
       <Filter>GameEngine\GraphicsEngine\RenderSystem\Shaders</Filter>
     </FxCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="dlsu.png" />
   </ItemGroup>
 </Project>

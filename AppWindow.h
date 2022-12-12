@@ -59,11 +59,11 @@ private:
 	
 	DebugWindow debugWindow;
 
-	Plane* plane[1];
-	Cube* cube[1];
 	MeshObject* teapot;
 	MeshObject* armadillo;
 	MeshObject* bunny;
+
+	Plane* plane;
 
 
 

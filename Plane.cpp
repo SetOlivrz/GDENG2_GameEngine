@@ -9,7 +9,9 @@
 
 Plane::Plane(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(name)
 {
-	this->setRotation(Utils::degToRad(90), 0, 0);
+	//setRotation(Vector3D(Utils::degToRad(0), 0, 0));
+	//m_world_cam.setTranslation(Vector3D(0, 0, -2));
+
 	m_world_cam = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
 	world_cam = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
 
@@ -17,19 +19,19 @@ Plane::Plane(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(
 
 
 	//create buffers for drawing. Vertex data that needs to be drawn are temporarily placed here.
-	Vertex quadList[] = {
+	Vertex vertex_list[] = {
 		//X, Y, Z
 		//FRONT FACE
-		{Vector3D(-0.5f,-0.5f,-0.5f),    Vector3D(0,1,.5), Vector3D(0.1f,0,0) },
-		{Vector3D(-0.5f,0.5f,-0.5f),     Vector3D(0,1,1), Vector3D(0.1f,0.2f,0) },
-		{Vector3D(0.5f,0.5f,-0.5f),      Vector3D(0,1,.5), Vector3D(0.1f,0.2f,0) },
-		{Vector3D(0.5f,-0.5f,-0.5f),     Vector3D(0,1,.5), Vector3D(0.1f,0,0) },
+		{Vector3D(-0.5f,-0.5f,-0.5f),    Vector3D(1,0,.5), Vector3D(0.2f,0,0) },
+		{Vector3D(-0.5f,0.5f,-0.5f),     Vector3D(1,.5,1), Vector3D(0.2f,0.2f,0) },
+		{Vector3D(0.5f,0.5f,-0.5f),      Vector3D(1,.5,.5), Vector3D(0.2f,0.2f,0) },
+		{Vector3D(0.5f,-0.5f,-0.5f),     Vector3D(1,0,.5), Vector3D(0.2f,0,0) },
 
 		//BACK FACE
-		{Vector3D(0.5f,-0.5f,0.5f),      Vector3D(0,1,1), Vector3D(0,0.2f,0) },
-		{Vector3D(0.5f,0.5f,0.5f),       Vector3D(0,1,.5), Vector3D(0,0.2f,0.2f) },
-		{Vector3D(-0.5f,0.5f,0.5f),      Vector3D(0,1,.5), Vector3D(0,0.2f,0.2f) },
-		{Vector3D(-0.5f,-0.5f,0.5f),     Vector3D(0,.1,1), Vector3D(0,0.2f,0) },
+		{Vector3D(0.5f,-0.5f,0.5f),      Vector3D(1,0,1), Vector3D(0,0.2f,0) },
+		{Vector3D(0.5f,0.5f,0.5f),       Vector3D(1,.5,.5), Vector3D(0,0.2f,0.2f) },
+		{Vector3D(-0.5f,0.5f,0.5f),      Vector3D(1,0,.5), Vector3D(0,0.2f,0.2f) },
+		{Vector3D(-0.5f,-0.5f,0.5f),     Vector3D(1,.5,1), Vector3D(0,0.2f,0) },
 	};
 
 	unsigned int index_list[] =
@@ -55,40 +57,31 @@ Plane::Plane(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(
 	};
 
 
-	// INDEX BUFFER
-	indexBuffer = GraphicsEngine::get()->createIndexBuffer();
-	indexBuffer->load(index_list, ARRAYSIZE(index_list));
+	//Index Buffer
+	this->indexBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createIndexBuffer(index_list, ARRAYSIZE(index_list));
 
-	// VERTEX SHADER
-	GraphicsEngine::get()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
-	vertexShader = GraphicsEngine::get()->createVertexShader(shaderByteCode, sizeShader);
+	//Vertex Shader
+	GraphicsEngine::getInstance()->getRenderSystem()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
+	vertexShader = GraphicsEngine::getInstance()->getRenderSystem()->createVertexShader(shaderByteCode, sizeShader);
 
-	// VERTEX BUFFER
-	vertexBuffer = GraphicsEngine::get()->createVertexBuffer();
-	vertexBuffer->load(quadList, sizeof(Vertex), ARRAYSIZE(quadList), shaderByteCode, sizeShader);
+	//Vertex Buffer
+	this->vertexBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createVertexBuffer(vertex_list, sizeof(Vertex), ARRAYSIZE(vertex_list), shaderByteCode, sizeShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->releaseCompiledShader();
 
-	GraphicsEngine::get()->releaseCompiledShader();
+	//Pixel Shader
+	GraphicsEngine::getInstance()->getRenderSystem()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shaderByteCode, &sizeShader);
+	pixelShader = GraphicsEngine::getInstance()->getRenderSystem()->createPixelShader(shaderByteCode, sizeShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->releaseCompiledShader();
 
-	// PIXEL SHADER
-	GraphicsEngine::get()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shaderByteCode, &sizeShader);
-	pixelShader = GraphicsEngine::get()->createPixelShader(shaderByteCode, sizeShader);
-	GraphicsEngine::get()->releaseCompiledShader();
+	//Create constant buffer
+	Constant cbData = {};
+	cbData.m_time = 0;
+	this->constantBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createConstantBuffer(&cbData, sizeof(Constant));
 
-	// CONSTANT BUFFER
-	Constant cc;
-	cc.m_time = 0;
-
-	constantBuffer = GraphicsEngine::get()->createConstantBuffer();
-	constantBuffer->load(&cc, sizeof(Constant));
 }
 
 Plane::~Plane()
 {
-	this->vertexBuffer->release();
-	this->indexBuffer->release();
-	this->constantBuffer->release();
-	this->pixelShader->release();
-	this->vertexShader->release();
 	AGameObject::~AGameObject();
 }
 
@@ -108,15 +101,15 @@ void Plane::draw(int width, int height)
 
 	if (isIncreasing)
 	{
-		rotFactor += deltaTime ;
+		rotFactor += deltaTime;
 	}
 	else
 	{
-		rotFactor -= deltaTime ;
+		rotFactor -= deltaTime;
 	}
 
-	GraphicsEngine* graphEngine = GraphicsEngine::get();
-	DeviceContext* deviceContext = GraphicsEngine::get()->getImmediateDeviceContext();
+	GraphicsEngine* graphEngine = GraphicsEngine::getInstance();
+	DeviceContext* deviceContext = GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext();
 
 	Constant cc;
 	Matrix4x4 temp;
@@ -130,8 +123,9 @@ void Plane::draw(int width, int height)
 	//SCALE
 	Matrix4x4 scaleMatrix;
 	scaleMatrix.setIdentity();
-	this->setScale(this->getLocalScale().m_x, this->getLocalScale().m_y, 0);
-	scaleMatrix.setScale(this->getLocalScale());
+	Vector3D scale = this->getLocalScale();
+
+	scaleMatrix.setScale(Vector3D(scale.m_x, scale.m_y, scale.m_z));
 
 	//ROTATION
 	Matrix4x4 xMatrix, yMatrix, zMatrix, rotMatrix;
@@ -141,14 +135,9 @@ void Plane::draw(int width, int height)
 	zMatrix.setIdentity();
 	Vector3D rotation = this->getLocalRotation();
 
-
-	/*xMatrix.setRotationZ(rotation.m_x + rotFactor * speed );
-	yMatrix.setRotationX(rotation.m_y+ rotFactor* speed );
-	zMatrix.setRotationY(rotation.m_z + rotFactor * speed );*/
-
-	xMatrix.setRotationZ(rotation.m_z );
-	yMatrix.setRotationX(rotation.m_x );
-	zMatrix.setRotationY(rotation.m_y );
+	xMatrix.setRotationZ(rotation.m_z);
+	yMatrix.setRotationX(rotation.m_x);
+	zMatrix.setRotationY(rotation.m_y);
 
 	rotMatrix.setIdentity();
 
@@ -162,33 +151,28 @@ void Plane::draw(int width, int height)
 	temp *= translationMatrix;
 
 	cc.worldMatrix = temp;
-	
-	//CAMERA
-	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
 
+	//CAMERA
+	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
 
 	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
 	float aspectRatio = (float)width / (float)height;
 	cc.projMatrix.setPerspectiveFovLH(aspectRatio, aspectRatio, 0.1f, 1000.0f);
 
-	constantBuffer->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
-
-	// SET CONSTANT BUFFER
-	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
+	this->constantBuffer->update(deviceContext, &cc);
 
 	//SET DEFAULT SHADER IN THE GRAPHICS PIPELINE TO BE ABLE TO DRAW
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexShader(vertexShader);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setPixelShader(pixelShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setVertexShader(vertexShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setPixelShader(pixelShader);
 
+	//SET DEFAULT BUFFER IN THE GRAPHICS PIPELINE TO BE ABLE TO DRAW
+	deviceContext->setConstantBuffer(vertexShader, this->constantBuffer);
+	deviceContext->setConstantBuffer(pixelShader, this->constantBuffer);
 
-	//SET THE VERTICES OF THE TRIANGLE TO DRAW
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(indexBuffer);
+	deviceContext->setIndexBuffer(this->indexBuffer);
+	deviceContext->setVertexBuffer(vertexBuffer);
 
-
-	// FINALLY DRAW THE TRIANGLE
-	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(indexBuffer->getSizeIndexList(), 0, 0);
+	deviceContext->drawIndexedTriangleList(this->indexBuffer->getSizeIndexList(), 0, 0);
 }
 
 void Plane::setAnimation(float speed, float interval, bool isSpeeding, float rotFactor)

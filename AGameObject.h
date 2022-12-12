@@ -12,11 +12,18 @@
 #include "VertexShader.h"
 #include "PixelShader.h"
 
+#include "AComponent.h"
+#include "reactphysics3d/reactphysics3d.h"
+
+#include"Prerequisites.h"
+#include <vector>
 
 using namespace std;
+using namespace reactphysics3d;
 
-class VertexShader;
-class PixelShader;
+
+//class VertexShader;
+//class PixelShader;
 class AGameObject
 {
 public:
@@ -32,14 +39,31 @@ public:
 	void setRotation(Vector3D rot);
 	void setScale(float x, float y, float z);
 	void setScale(Vector3D rot);
+
 	Vector3D getLocalPosition();
 	Vector3D getLocalRotation();
-
 	Vector3D getLocalScale();
-
 
 	string getName();
 
+	typedef string String;
+	//typedef std::vector<AComponent*>; ComponentList;
+
+	void attachComponent(AComponent* component);
+	void detachComponent(AComponent* component);
+
+	AComponent* findComponentByName(String name);
+	AComponent* findComponentOfType(AComponent::ComponentType type, String name);
+	vector<AComponent*> getComponentsOfType(AComponent::ComponentType type);
+	vector<AComponent*> getComponentsOfTypeRecursive(AComponent::ComponentType type);
+
+	void updateLocalMatrix();
+
+	void recomputeMatrix(float matrix[16]);
+
+
+
+public:
 
 	_declspec(align(16)) //make CBData a size of 16-bytes.
 		struct Constant {
@@ -67,6 +91,8 @@ protected:
 	Vector3D localRotation;
 	Vector3D localScale;
 	Matrix4x4 localMatrix;
+
+	vector<AComponent*> componentList;
 
 	VertexBuffer* vertexBuffer;
 	TVertexBuffer* tVertexBuffer;

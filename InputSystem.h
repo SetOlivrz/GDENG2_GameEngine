@@ -5,7 +5,7 @@
 #include <vector>
 #include "Point.h"
 
-typedef std::vector<InputListener*> List;
+//typedef std::vector<InputListener*> List;
 
 class InputSystem
 {
@@ -41,7 +41,7 @@ private:
 	void onRightMouseUp(Point deltaPt);
 
 	static InputSystem* sharedInstance;
-	List inputListenerList;
+	std::vector<InputListener*> inputListenerList;
 	unsigned char keyStates[256] = {};
 	unsigned char oldKeyStates[256] = {};
 

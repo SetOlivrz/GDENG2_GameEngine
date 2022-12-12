@@ -16,7 +16,7 @@ Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(na
 
 
 	//create buffers for drawing. Vertex data that needs to be drawn are temporarily placed here.
-	Vertex quadList[] = {
+	Vertex vertex_list[] = {
 		//X, Y, Z
 		//FRONT FACE
 		{Vector3D(-0.5f,-0.5f,-0.5f),    Vector3D(1,0,.5), Vector3D(0.2f,0,0) },
@@ -54,40 +54,31 @@ Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(na
 	};
 
 
-	// INDEX BUFFER
-	indexBuffer = GraphicsEngine::get()->createIndexBuffer();
-	indexBuffer->load(index_list, ARRAYSIZE(index_list));
+	//Index Buffer
+	this->indexBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createIndexBuffer(index_list, ARRAYSIZE(index_list));
 
 	//Vertex Shader
-	GraphicsEngine::get()->compileVertexShader(L"TVertexShader.hlsl", "tvsmain", &shaderByteCode, &sizeShader);
-	vertexShader = GraphicsEngine::get()->createVertexShader(shaderByteCode, sizeShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->compileVertexShader(L"VertexShader.hlsl", "vsmain", &shaderByteCode, &sizeShader);
+	vertexShader = GraphicsEngine::getInstance()->getRenderSystem()->createVertexShader(shaderByteCode, sizeShader);
 
-	// VERTEX BUFFER
-	vertexBuffer = GraphicsEngine::get()->createVertexBuffer();
-	vertexBuffer->load(quadList, sizeof(Vertex), ARRAYSIZE(quadList), shaderByteCode, sizeShader);
+	//Vertex Buffer
+	this->tVertexBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createTVertexBuffer(vertex_list, sizeof(Vertex), ARRAYSIZE(vertex_list), shaderByteCode, sizeShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->releaseCompiledShader();
 
-	GraphicsEngine::get()->releaseCompiledShader();
+	//Pixel Shader
+	GraphicsEngine::getInstance()->getRenderSystem()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shaderByteCode, &sizeShader);
+	pixelShader = GraphicsEngine::getInstance()->getRenderSystem()->createPixelShader(shaderByteCode, sizeShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->releaseCompiledShader();
 
-	// PIXEL SHADER
-	GraphicsEngine::get()->compilePixelShader(L"PixelShader.hlsl", "psmain", &shaderByteCode, &sizeShader);
-	pixelShader = GraphicsEngine::get()->createPixelShader(shaderByteCode, sizeShader);
-	GraphicsEngine::get()->releaseCompiledShader();
+	//Create constant buffer
+	Constant cbData = {};
+	cbData.m_time = 0;
+	this->constantBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createConstantBuffer(&cbData, sizeof(Constant));
 
-	// CONSTANT BUFFER
-	Constant cc;
-	//cc.m_time = 0;
-
-	constantBuffer = GraphicsEngine::get()->createConstantBuffer();
-	constantBuffer->load(&cc, sizeof(Constant));
 }
 
 Cube::~Cube()
 {
-	this->vertexBuffer->release();
-	this->indexBuffer->release();
-	this->constantBuffer->release();
-	this->pixelShader->release();
-	this->vertexShader->release();
 	AGameObject::~AGameObject();
 }
 
@@ -114,8 +105,8 @@ void Cube::draw(int width, int height)
 		rotFactor -= deltaTime ;
 	}
 
-	GraphicsEngine* graphEngine = GraphicsEngine::get();
-	DeviceContext* deviceContext = GraphicsEngine::get()->getImmediateDeviceContext();
+	GraphicsEngine* graphEngine = GraphicsEngine::getInstance();
+	DeviceContext* deviceContext = GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext();
 
 	Constant cc;
 	Matrix4x4 temp;
@@ -139,9 +130,9 @@ void Cube::draw(int width, int height)
 	zMatrix.setIdentity();
 	Vector3D rotation = this->getLocalRotation();
 
-	xMatrix.setRotationZ(rotation.m_x );
-	yMatrix.setRotationX(rotation.m_y );
-	zMatrix.setRotationY(rotation.m_z );
+	xMatrix.setRotationZ(rotation.m_x);
+	yMatrix.setRotationX(rotation.m_y);
+	zMatrix.setRotationY(rotation.m_z);
 
 	rotMatrix.setIdentity();
 
@@ -155,32 +146,28 @@ void Cube::draw(int width, int height)
 	temp *= translationMatrix;
 
 	cc.worldMatrix = temp;
-	
+
 	//CAMERA
-	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
+	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
 
 	//cc.projMatrix.setOrthoLH(width / 400.0f, height / 400.0f, -4.0f, 4.0f);
 	float aspectRatio = (float)width / (float)height;
 	cc.projMatrix.setPerspectiveFovLH(aspectRatio, aspectRatio, 0.1f, 1000.0f);
 
-	constantBuffer->update(GraphicsEngine::get()->getImmediateDeviceContext(), &cc);
-
-	// SET CONSTANT BUFFER
-	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(vertexShader, constantBuffer);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setConstantBuffer(pixelShader, constantBuffer);
+	this->constantBuffer->update(deviceContext, &cc);
 
 	//SET DEFAULT SHADER IN THE GRAPHICS PIPELINE TO BE ABLE TO DRAW
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexShader(vertexShader);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setPixelShader(pixelShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setVertexShader(vertexShader);
+	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setPixelShader(pixelShader);
 
+	//SET DEFAULT BUFFER IN THE GRAPHICS PIPELINE TO BE ABLE TO DRAW
+	deviceContext->setConstantBuffer(vertexShader, this->constantBuffer);
+	deviceContext->setConstantBuffer(pixelShader, this->constantBuffer);
 
-	//SET THE VERTICES OF THE TRIANGLE TO DRAW
-	GraphicsEngine::get()->getImmediateDeviceContext()->setVertexBuffer(vertexBuffer);
-	GraphicsEngine::get()->getImmediateDeviceContext()->setIndexBuffer(indexBuffer);
+	deviceContext->setIndexBuffer(this->indexBuffer);
+	deviceContext->setTVertexBuffer(tVertexBuffer);
 
-
-	// FINALLY DRAW THE TRIANGLE
-	GraphicsEngine::get()->getImmediateDeviceContext()->drawIndexedTriangleList(indexBuffer->getSizeIndexList(), 0, 0);
+	deviceContext->drawIndexedTriangleList(this->indexBuffer->getSizeIndexList(), 0, 0);
 }
 
 void Cube::setAnimation(float speed, float interval, bool isSpeeding, float rotFactor)

@@ -145,6 +145,11 @@ public:
 		return Vector3D(m_mat[3][0], m_mat[3][1], m_mat[3][2]);
 	}
 
+	void setMatrix(float matrix[4][4])
+	{
+		::memcpy(this->m_mat, matrix, sizeof(float) * 16);
+	}
+
 	void setPerspectiveFovLH(float fov, float aspect, float znear, float zfar)
 	{
 		float yscale = 1.0f / tan(fov / 2.0f);

@@ -29,7 +29,7 @@ private:
 	void updateViewMatrix();
 
 	// matrices
-	Matrix4x4 m_world_cam;
+	Matrix4x4 world_cam;
 
 	float ticks = 0.0f;
 	float mouseDown = false;

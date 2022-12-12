@@ -5,10 +5,10 @@
 Camera::Camera(string name) : AGameObject(name)
 {
 	//preset camera values
-	this->setPosition(0.0f, 0.0f, -2.0f);
-	//this->localMatrix.setTranslation(this->localPosition);
+	this->setPosition(0.0f, 0.0f, -10.0f);
+	this->localMatrix.setTranslation(this->localPosition);
 
-	this->m_world_cam.setTranslation(this->localPosition);
+	//this->m_world_cam.setTranslation(this->localPosition);
 
 
 	InputSystem::getInstance()->addListener(this);
@@ -52,7 +52,7 @@ void Camera::update(float deltaTime)
 
 Matrix4x4 Camera::getViewMatrix()
 {
-	return this->localMatrix;
+	return this->world_cam;
 }
 
 Matrix4x4 Camera::getWorldCamMatrix()
@@ -146,13 +146,12 @@ void Camera::onRightMouseUp(const Point deltaPos)
 
 void Camera::updateViewMatrix()
 {
+
 	Constant cc;
 	Matrix4x4 temp;
-	Matrix4x4 world_cam;
-	world_cam.setIdentity();
 
 	//UPDATE FOR CAM ROTATION
-	//m_world_cam.setIdentity();
+	world_cam.setIdentity();
 	temp.setIdentity();
 	temp.setRotationX(this->getLocalRotation().m_x);
 	world_cam *= temp;
@@ -161,22 +160,51 @@ void Camera::updateViewMatrix()
 	temp.setRotationY(this->getLocalRotation().m_y);
 	world_cam *= temp;
 
-
 	// UPDATE FOR CAM TRANSLATION
-	Vector3D new_pos = this->m_world_cam.getTranslation() + (world_cam.getZDirection() * (this->forward * 0.1f));
+	Vector3D new_pos = this->localMatrix.getTranslation() + (world_cam.getZDirection() * (this->forward * 0.1f));
 	new_pos = new_pos + (world_cam.getYDirection() * (this->upward * 0.1f));
 	new_pos = new_pos + (world_cam.getXDirection() * (this->rightward * 0.1f));
 
-	//cam_view_matrix.setTranslation(new_pos);
-	world_cam.setTranslation(new_pos);
+	this->setPosition(new_pos);
 
-	m_world_cam = world_cam;
+	world_cam.setTranslation(new_pos);
+	//update local matrix
+	this->localMatrix = world_cam;
+
 	// application
 	world_cam.inverse();
 
+	//Constant cc;
+	//Matrix4x4 temp;
+	//Matrix4x4 world_cam;
+	//world_cam.setIdentity();
 
-	//update local matrix
-	this->localMatrix = world_cam;
+	////UPDATE FOR CAM ROTATION
+	////m_world_cam.setIdentity();
+	//temp.setIdentity();
+	//temp.setRotationX(this->getLocalRotation().m_x);
+	//world_cam *= temp;
+
+	//temp.setIdentity();
+	//temp.setRotationY(this->getLocalRotation().m_y);
+	//world_cam *= temp;
+
+
+	//// UPDATE FOR CAM TRANSLATION
+	//Vector3D new_pos = this->m_world_cam.getTranslation() + (world_cam.getZDirection() * (this->forward * 0.1f));
+	//new_pos = new_pos + (world_cam.getYDirection() * (this->upward * 0.1f));
+	//new_pos = new_pos + (world_cam.getXDirection() * (this->rightward * 0.1f));
+
+	////cam_view_matrix.setTranslation(new_pos);
+	//world_cam.setTranslation(new_pos);
+
+	//m_world_cam = world_cam;
+	//// application
+	//world_cam.inverse();
+
+
+	////update local matrix
+	//this->localMatrix = world_cam;
 
 	//std::cout << "x: "<<this->getLocalPosition().m_x <<" y: "<< this->getLocalPosition().m_y<<" z: "<<this->getLocalPosition().m_z <<"\n";
 }

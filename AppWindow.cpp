@@ -5,7 +5,10 @@
 #include "InputSystem.h"
 #include "SceneCameraHandler.h"
 #include "UIManager.h"
-
+#include "PhysicsComponent.h"
+#include "PhysicsSystem.h"
+#include "BaseComponentSystem.h"
+#include"GameObjectManager.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -45,12 +48,14 @@ void AppWindow::onCreate()
 
 	//Initialize InputListener
 	InputSystem::initialize();
-
 	GraphicsEngine::create();
+	GameObjectManager::get()->initialize();
 
 	//Initialize SceneCameraHAndler
 
 	SceneCameraHandler::initialize();
+	BaseComponentSystem::initialize();
+
 
 	InputSystem::getInstance()->addListener(this);
 	//InputSystem::getInstance()->showCursor(false);
@@ -65,7 +70,7 @@ void AppWindow::onCreate()
 
 
 	
-	Texture* woodTex = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
+	//Texture* woodTex = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
 
 
 	void* shaderByteCode = nullptr;
@@ -89,13 +94,39 @@ void AppWindow::onCreate()
 		this->CubeList.push_back(cubeObj);S
 	}*/
 
-	TexturedCube* cube = new TexturedCube("tcube", shaderByteCode, sizeShader);
-	cube->myTexture = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\dlsu.png");
-	cube->setPosition(1.0, 1.0, 1.0f);
-	cube->setScale(1, 1, 1);
-	ObjectList.push_back(cube);
+	//TexturedCube* cube = new TexturedCube("cube1", shaderByteCode, sizeShader);
+	//cube->myTexture = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
+	//cube->setPosition(1.0, 1.0, 1.0f);
+	//cube->setScale(2, 2, 2);
+	//cube->attachComponent(new PhysicsComponent("PhysicsComponent", cube));
+	////ObjectList.push_back(cube);
 
-	Mesh* mesh = GraphicsEngine::getInstance()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\teapot2.obj");
+	//cube = new TexturedCube("cube2", shaderByteCode, sizeShader);
+	//cube->myTexture = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
+	//cube->setPosition(1.0, 1.0, 1.0f);
+	//cube->setScale(2, 2, 2);
+	//cube->attachComponent(new PhysicsComponent("PhysicsComponent", cube));
+	////ObjectList.push_back(cube);
+
+
+	//cube = new TexturedCube("cube3", shaderByteCode, sizeShader);
+	//cube->myTexture = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
+	//cube->setPosition(1.0, 1.0, 1.0f);
+	//cube->setScale(2, 2, 2);
+	//cube->attachComponent(new PhysicsComponent("PhysicsComponent", cube));
+	////ObjectList.push_back(cube);
+
+	//plane = new Plane("plane", shaderByteCode, sizeShader);
+	//plane->setPosition(1.0, -5.0, 1.0f);
+	//plane->setScale(50, 1, 50);
+	//PhysicsComponent* physicsComp = new PhysicsComponent("PhysicsComponent", plane);
+	//physicsComp->setToStatic();
+	//plane->attachComponent(physicsComp);
+	////ObjectList.push_back(plane);
+
+	
+
+	/*Mesh* mesh = GraphicsEngine::getInstance()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\teapot2.obj");
 
 	teapot = new MeshObject("Teapot", shaderByteCode, sizeShader, mesh);
 	teapot->setTexture(GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\brick.png"));
@@ -117,7 +148,7 @@ void AppWindow::onCreate()
 
 	bunny->setPosition(1.0, 0.0, 1.0f);
 	bunny->setScale(1, 1, 1);
-	ObjectList.push_back(bunny);
+	ObjectList.push_back(bunny);*/
 
 
 
@@ -148,17 +179,25 @@ void AppWindow::onUpdate()
 	//SET VIEWPORT OF RENDER TARGET IN WHICH WE HAVE TO DRAW
 	RECT rc = this->getClientWindowRect();
 	GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext()->setViewportSize(rc.right - rc.left, rc.bottom - rc.top);
-
+	
+	GameObjectManager::get()->updateObjects();
+	
 	//UPDATE PRIMITIVES
-	for (int i = 0; i < ObjectList.size(); i++)
+	BaseComponentSystem::getInstance()->getPhysicsSystem()->updateAllComponents();
+
+
+
+	/*for (int i = 0; i < ObjectList.size(); i++)
 	{
 		ObjectList[i]->update(EngineTime::getDeltaTime());
 	}
 
+	std::cout << "ROTz: " << plane->getLocalRotation().m_z << " \n";
+
 	for (int i = 0; i < ObjectList.size(); i++)
 	{
 		ObjectList[i]->draw(rc.right - rc.left, rc.bottom - rc.top);
-	}
+	}*/
 
 
 	//UPDATE CAMERA
@@ -186,7 +225,23 @@ void AppWindow::onKillFocus()
 
 void AppWindow::onKeyDown(int key)
 {
-	
+	if (key == 'H')
+	{
+		Vector3D rot;
+		float var = ObjectList[3]->getLocalRotation().m_z + 30;
+		ObjectList[3]->setRotation(ObjectList[3]->getLocalRotation().m_x, ObjectList[0]->getLocalRotation().m_y, var);
+		std::cout << "ROTz: " << var << " \n";
+
+
+	}
+	if (key == 'F') //x
+	{
+		Vector3D rot;
+		float var = ObjectList[0]->getLocalRotation().m_x + 30;
+		ObjectList[3]->setRotation(var+1, ObjectList[0]->getLocalRotation().m_y, ObjectList[0]->getLocalRotation().m_z);
+		std::cout << "ROTx: " << ObjectList[0]->getLocalRotation().m_x << " \n";
+
+	}
 }
 
 void AppWindow::onKeyUp(int key)
@@ -220,6 +275,7 @@ void AppWindow::onLeftMouseUp(const Point deltaPos)
 {
 	std::cout << "Left mouse up! \n";
 	isLeftMouseDown = false;
+
 
 }
 
