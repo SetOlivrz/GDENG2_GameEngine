@@ -243,6 +243,21 @@
     <ClCompile Include="GameObjectManager.cpp">
       <Filter>GameEngine\Manager\GameObjectManager</Filter>
     </ClCompile>
+    <ClCompile Include="HierarchyScreen.cpp">
+      <Filter>GameEngine\User Interface\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="InspectorScreen.cpp">
+      <Filter>GameEngine\User Interface\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneControlsScreen.cpp">
+      <Filter>GameEngine\User Interface\Screen</Filter>
+    </ClCompile>
+    <ClCompile Include="EngineBackend.cpp">
+      <Filter>GameEngine\GraphicsEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneWriterAndReader.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Capsule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppWindow.h">
@@ -413,6 +428,21 @@
     <ClInclude Include="GameObjectManager.h">
       <Filter>GameEngine\Manager\GameObjectManager</Filter>
     </ClInclude>
+    <ClInclude Include="HierarchyScreen.h">
+      <Filter>GameEngine\User Interface\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="InspectorScreen.h">
+      <Filter>GameEngine\User Interface\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneControlsScreen.h">
+      <Filter>GameEngine\User Interface\Screen</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineBackend.h">
+      <Filter>GameEngine\GraphicsEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneWriterAndReader.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Capsule.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">

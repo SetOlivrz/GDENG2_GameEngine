@@ -9,6 +9,8 @@
 #include "PhysicsSystem.h"
 #include "BaseComponentSystem.h"
 #include"GameObjectManager.h"
+#include "EngineBackend.h"
+#include "EngineBackend.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -52,119 +54,21 @@ void AppWindow::onCreate()
 	GameObjectManager::get()->initialize();
 
 	//Initialize SceneCameraHAndler
-
 	SceneCameraHandler::initialize();
+
 	BaseComponentSystem::initialize();
 
-
 	InputSystem::getInstance()->addListener(this);
-	//InputSystem::getInstance()->showCursor(false);
 
 	//Initialize UIManager
 	UIManager::getInstance()->initialize(Window::m_hwnd);
 
+	EngineBackend::getInstance()->initialize();
 
 	RECT rc = this->getClientWindowRect();
+
 	//Set swap chain
 	swapChain = GraphicsEngine::getInstance()->getRenderSystem()->createSwapChain(this->m_hwnd, rc.right - rc.left, rc.bottom - rc.top);
-
-
-	
-	//Texture* woodTex = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
-
-
-	void* shaderByteCode = nullptr;
-	size_t sizeShader = 0;
-	/*for (int i = 0; i <20 ; i++)
-	{
-		float x = Utils::randFloatInterval(-5, 5);
-		float y = Utils::randFloatInterval(-5, 5);
-		float z = Utils::randFloatInterval(-5, 0);
-
-		float sx = Utils::randFloatInterval(0.25, 2);
-		float sy = Utils::randFloatInterval(0.25, 2);
-		float sz = Utils::randFloatInterval(0.25, 2);
-
-
-
-		Cube *cubeObj =  new Cube("Cube", shaderByteCode, sizeShader);
-		cubeObj->setPosition(x,y,z);
-		cubeObj->setScale(sx,sy,sz);
-		cubeObj->setAnimation(Utils::randFloatInterval(1.0, 1.0), Utils::randFloatInterval(2.0, 5.0),true, 1 );
-		this->CubeList.push_back(cubeObj);S
-	}*/
-
-	//TexturedCube* cube = new TexturedCube("cube1", shaderByteCode, sizeShader);
-	//cube->myTexture = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
-	//cube->setPosition(1.0, 1.0, 1.0f);
-	//cube->setScale(2, 2, 2);
-	//cube->attachComponent(new PhysicsComponent("PhysicsComponent", cube));
-	////ObjectList.push_back(cube);
-
-	//cube = new TexturedCube("cube2", shaderByteCode, sizeShader);
-	//cube->myTexture = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
-	//cube->setPosition(1.0, 1.0, 1.0f);
-	//cube->setScale(2, 2, 2);
-	//cube->attachComponent(new PhysicsComponent("PhysicsComponent", cube));
-	////ObjectList.push_back(cube);
-
-
-	//cube = new TexturedCube("cube3", shaderByteCode, sizeShader);
-	//cube->myTexture = GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\wood.jpg");
-	//cube->setPosition(1.0, 1.0, 1.0f);
-	//cube->setScale(2, 2, 2);
-	//cube->attachComponent(new PhysicsComponent("PhysicsComponent", cube));
-	////ObjectList.push_back(cube);
-
-	//plane = new Plane("plane", shaderByteCode, sizeShader);
-	//plane->setPosition(1.0, -5.0, 1.0f);
-	//plane->setScale(50, 1, 50);
-	//PhysicsComponent* physicsComp = new PhysicsComponent("PhysicsComponent", plane);
-	//physicsComp->setToStatic();
-	//plane->attachComponent(physicsComp);
-	////ObjectList.push_back(plane);
-
-	
-
-	/*Mesh* mesh = GraphicsEngine::getInstance()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\teapot2.obj");
-
-	teapot = new MeshObject("Teapot", shaderByteCode, sizeShader, mesh);
-	teapot->setTexture(GraphicsEngine::getInstance()->getTextureManager()->createTextureFromFile(L"Assets\\Textures\\brick.png"));
-	teapot->setPosition(-1.0, 0.0, -1.0f);
-	teapot->setScale(1, 1, 1);
-	ObjectList.push_back(teapot);
-
-	mesh = GraphicsEngine::getInstance()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\armadillo.obj");
-
-	armadillo = new MeshObject("Armadillo", shaderByteCode, sizeShader, mesh);
-
-	armadillo->setPosition(0.0, 0.0, 0.0f);
-	armadillo->setScale(0.5, 0.5, 0.5);
-	ObjectList.push_back(armadillo);
-
-	mesh = GraphicsEngine::getInstance()->getMeshManager()->createMeshFromFile(L"Assets\\Meshes\\bunny.obj");
-
-	bunny = new MeshObject("Bunny", shaderByteCode, sizeShader, mesh);
-
-	bunny->setPosition(1.0, 0.0, 1.0f);
-	bunny->setScale(1, 1, 1);
-	ObjectList.push_back(bunny);*/
-
-
-
-
-
-	/*int width = 0;
-	int height = 0;
-	ID3D11ShaderResourceView* texture = NULL;
-	bool ret = LoadTextureFromFile("C://Users//Setiel Olivarez/Desktop/School/GDENG2/Project/Game Engine/dlsu.png", &texture, &width, &height);
-	IM_ASSERT(ret);
-
-	UIManager::getInstance()->my_image_width = width/4;
-	UIManager::getInstance()->my_image_height = height/4;
-	UIManager::getInstance()->my_texture = texture;*/
-
-
 
 }
 
@@ -182,23 +86,27 @@ void AppWindow::onUpdate()
 	
 	GameObjectManager::get()->updateObjects();
 	
-	//UPDATE PRIMITIVES
-	BaseComponentSystem::getInstance()->getPhysicsSystem()->updateAllComponents();
-
-
-
-	/*for (int i = 0; i < ObjectList.size(); i++)
+	//UPDATE BASED IN ENGINE STATE
+	if (EngineBackend::getInstance()->getMode() == EngineBackend::EDITOR)
 	{
-		ObjectList[i]->update(EngineTime::getDeltaTime());
+		//UPDATE PHYSICS
+		//BaseComponentSystem::getInstance()->getPhysicsSystem()->updateAllComponents();
 	}
-
-	std::cout << "ROTz: " << plane->getLocalRotation().m_z << " \n";
-
-	for (int i = 0; i < ObjectList.size(); i++)
+	else if (EngineBackend::getInstance()->getMode() == EngineBackend::PLAY)
 	{
-		ObjectList[i]->draw(rc.right - rc.left, rc.bottom - rc.top);
-	}*/
+		//UPDATE PHYSICS
+		BaseComponentSystem::getInstance()->getPhysicsSystem()->updateAllComponents();
+	}
+	else if (EngineBackend::getInstance()->getMode() == EngineBackend::PAUSED)
+	{
+		if (EngineBackend::getInstance()->insideFrameStep())
+		{
+			//UPDATE PHYSICS
+			//BaseComponentSystem::getInstance()->getPhysicsSystem()->updateAllComponents();
 
+			EngineBackend::getInstance()->endFrameStep();
+		}
+	}
 
 	//UPDATE CAMERA
 	SceneCameraHandler::getInstance()->update();
@@ -265,16 +173,16 @@ void AppWindow::onMouseMove(const Point deltaPos)
 
 void AppWindow::onLeftMouseDown(const Point deltaPos)
 {
-	std::cout << "Left mouse down! \n";
+	//std::cout << "Left mouse down! \n";
 
-	isLeftMouseDown = true;
+	////isLeftMouseDown = true;
 
 }
 
 void AppWindow::onLeftMouseUp(const Point deltaPos)
 {
-	std::cout << "Left mouse up! \n";
-	isLeftMouseDown = false;
+	//std::cout << "Left mouse up! \n";
+	//isLeftMouseDown = false;
 
 
 }

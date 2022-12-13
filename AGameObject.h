@@ -14,6 +14,7 @@
 
 #include "AComponent.h"
 #include "reactphysics3d/reactphysics3d.h"
+#include "PhysicsComponent.h"
 
 #include"Prerequisites.h"
 #include <vector>
@@ -46,6 +47,11 @@ public:
 
 	string getName();
 
+	string gameObjectType;
+	bool hasRigidBody = false;
+	string rbType;
+
+
 	typedef string String;
 	//typedef std::vector<AComponent*>; ComponentList;
 
@@ -59,7 +65,10 @@ public:
 
 	void updateLocalMatrix();
 
-	void recomputeMatrix(float matrix[16]);
+	void setLocalMatrix(float matrix[16]);
+	bool isSelected = false;
+
+	PhysicsComponent* physicsComponent = nullptr;
 
 
 
@@ -101,6 +110,8 @@ protected:
 
 	VertexShader* vertexShader;
 	PixelShader* pixelShader;
+
+	bool overwriteMatrix = false;
 
 
 };

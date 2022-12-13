@@ -4,6 +4,10 @@
 #include "ColorPickerScreen.h"
 #include "CreditScreen.h"
 #include "GameObjectManager.h"
+#include "HierarchyScreen.h"
+#include "InspectorScreen.h"
+#include "SceneControlsScreen.h"
+#include "SceneWriterAndReader.h"
 
 EditorScreen::EditorScreen() : AUIScreen("EditorScreen")
 {
@@ -23,15 +27,44 @@ void EditorScreen::drawUI()
     ImGui::SetNextWindowSize(ImVec2(UIManager::WINDOW_WIDTH, UIManager::WINDOW_HEIGHT));
     if (ImGui::BeginMainMenuBar())
     {
+        if (ImGui::BeginMenu("Files"))
+        {
+            if (ImGui::MenuItem("Save File As JSON"))
+            {
+                SceneWriterAndReader* sceneWriter = new SceneWriterAndReader();
+                sceneWriter->writeToFile();
+            }
+            if (ImGui::MenuItem("Load Saved File"))
+            {
+                SceneWriterAndReader* sceneReader = new SceneWriterAndReader();
+                sceneReader->readFromEngineFile();
+            }
+            if (ImGui::MenuItem("Load From Unity"))
+            {
+                SceneWriterAndReader* sceneReader = new SceneWriterAndReader();
+                sceneReader->readFromUnityFile();
+
+            }
+
+            ImGui::EndMenu();
+        }
         if (ImGui::BeginMenu("GameObject"))
         {
             if (ImGui::MenuItem("Spawn Cube"))
             {
-                GameObjectManager::get()->createCube();
+                GameObjectManager::get()->createPhysicsCube();
+            }
+            if (ImGui::MenuItem("Spawn Sphere"))
+            {
+                GameObjectManager::get()->createPhysicsSphere();
+            }
+            if (ImGui::MenuItem("Spawn Capsule"))
+            {
+                GameObjectManager::get()->createPhysicsCapsule();
             }
             if (ImGui::MenuItem("Spawn Cubes"))
             {
-                GameObjectManager::get()->createCubes();
+                GameObjectManager::get()->createPhysicsCubes();
 
             }
             if (ImGui::MenuItem("Spawn Plane"))
@@ -39,17 +72,17 @@ void EditorScreen::drawUI()
                 GameObjectManager::get()->createPlane();
 
             }
-           /* if (ImGui::MenuItem("Open Color Picker")) 
-            { 
-                ColorPickerScreen::isOpen = true;
-            }
-
-            if (ImGui::MenuItem("About"))
-            {
-                CreditScreen::isOpen = true;
-            }*/
+            ImGui::EndMenu();
+        }
+     
+        if (ImGui::BeginMenu("Windows"))
+        {
+            if (ImGui::MenuItem("Heirarchy")) { HierarchyScreen::isOpen = true; }
+            if (ImGui::MenuItem("Inspector")) { InspectorScreen::isOpen = true; }
+            if (ImGui::MenuItem("Scene Controls")) { SceneControlsScreen::isOpen = true; }
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
+       
     }
 }

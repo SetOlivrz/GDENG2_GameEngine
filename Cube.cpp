@@ -8,6 +8,7 @@
 
 Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(name)
 {
+	this->gameObjectType = "Cube";
 	//m_world_cam.setTranslation(Vector3D(0, 0, -2));
 	m_world_cam = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
 	world_cam = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
@@ -62,7 +63,7 @@ Cube::Cube(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(na
 	vertexShader = GraphicsEngine::getInstance()->getRenderSystem()->createVertexShader(shaderByteCode, sizeShader);
 
 	//Vertex Buffer
-	this->tVertexBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createTVertexBuffer(vertex_list, sizeof(Vertex), ARRAYSIZE(vertex_list), shaderByteCode, sizeShader);
+	this->vertexBuffer = GraphicsEngine::getInstance()->getRenderSystem()->createVertexBuffer(vertex_list, sizeof(Vertex), ARRAYSIZE(vertex_list), shaderByteCode, sizeShader);
 	GraphicsEngine::getInstance()->getRenderSystem()->releaseCompiledShader();
 
 	//Pixel Shader
@@ -90,20 +91,6 @@ void Cube::update(float deltaTime)
 
 void Cube::draw(int width, int height)
 {
-	if (ticks >= animationInterval)
-	{
-		isIncreasing = !isIncreasing;
-		ticks = 0;
-	}
-
-	if (isIncreasing)
-	{
-		rotFactor += deltaTime ;
-	}
-	else
-	{
-		rotFactor -= deltaTime ;
-	}
 
 	GraphicsEngine* graphEngine = GraphicsEngine::getInstance();
 	DeviceContext* deviceContext = GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext();
@@ -112,40 +99,47 @@ void Cube::draw(int width, int height)
 	Matrix4x4 temp;
 	temp.setIdentity();
 
-	//TRANSLATION
-	Matrix4x4 translationMatrix;
-	translationMatrix.setIdentity();
-	translationMatrix.setTranslation(this->getLocalPosition());
+	if (!overwriteMatrix)
+	{
+		//TRANSLATION
+		Matrix4x4 translationMatrix;
+		translationMatrix.setIdentity();
+		translationMatrix.setTranslation(this->getLocalPosition());
 
-	//SCALE
-	Matrix4x4 scaleMatrix;
-	scaleMatrix.setIdentity();
-	scaleMatrix.setScale(this->getLocalScale());
+		//SCALE
+		Matrix4x4 scaleMatrix;
+		scaleMatrix.setIdentity();
+		scaleMatrix.setScale(this->getLocalScale());
 
-	//ROTATION
-	Matrix4x4 xMatrix, yMatrix, zMatrix, rotMatrix;
+		//ROTATION
+		Matrix4x4 xMatrix, yMatrix, zMatrix, rotMatrix;
 
-	xMatrix.setIdentity();
-	yMatrix.setIdentity();
-	zMatrix.setIdentity();
-	Vector3D rotation = this->getLocalRotation();
+		xMatrix.setIdentity();
+		yMatrix.setIdentity();
+		zMatrix.setIdentity();
+		Vector3D rotation = this->getLocalRotation();
 
-	xMatrix.setRotationZ(rotation.m_x);
-	yMatrix.setRotationX(rotation.m_y);
-	zMatrix.setRotationY(rotation.m_z);
+		xMatrix.setRotationX(rotation.m_x);
+		yMatrix.setRotationY(rotation.m_y);
+		zMatrix.setRotationZ(rotation.m_z);
 
-	rotMatrix.setIdentity();
+		rotMatrix.setIdentity();
 
-	rotMatrix *= xMatrix;
-	rotMatrix *= yMatrix;
-	rotMatrix *= zMatrix;
+		rotMatrix *= xMatrix;
+		rotMatrix *= yMatrix;
+		rotMatrix *= zMatrix;
 
-	// APPLICATION
-	temp *= scaleMatrix;
-	temp *= rotMatrix;
-	temp *= translationMatrix;
+		// APPLICATION
+		temp *= scaleMatrix;
+		temp *= rotMatrix;
+		temp *= translationMatrix;
 
-	cc.worldMatrix = temp;
+		cc.worldMatrix = temp;
+	}
+	else
+	{
+		cc.worldMatrix = this->localMatrix;
+	}
 
 	//CAMERA
 	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
@@ -165,7 +159,7 @@ void Cube::draw(int width, int height)
 	deviceContext->setConstantBuffer(pixelShader, this->constantBuffer);
 
 	deviceContext->setIndexBuffer(this->indexBuffer);
-	deviceContext->setTVertexBuffer(tVertexBuffer);
+	deviceContext->setVertexBuffer(this->vertexBuffer);
 
 	deviceContext->drawIndexedTriangleList(this->indexBuffer->getSizeIndexList(), 0, 0);
 }

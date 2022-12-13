@@ -1,9 +1,10 @@
 #include "UIManager.h"
 #include "imgui_impl_dx11.h"
 #include "imgui_impl_win32.h"
+#include "HierarchyScreen.h"
+#include "SceneControlsScreen.h"
+#include "InspectorScreen.h"
 #include "EditorScreen.h"
-#include "ColorPickerScreen.h"
-#include "CreditScreen.h"
 
 UIManager* UIManager::sharedInstance = NULL;
 
@@ -58,18 +59,17 @@ UIManager::UIManager(HWND windowHandle)
 	this->uiTable[uiNames.EDITOR_SCREEN] = editorScreen;
 	this->uiList.push_back(editorScreen);
 
-	ColorPickerScreen* colorPicker = new ColorPickerScreen();
-	this->uiTable[uiNames.COLOR_PICKER_SCREEN] = colorPicker;
-	this->uiList.push_back(colorPicker);
+	HierarchyScreen* hierarchyScreen = new HierarchyScreen();
+	this->uiTable[uiNames.HIERARCHY_SCREEN] = hierarchyScreen;
+	this->uiList.push_back(hierarchyScreen);
 
-	CreditScreen* creditScreen = new CreditScreen();
+	SceneControlsScreen* sceneControlsScreen = new SceneControlsScreen();
+	this->uiTable[uiNames.SCENECONTROLS_SCREEN] = sceneControlsScreen;
+	this->uiList.push_back(sceneControlsScreen);
 
-	//creditScreen->my_image_height = this->my_image_height;
-	//creditScreen->my_image_width = this->my_image_width;
-	//creditScreen->my_texture = this->my_texture;
-
-	this->uiTable[uiNames.CREDITS_SCREEN] = creditScreen;
-	this->uiList.push_back(creditScreen);
+	InspectorScreen* inspectorScreen = new InspectorScreen();
+	this->uiTable[uiNames.INSPECTOR_SCREEN] = inspectorScreen;
+	this->uiList.push_back(inspectorScreen);
 }
 
 UIManager::~UIManager()

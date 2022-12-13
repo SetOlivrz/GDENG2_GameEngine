@@ -9,9 +9,7 @@
 
 Plane::Plane(string name, void* shaderByteCode, size_t sizeShader) :AGameObject(name)
 {
-	//setRotation(Vector3D(Utils::degToRad(0), 0, 0));
-	//m_world_cam.setTranslation(Vector3D(0, 0, -2));
-
+	this->gameObjectType = "Plane";
 	m_world_cam = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();
 	world_cam = SceneCameraHandler::getInstance()->getSceneCameraWorldCamMatrix();
 
@@ -93,20 +91,6 @@ void Plane::update(float deltaTime)
 
 void Plane::draw(int width, int height)
 {
-	if (ticks >= animationInterval)
-	{
-		isIncreasing = !isIncreasing;
-		ticks = 0;
-	}
-
-	if (isIncreasing)
-	{
-		rotFactor += deltaTime;
-	}
-	else
-	{
-		rotFactor -= deltaTime;
-	}
 
 	GraphicsEngine* graphEngine = GraphicsEngine::getInstance();
 	DeviceContext* deviceContext = GraphicsEngine::getInstance()->getRenderSystem()->getImmediateDeviceContext();
@@ -114,43 +98,47 @@ void Plane::draw(int width, int height)
 	Constant cc;
 	Matrix4x4 temp;
 	temp.setIdentity();
+	if (!overwriteMatrix)
+	{
+		//TRANSLATION
+		Matrix4x4 translationMatrix;
+		translationMatrix.setIdentity();
+		translationMatrix.setTranslation(this->getLocalPosition());
 
-	//TRANSLATION
-	Matrix4x4 translationMatrix;
-	translationMatrix.setIdentity();
-	translationMatrix.setTranslation(this->getLocalPosition());
+		//SCALE
+		Matrix4x4 scaleMatrix;
+		scaleMatrix.setIdentity();
+		scaleMatrix.setScale(this->getLocalScale());
 
-	//SCALE
-	Matrix4x4 scaleMatrix;
-	scaleMatrix.setIdentity();
-	Vector3D scale = this->getLocalScale();
+		//ROTATION
+		Matrix4x4 xMatrix, yMatrix, zMatrix, rotMatrix;
 
-	scaleMatrix.setScale(Vector3D(scale.m_x, scale.m_y, scale.m_z));
+		xMatrix.setIdentity();
+		yMatrix.setIdentity();
+		zMatrix.setIdentity();
+		Vector3D rotation = this->getLocalRotation();
 
-	//ROTATION
-	Matrix4x4 xMatrix, yMatrix, zMatrix, rotMatrix;
+		xMatrix.setRotationX(rotation.m_x);
+		yMatrix.setRotationY(rotation.m_y);
+		zMatrix.setRotationZ(rotation.m_z);
 
-	xMatrix.setIdentity();
-	yMatrix.setIdentity();
-	zMatrix.setIdentity();
-	Vector3D rotation = this->getLocalRotation();
+		rotMatrix.setIdentity();
 
-	xMatrix.setRotationZ(rotation.m_z);
-	yMatrix.setRotationX(rotation.m_x);
-	zMatrix.setRotationY(rotation.m_y);
+		rotMatrix *= xMatrix;
+		rotMatrix *= yMatrix;
+		rotMatrix *= zMatrix;
 
-	rotMatrix.setIdentity();
+		// APPLICATION
+		temp *= scaleMatrix;
+		temp *= rotMatrix;
+		temp *= translationMatrix;
 
-	rotMatrix *= xMatrix;
-	rotMatrix *= yMatrix;
-	rotMatrix *= zMatrix;
-
-	// APPLICATION
-	temp *= scaleMatrix;
-	temp *= rotMatrix;
-	temp *= translationMatrix;
-
-	cc.worldMatrix = temp;
+		cc.worldMatrix = temp;
+	}
+	else
+	{
+		cc.worldMatrix = this->localMatrix;
+	}
 
 	//CAMERA
 	cc.viewMatrix = SceneCameraHandler::getInstance()->getSceneCameraViewMatrix();

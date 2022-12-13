@@ -17,7 +17,9 @@ public:
 
 	void setToDynamic();
 
+	void updateRigidBody();
+
 private:
-	float mass = 1000.0f; //in kilograms
+	float mass = 50.f; //in kilograms
 	RigidBody* rigidBody;
 };
